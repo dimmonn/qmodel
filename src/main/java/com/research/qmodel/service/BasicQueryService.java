@@ -27,7 +27,7 @@ public class BasicQueryService {
     public <T> T retrievemetrics(String url, TypeReference<T> targetType) throws URISyntaxException {
         List<JsonNode> allEntities = new ArrayList<>();
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer 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");
+        headers.set("Authorization", "Bearer token");
         int pageNumber = 1;
         int pageSize = 100;
         String baseUrl = "https://api.github.com/";
