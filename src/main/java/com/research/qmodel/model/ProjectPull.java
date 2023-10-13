@@ -26,6 +26,7 @@ public class ProjectPull implements BaseMetric {
             @JoinColumn(name = "project_owner", referencedColumnName = "owner"),
             @JoinColumn(name = "project_project_name", referencedColumnName = "project_name")
     })
+
     private Project project;
     @Temporal(TemporalType.TIMESTAMP)
     private Date created_at;
