@@ -1,0 +1,6 @@
+JAVACLASS (?:[a-zA-Z0-9-]+\.)+[A-Za-z0-9$_]+
+JAVAFILE (?:[A-Za-z0-9_. -]+)
+JAVASTACKTRACEPART (^\d+\) .+)|(^.+Exception: .+)|(^\s+at .+)|(^\s+... \d+ more)|(^\s*Caused by:.+)
+JAVASTACKTRACEPARTBASE at %{JAVACLASS:class}\.%{WORD:method}\(%{JAVAFILE:file}:%{NUMBER:line}\)
+VCPLCMTIMESTAMP (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3}Z)
+TIMESTAMP_CUSTOM %{YEAR}-%{MONTHNUM}-%{MONTHDAY} %{HOUR}:%{MINUTE}:%{SECOND},%{INT}Z
