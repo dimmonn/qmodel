@@ -42,6 +42,65 @@ App visualises software quality metrics for a given github project
   JOIN project p ON p.owner = ag.repo_owner AND p.project_name = ag.repo_project_name
   GROUP BY p.owner, p.project_name, time
   ORDER BY time ASC`
+
+- Total Additions Per Commit Over Time
+  `SELECT
+  CONCAT(p.owner, '_', p.project_name) AS project,
+  DATE(c.commit_date) AS time,
+  SUM(fc.total_additions) AS total_additions
+  FROM
+  file_change fc
+  JOIN
+  commit_file_changes cfc ON fc.id = cfc.file_changes_id
+  JOIN
+  commit c ON cfc.commit_id = c.id
+  JOIN
+  agraph ag ON c.a_graph_id = ag.id
+  JOIN
+  project p ON ag.repo_owner = p.owner AND ag.repo_project_name = p.project_name
+  GROUP BY
+  p.owner, p.project_name, c.commit_date
+  ORDER BY
+  c.commit_date ASC`
+- Total Changes Per Commit Over Time
+  `SELECT
+  CONCAT(p.owner, '_', p.project_name) AS project,
+  DATE(c.commit_date) AS time,
+  SUM(fc.total_changes) AS total_changes
+  FROM
+  file_change fc
+  JOIN
+  commit_file_changes cfc ON fc.id = cfc.file_changes_id
+  JOIN
+  commit c ON cfc.commit_id = c.id
+  JOIN
+  agraph ag ON c.a_graph_id = ag.id
+  JOIN
+  project p ON ag.repo_owner = p.owner AND ag.repo_project_name = p.project_name
+  GROUP BY
+  p.owner, p.project_name, c.commit_date
+  ORDER BY
+  c.commit_date ASC`
+- Total Deletions Per Commit Over Time
+  `SELECT
+  CONCAT(p.owner, '_', p.project_name) AS project,
+  DATE(c.commit_date) AS time,
+  SUM(fc.total_deletions) AS total_deletions
+  FROM
+  file_change fc
+  JOIN
+  commit_file_changes cfc ON fc.id = cfc.file_changes_id
+  JOIN
+  commit c ON cfc.commit_id = c.id
+  JOIN
+  agraph ag ON c.a_graph_id = ag.id
+  JOIN
+  project p ON ag.repo_owner = p.owner AND ag.repo_project_name = p.project_name
+  GROUP BY
+  p.owner, p.project_name, c.commit_date
+  ORDER BY
+  c.commit_date ASC`
+- 
 ## Usage
 
 `GET http://localhost:8080/api/v1/metrics/repos/{repo_owner}/{repo_name}`

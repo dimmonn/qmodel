@@ -7,6 +7,7 @@ import lombok.Data;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "commit")
@@ -20,4 +21,8 @@ public class Commit {
     private Date commitDate;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private AGraph aGraph;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<FileChange> fileChanges;
+    @Column
+    private int numOfFilesChanged;
 }

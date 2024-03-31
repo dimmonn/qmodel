@@ -13,13 +13,17 @@ services:
     command: --max-allowed-packet=200M
     volumes:
       - /Users/dpolishchuk/Downloads/mysql/data:/var/lib/mysql
+    networks:
+      - elk
 
-  qmodel:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - 8080:8080
+#  qmodel:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    ports:
+#      - 8080:8080
+#    networks:
+#      - elk
 
   grafana:
     image: grafana/grafana:latest
@@ -28,3 +32,10 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - mysql
+    networks:
+      - elk
+
+networks:
+  elk:

@@ -1,36 +1,60 @@
 package com.research.qmodel.annotations;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.research.qmodel.model.AGraph;
 import com.research.qmodel.model.Commit;
-import com.research.qmodel.model.Project;
+import com.research.qmodel.model.FileChange;
+import com.research.qmodel.service.BasicQueryService;
+import lombok.SneakyThrows;
+import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.io.IOException;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 
+@Component
 public class AGraphDeserializer extends JsonDeserializer<AGraph> {
+    private BasicQueryService basicQueryService;
+    private final ObjectMapper objectMapper;
 
+    public AGraphDeserializer(BasicQueryService basicQueryService, ObjectMapper objectMapper) {
+        this.basicQueryService = basicQueryService;
+        this.objectMapper = objectMapper;
+    }
+
+    @SneakyThrows
     @Override
     public AGraph deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         AGraph aGraph = new AGraph();
         aGraph.setGraph(node.toString());
         for (JsonNode rawCommit : node) {
-            if (rawCommit.get("commit") != null && rawCommit.get("commit").get("author") != null && rawCommit.get("commit").get("author").get("date") != null) {
+            if (rawCommit.get("commit") != null && rawCommit.get("commit").get("author") != null && rawCommit.get("commit").get("author").get("date") != null && rawCommit.get("url") != null) {
                 Commit commit = new Commit();
                 DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT;
-                Instant instant = Instant.from(formatter.parse( rawCommit.get("commit").get("author").get("date").asText()));
+                Instant instant = Instant.from(formatter.parse(rawCommit.get("commit").get("author").get("date").asText()));
+                objectMapper.enable(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY);
+                SimpleModule module = new SimpleModule();
+                module.addDeserializer(List.class, new FileChangesDeserializer(basicQueryService));
+                objectMapper.registerModule(module);
+                List<FileChange> fileChanges = objectMapper.convertValue(rawCommit, new TypeReference<>() {
+                });
+                commit.setNumOfFilesChanged(fileChanges.size());
                 Date date = Date.from(instant);
                 commit.setCommitDate(date);
                 aGraph.addCoommit(commit);
+                if (fileChanges == null) {
+                    break;
+                }
+                commit.setFileChanges(fileChanges);
+
             }
         }
-
         return aGraph;
     }
 }
