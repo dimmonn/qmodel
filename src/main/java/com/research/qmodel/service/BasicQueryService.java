@@ -32,7 +32,7 @@ public class BasicQueryService {
         this.objectMapper = objectMapper;
     }
 
-    public <T> T retrievemetrics(String url, TypeReference<T> targetType) throws URISyntaxException {
+    public <T> T retrievemetrics(String url, TypeReference<T> targetType) {
         List<JsonNode> allEntities = new ArrayList<>();
         int pageNumber = 1;
         int pageSize = 200;
@@ -58,7 +58,7 @@ public class BasicQueryService {
     private JsonNode getRowData(String url, String baseUrl, int pageNumber, int pageSize) {
         String apiUrl = String.format(url, baseUrl, "?page=" + pageNumber + "&per_page=" + pageSize);
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer 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");
+        headers.set("Authorization", "Bearer XXX");
         RequestEntity<Void> requestEntity = null;
         try {
             requestEntity = new RequestEntity<>(headers, HttpMethod.GET, new URI(apiUrl));
