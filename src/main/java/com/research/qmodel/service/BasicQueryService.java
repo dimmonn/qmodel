@@ -26,6 +26,8 @@ public class BasicQueryService {
     private final Logger LOGGER = LoggerFactory.getLogger(BasicQueryService.class);
     @Value("${app.mode}")
     private String mode;
+    @Value("${qmodel.api.key}")
+    private String apiKey;
 
     public BasicQueryService(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
@@ -58,7 +60,7 @@ public class BasicQueryService {
     private JsonNode getRowData(String url, String baseUrl, int pageNumber, int pageSize) {
         String apiUrl = String.format(url, baseUrl, "?page=" + pageNumber + "&per_page=" + pageSize);
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer XXX");
+        headers.set("Authorization", apiKey);
         RequestEntity<Void> requestEntity = null;
         try {
             requestEntity = new RequestEntity<>(headers, HttpMethod.GET, new URI(apiUrl));
@@ -73,7 +75,7 @@ public class BasicQueryService {
 
     public JsonNode getRowData(String commitUrl) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer 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");
+        headers.set("Authorization", apiKey);
         RequestEntity<Void> requestEntity = null;
         try {
             requestEntity = new RequestEntity<>(headers, HttpMethod.GET, new URI(commitUrl));
