@@ -61,7 +61,7 @@ public class BasicQueryService {
         String apiUrl = String.format(url, baseUrl, "?page=" + pageNumber + "&per_page=" + pageSize);
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", apiKey);
-        RequestEntity<Void> requestEntity = null;
+        RequestEntity<Void> requestEntity;
         try {
             requestEntity = new RequestEntity<>(headers, HttpMethod.GET, new URI(apiUrl));
             ResponseEntity<JsonNode> response = restTemplate.exchange(requestEntity, JsonNode.class);
