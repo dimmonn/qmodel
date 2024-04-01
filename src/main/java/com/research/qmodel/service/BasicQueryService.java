@@ -80,7 +80,7 @@ public class BasicQueryService {
     public JsonNode getRowData(String commitUrl) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", apiKey);
-        RequestEntity<Void> requestEntity = null;
+        RequestEntity<Void> requestEntity;
         try {
             requestEntity = new RequestEntity<>(headers, HttpMethod.GET, new URI(commitUrl));
         } catch (Exception e) {

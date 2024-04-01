@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -31,5 +32,16 @@ public class FileChange {
     private int totalChanges;
     @Column
     private String fileName;
+
+    public void addCommit(Commit commit) {
+        if (this.commit == null || this.commit.isEmpty()) {
+            this.commit = new ArrayList<>();
+            this.commit.add(commit);
+        } else {
+            if (this.commit.stream().filter(c -> c.getId() == commit.getId()).findFirst().isEmpty()) {
+                this.commit.add(commit);
+            }
+        }
+    }
 
 }

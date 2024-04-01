@@ -45,7 +45,9 @@ public class AGraphDeserializer extends JsonDeserializer<AGraph> {
                     break;
                 }
                 commit.setFileChanges(fileChanges);
-
+                for (FileChange fileChange : fileChanges) {
+                    fileChange.addCommit(commit);
+                }
             }
         }
         return aGraph;

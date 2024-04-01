@@ -35,7 +35,7 @@ public class BaseGitQueryController {
                               @Parameter(name = "owner", in = ParameterIn.PATH, description = "Owner of the project")
                               String owner, @PathVariable(value = "repo")
                               @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
-                              String repo) throws URISyntaxException {
+                              String repo) {
         AGraph ag = basicQueryService.retrievemetrics("%s" + String.format("repos/%s/%s/commits", owner, repo) + "%s", new TypeReference<>() {
         });
         return new ResponseEntity(dataPersistance.persistGraph(List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), ag)), HttpStatus.OK);
@@ -43,8 +43,8 @@ public class BaseGitQueryController {
 
     @GetMapping(value = "/repos/ag")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<JsonNode> baseQueryBunchAg(@RequestBody List<Project> repos) throws URISyntaxException {
-        Map<Project, AGraph> ags = queryProvider(repos, "repos/%s/%s/commits/", new TypeReference<>() {
+    public ResponseEntity<JsonNode> baseQueryBunchAg(@RequestBody List<Project> repos) {
+        Map<Project, AGraph> ags = queryProvider(repos, "repos/%s/%s/commits", new TypeReference<>() {
         });
         return new ResponseEntity(dataPersistance.persistGraph(repos, ags), HttpStatus.OK);
     }
@@ -55,7 +55,7 @@ public class BaseGitQueryController {
                                 @Parameter(name = "owner", in = ParameterIn.PATH, description = "Owner of the project")
                                 String owner, @PathVariable(value = "repo")
                                 @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
-                                String repo) throws URISyntaxException {
+                                String repo) {
         List<ProjectPull> projectPull = basicQueryService.retrievemetrics("%s" + String.format("repos/%s/%s/pulls", owner, repo) + "%s&state=closed", new TypeReference<>() {
         });
         return new ResponseEntity(dataPersistance.persistPulls(List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), projectPull)), HttpStatus.OK);
@@ -63,7 +63,7 @@ public class BaseGitQueryController {
 
     @GetMapping(value = "/repos/pulls")
     @ResponseStatus(HttpStatus.OK)
-    public Object baseQueryBunchPulls(@RequestBody List<Project> repos) throws URISyntaxException {
+    public Object baseQueryBunchPulls(@RequestBody List<Project> repos) {
         Map<Project, List<ProjectPull>> pulls = queryProvider(repos, "repos/%s/%s/pulls", new TypeReference<>() {
         });
         return new ResponseEntity(dataPersistance.persistPulls(repos, pulls), HttpStatus.OK);
