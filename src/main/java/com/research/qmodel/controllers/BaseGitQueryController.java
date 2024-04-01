@@ -1,4 +1,5 @@
 package com.research.qmodel.controllers;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.research.qmodel.model.AGraph;
@@ -32,9 +33,9 @@ public class BaseGitQueryController {
     @ResponseStatus(HttpStatus.OK)
     public Object baseQueryAg(@PathVariable(value = "owner")
                               @Parameter(name = "owner", in = ParameterIn.PATH, description = "Owner of the project")
-                                      String owner, @PathVariable(value = "repo")
+                              String owner, @PathVariable(value = "repo")
                               @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
-                                      String repo) throws URISyntaxException {
+                              String repo) throws URISyntaxException {
         AGraph ag = basicQueryService.retrievemetrics("%s" + String.format("repos/%s/%s/commits", owner, repo) + "%s", new TypeReference<>() {
         });
         return new ResponseEntity(dataPersistance.persistGraph(List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), ag)), HttpStatus.OK);
@@ -52,9 +53,9 @@ public class BaseGitQueryController {
     @ResponseStatus(HttpStatus.OK)
     public Object baseQueryPull(@PathVariable(value = "owner")
                                 @Parameter(name = "owner", in = ParameterIn.PATH, description = "Owner of the project")
-                                        String owner, @PathVariable(value = "repo")
+                                String owner, @PathVariable(value = "repo")
                                 @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
-                                        String repo) throws URISyntaxException {
+                                String repo) throws URISyntaxException {
         List<ProjectPull> projectPull = basicQueryService.retrievemetrics("%s" + String.format("repos/%s/%s/pulls", owner, repo) + "%s&state=closed", new TypeReference<>() {
         });
         return new ResponseEntity(dataPersistance.persistPulls(List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), projectPull)), HttpStatus.OK);
@@ -63,7 +64,7 @@ public class BaseGitQueryController {
     @GetMapping(value = "/repos/pulls")
     @ResponseStatus(HttpStatus.OK)
     public Object baseQueryBunchPulls(@RequestBody List<Project> repos) throws URISyntaxException {
-        Map<Project, List<ProjectPull>> pulls = queryProvider(repos, "%s/repos/%s/%s/pulls%s&state=closed", new TypeReference<>() {
+        Map<Project, List<ProjectPull>> pulls = queryProvider(repos, "repos/%s/%s/pulls", new TypeReference<>() {
         });
         return new ResponseEntity(dataPersistance.persistPulls(repos, pulls), HttpStatus.OK);
     }
@@ -72,9 +73,9 @@ public class BaseGitQueryController {
     @ResponseStatus(HttpStatus.OK)
     public Object baseQueryIssueResolutionTime(@PathVariable(value = "owner")
                                                @Parameter(name = "owner", in = ParameterIn.PATH, description = "Owner of the project")
-                                                       String owner, @PathVariable(value = "repo")
+                                               String owner, @PathVariable(value = "repo")
                                                @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
-                                                       String repo) throws URISyntaxException {
+                                               String repo) {
         List<ProjectIssue> projectIssues = basicQueryService.retrievemetrics("%s" + String.format("repos/%s/%s/issues", owner, repo) + "%s" + "&state=closed", new TypeReference<>() {
         });
         return new ResponseEntity(dataPersistance.persistIssues(List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), projectIssues)), HttpStatus.OK);
@@ -82,16 +83,16 @@ public class BaseGitQueryController {
 
     @GetMapping(value = "/repos/fixtime")
     @ResponseStatus(HttpStatus.OK)
-    public Object baseQueryBunchResolutionTime(@RequestBody List<Project> repos) throws URISyntaxException {
-        Map<Project, List<ProjectIssue>> pulls = queryProvider(repos, "%s/repos/%s/%s/issues%s&state=closed", new TypeReference<>() {
+    public Object baseQueryBunchResolutionTime(@RequestBody List<Project> repos) {
+        Map<Project, List<ProjectIssue>> pulls = queryProvider(repos, "repos/%s/%s/issues", new TypeReference<>() {
         });
         return new ResponseEntity(dataPersistance.persistIssues(repos, pulls), HttpStatus.OK);
     }
 
-    private <T> Map<Project, T> queryProvider(@RequestBody List<Project> repos, String url, TypeReference<? extends T> targetType) throws URISyntaxException {
+    private <T> Map<Project, T> queryProvider(@RequestBody List<Project> repos, String url, TypeReference<? extends T> targetType) {
         Map<Project, T> pulls = new HashMap<>();
         for (Project project : repos) {
-            pulls.put(project, basicQueryService.retrievemetrics("%s/" + String.format(url, project.getOwner(), project.getProjectName()) + "%s&state=closed", targetType));
+            pulls.put(project, basicQueryService.retrievemetrics("%s" + String.format(url, project.getOwner(), project.getProjectName()) + "%s&state=closed", targetType));
         }
         return pulls;
     }
