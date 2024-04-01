@@ -38,7 +38,7 @@ public class FileChangesDeserializer extends JsonDeserializer<List<FileChange>> 
                 int deletions = file.get("deletions") != null ? file.get("deletions").asInt() : 0;
                 int changes = file.get("changes") != null ? file.get("changes").asInt() : 0;
                 String filename = file.get("filename") != null ? file.get("filename").asText() : null;
-                result.add(FileChange.builder().totalAdditions(additions).totalDeletions(deletions).totalChanges(changes).fileName(filename).build());
+                result.add(new FileChange(null, null, null, additions, deletions, changes, filename));
             }
             return result;
         }

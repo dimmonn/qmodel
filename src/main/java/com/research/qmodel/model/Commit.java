@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.research.qmodel.annotations.CommitDeserializer;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.Date;
@@ -13,6 +14,7 @@ import java.util.List;
 @Table(name = "commit")
 @JsonDeserialize(using = CommitDeserializer.class)
 @Data
+@NoArgsConstructor
 public class Commit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

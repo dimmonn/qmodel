@@ -3,8 +3,7 @@ package com.research.qmodel.model;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.research.qmodel.annotations.FileChangesDeserializer;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.Date;
@@ -14,7 +13,8 @@ import java.util.List;
 @Table(name = "file_changes")
 @JsonDeserialize(using = FileChangesDeserializer.class)
 @Data
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FileChange {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
