@@ -31,7 +31,7 @@ public class Commit {
     private String author;
     @Column
     private String email;
-    @Column
+    @Column(columnDefinition = "LONGTEXT")
     private String message;
     @Column
     private int commentCount;
