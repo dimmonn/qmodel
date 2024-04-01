@@ -27,4 +27,12 @@ public class Commit {
     private List<FileChange> fileChanges;
     @Column
     private int numOfFilesChanged;
+    @Column
+    private String author;
+    @Column
+    private String email;
+    @Column
+    private String message;
+    @Column
+    private int commentCount;
 }

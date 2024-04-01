@@ -12,9 +12,6 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.io.IOException;
-import java.time.Instant;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -35,9 +32,7 @@ public class AGraphDeserializer extends JsonDeserializer<AGraph> {
         aGraph.setGraph(node.toString());
         for (JsonNode rawCommit : node) {
             if (rawCommit.get("commit") != null && rawCommit.get("commit").get("author") != null && rawCommit.get("commit").get("author").get("date") != null && rawCommit.get("url") != null) {
-                Commit commit = new Commit();
-                DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT;
-                Instant instant = Instant.from(formatter.parse(rawCommit.get("commit").get("author").get("date").asText()));
+                Commit commit= objectMapper.convertValue(rawCommit.get("commit"), Commit.class);
                 objectMapper.enable(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY);
                 SimpleModule module = new SimpleModule();
                 module.addDeserializer(List.class, new FileChangesDeserializer(basicQueryService));
@@ -45,8 +40,6 @@ public class AGraphDeserializer extends JsonDeserializer<AGraph> {
                 List<FileChange> fileChanges = objectMapper.convertValue(rawCommit, new TypeReference<>() {
                 });
                 commit.setNumOfFilesChanged(fileChanges.size());
-                Date date = Date.from(instant);
-                commit.setCommitDate(date);
                 aGraph.addCoommit(commit);
                 if (fileChanges == null) {
                     break;

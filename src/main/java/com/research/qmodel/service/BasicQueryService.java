@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +27,13 @@ public class BasicQueryService {
     private String mode;
     @Value("${qmodel.api.key}")
     private String apiKey;
+    @Value("${app.page_limit}")
+    private int PAGE_LIMIT;
+    @Value("${app.page_size}")
+    private int PAGE_SIZE;
+    @Value("${app.base_url}")
+    private String BASE_URL;
+
 
     public BasicQueryService(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
@@ -37,10 +43,8 @@ public class BasicQueryService {
     public <T> T retrievemetrics(String url, TypeReference<T> targetType) {
         List<JsonNode> allEntities = new ArrayList<>();
         int pageNumber = 1;
-        int pageSize = 200;
-        String baseUrl = "https://api.github.com/";
         while (isRun(pageNumber)) {
-            JsonNode body = getRowData(url, baseUrl, pageNumber, pageSize);
+            JsonNode body = getRowData(url, BASE_URL, pageNumber, PAGE_SIZE);
             if (body != null && body.size() > 0) {
                 List<JsonNode> rowBody = new ObjectMapper().convertValue(body, ArrayList.class);
                 allEntities.addAll(rowBody);
@@ -54,7 +58,7 @@ public class BasicQueryService {
     }
 
     private boolean isRun(int pageNumber) {
-        return mode.equals("demo") ? pageNumber < 20 : true;
+        return mode.equals("demo") ? pageNumber < PAGE_LIMIT : true;
     }
 
     private JsonNode getRowData(String url, String baseUrl, int pageNumber, int pageSize) {

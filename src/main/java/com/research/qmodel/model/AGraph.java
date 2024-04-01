@@ -1,22 +1,21 @@
 package com.research.qmodel.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.research.qmodel.annotations.AGraphDeserializer;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Data
 @Entity
 @Table(name = "graph")
 @JsonDeserialize(using = AGraphDeserializer.class)
+@ToString
 public class AGraph implements BaseMetric {
 
     @Id
