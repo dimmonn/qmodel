@@ -27,13 +27,12 @@ public class BasicQueryService {
     private String mode;
     @Value("${qmodel.api.key}")
     private String apiKey;
-    @Value("${app.page_limit}")
-    private int PAGE_LIMIT;
+    @Value("${app.batch_limit}")
+    private int BATCH_LIMIT;
     @Value("${app.page_size}")
     private int PAGE_SIZE;
     @Value("${app.base_url}")
     private String BASE_URL;
-
 
     public BasicQueryService(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
@@ -58,7 +57,7 @@ public class BasicQueryService {
     }
 
     private boolean isRun(int pageNumber) {
-        return mode.equals("demo") ? pageNumber < PAGE_LIMIT : true;
+        return mode.equals("demo") ? pageNumber < BATCH_LIMIT : true;
     }
 
     private JsonNode getRowData(String url, String baseUrl, int pageNumber, int pageSize) {
@@ -72,6 +71,7 @@ public class BasicQueryService {
             JsonNode body = response.getBody();
             return body;
         } catch (Exception e) {
+            LOGGER.error(e.getMessage());
             return null;
         }
 

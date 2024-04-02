@@ -100,6 +100,34 @@ App visualises software quality metrics for a given github project
   p.owner, p.project_name, c.commit_date
   ORDER BY
   c.commit_date ASC`
+- Total Developers
+  `SELECT
+  ag.repo_owner AS repo_owner,
+  ag.repo_project_name AS repo_project_name,
+  COUNT(DISTINCT c.author) AS num_developers
+  FROM
+  commit c
+  JOIN
+  agraph ag ON c.a_graph_id = ag.id
+  GROUP BY
+  ag.repo_owner, ag.repo_project_name
+  ORDER BY
+  num_developers DESC;`
+- Total Developers Over Time
+  `SELECT
+  CONCAT(p.owner, '_', p.project_name) AS project,
+  DATE(c.commit_date) AS time,
+  COUNT(DISTINCT c.author) AS num_developers
+  FROM
+  commit c
+  JOIN
+  agraph ag ON c.a_graph_id = ag.id
+  JOIN
+  project p ON ag.repo_owner = p.owner AND ag.repo_project_name = p.project_name
+  GROUP BY
+  p.owner, p.project_name, DATE(c.commit_date)
+  ORDER BY
+  DATE(c.commit_date) ASC;`
 - 
 ## Usage
 
