@@ -9,9 +9,9 @@ pipeline {
             }
         }
 
-        stage('Install') {
+        stage('Clean') {
             steps {
-                sh '/home/apache-maven-3.9.6/bin/mvn install'
+                sh '/home/apache-maven-3.9.6/bin/mvn clean'
             }
         }
 
