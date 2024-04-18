@@ -8,6 +8,18 @@ pipeline {
                 checkout scm
             }
         }
+
+        stage('Install') {
+            steps {
+                sh -c '/home/apache-maven-3.9.6/bin/mvn install'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh -c 'docker-compose up -d'
+            }
+        }
     }
 
     post {
