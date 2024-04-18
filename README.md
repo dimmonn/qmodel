@@ -128,6 +128,60 @@ App visualises software quality metrics for a given github project
   p.owner, p.project_name, DATE(c.commit_date)
   ORDER BY
   DATE(c.commit_date) ASC;`
+- Issues Closed
+  `SELECT
+  CONCAT(project_owner, '_', project_project_name) AS project,
+  DATE(closed_at) AS time,
+  COUNT(*) AS issues_closed
+  FROM
+  project_issue
+  WHERE
+  closed_at IS NOT NULL
+  GROUP BY
+  project_owner, project_project_name, DATE(closed_at)
+  ORDER BY
+  DATE(closed_at) ASC;`
+- Issues Opened
+  `SELECT
+  CONCAT(project_owner, '_', project_project_name) AS project,
+  DATE(created_at) AS time,
+  COUNT(*) AS issues_opened
+  FROM
+  project_issue
+  GROUP BY
+  project_owner, project_project_name, DATE(created_at)
+  ORDER BY
+  DATE(created_at) ASC;`
+- Commit Frequency
+  `SELECT
+  CONCAT(p.owner, '_', p.project_name) AS project,
+  DATE(c.commit_date) AS time,
+  COUNT(*) AS commit_frequency
+  FROM
+  commit c
+  JOIN
+  agraph ag ON c.a_graph_id = ag.id
+  JOIN
+  project p ON ag.repo_owner = p.owner AND ag.repo_project_name = p.project_name
+  GROUP BY
+  p.owner, p.project_name, DATE(c.commit_date)
+  ORDER BY
+  DATE(c.commit_date) ASC;`
+- Total Developers
+  `SELECT
+  CONCAT(p.owner, '_', p.project_name) AS project,
+  DATE(c.commit_date) AS time,
+  COUNT(DISTINCT c.author) AS num_developers
+  FROM
+  commit c
+  JOIN
+  agraph ag ON c.a_graph_id = ag.id
+  JOIN
+  project p ON ag.repo_owner = p.owner AND ag.repo_project_name = p.project_name
+  GROUP BY
+  p.owner, p.project_name, DATE(c.commit_date)
+  ORDER BY
+  DATE(c.commit_date) ASC;`
 - 
 ## Usage
 
