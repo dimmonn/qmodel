@@ -21,7 +21,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 8082:8082
+      - 8082:8080
     depends_on:
       - mysql
     networks:
@@ -30,7 +30,7 @@ services:
   grafana:
     image: grafana/grafana:latest
     ports:
-      - 3001:3001
+      - 3001:3000
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
