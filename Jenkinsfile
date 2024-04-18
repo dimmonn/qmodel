@@ -3,6 +3,18 @@ pipeline {
 
     stages {
 
+        stage('Stop') {
+            steps {
+                sh 'docker-compose stop'
+            }
+        }
+
+        stage('Install') {
+            steps {
+                sh '/home/apache-maven-3.9.6/bin/mvn install'
+            }
+        }
+
         stage('Checkout') {
             steps {
                 checkout scm
