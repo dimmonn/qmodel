@@ -22,7 +22,7 @@ public class FileChange {
     private Long id;
     @Temporal(TemporalType.TIMESTAMP)
     private Date changeDate;
-    @ManyToMany(mappedBy = "fileChanges", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "fileChanges", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Commit> commit;
     @Column
     private int totalAdditions;
