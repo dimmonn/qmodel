@@ -16,8 +16,8 @@ public class CommitDeserializer extends JsonDeserializer<Commit> {
     @Override
     public Commit deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-        Commit commit = new Commit();
         if (node != null) {
+            Commit commit = new Commit();
             JsonNode author = node.get("author");
             JsonNode commentCount = node.get("comment_count");
             if (commentCount != null) {
@@ -38,7 +38,8 @@ public class CommitDeserializer extends JsonDeserializer<Commit> {
                     commit.setCommitDate(date);
                 }
             }
+            return commit;
         }
-        return commit;
+        return null;
     }
 }
