@@ -5,7 +5,7 @@ pipeline {
 
         stage('Stop') {
             steps {
-                sh 'docker-compose stop'
+                sh 'docker-compose down --rmi all'
             }
         }
 
