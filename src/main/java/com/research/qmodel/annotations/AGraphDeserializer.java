@@ -43,11 +43,11 @@ public class AGraphDeserializer extends JsonDeserializer<AGraph> {
                 objectMapper.registerModule(module);
                 List<FileChange> fileChanges = objectMapper.convertValue(rawCommit, new TypeReference<>() {
                 });
-                List<FileChange> files = fileChanges.stream().filter(f -> f != null).collect(Collectors.toList());
-                if (files == null || fileChanges.isEmpty()) {
+                if (fileChanges == null || fileChanges.isEmpty()) {
                     LOGGER.error("Failed to pull out files for commit " + rawCommit);
                     continue;
                 }
+                List<FileChange> files = fileChanges.stream().filter(f -> f != null).collect(Collectors.toList());
                 commit.setNumOfFilesChanged(fileChanges.size());
                 aGraph.addCoommit(commit);
                 commit.setFileChanges(fileChanges);
