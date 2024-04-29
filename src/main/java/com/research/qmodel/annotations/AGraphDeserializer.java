@@ -15,6 +15,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class AGraphDeserializer extends JsonDeserializer<AGraph> {
@@ -42,17 +43,15 @@ public class AGraphDeserializer extends JsonDeserializer<AGraph> {
                 objectMapper.registerModule(module);
                 List<FileChange> fileChanges = objectMapper.convertValue(rawCommit, new TypeReference<>() {
                 });
-                if (fileChanges == null || fileChanges.isEmpty()) {
+                List<FileChange> files = fileChanges.stream().filter(f -> f != null).collect(Collectors.toList());
+                if (files == null || fileChanges.isEmpty()) {
                     LOGGER.error("Failed to pull out files for commit " + rawCommit);
                     continue;
                 }
                 commit.setNumOfFilesChanged(fileChanges.size());
                 aGraph.addCoommit(commit);
-                if (fileChanges == null) {
-                    break;
-                }
                 commit.setFileChanges(fileChanges);
-                for (FileChange fileChange : fileChanges) {
+                for (FileChange fileChange : files) {
                     fileChange.addCommit(commit);
                 }
             }
