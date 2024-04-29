@@ -1,5 +1,4 @@
 package com.research.qmodel.service;
-
 import com.research.qmodel.dto.ProjectAGraph;
 import com.research.qmodel.dto.ProjectToIssue;
 import com.research.qmodel.dto.ProjectToPull;
@@ -11,7 +10,8 @@ import com.research.qmodel.repos.AGraphRepository;
 import com.research.qmodel.repos.ProjectIssueRepository;
 import com.research.qmodel.repos.ProjectPullRepository;
 import com.research.qmodel.repos.ProjectRepository;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class DataPersistance {
     private final ProjectIssueRepository projectIssueRepository;
     private final ProjectPullRepository projectPullRepository;
     private final ProjectRepository projectRepository;
-
+    private final Logger LOGGER = LoggerFactory.getLogger(DataPersistance.class);
     public DataPersistance(AGraphRepository aGraphRepository, ProjectIssueRepository projectIssueRepository, ProjectPullRepository projectPullRepository, ProjectRepository projectRepository) {
         this.aGraphRepository = aGraphRepository;
         this.projectIssueRepository = projectIssueRepository;
@@ -43,7 +43,7 @@ public class DataPersistance {
             if (aGraph != null && aGraph.equals("[]")) {
                 project.setAGraph(aGraph);
                 aGraph.setProject(project);
-                System.out.println(aGraph);
+                LOGGER.info(aGraph.toString());
                 aGraphRepository.save(aGraph);
                 projectRepository.save(project);
             }

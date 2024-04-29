@@ -5,8 +5,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.research.qmodel.configs.HttpClientConfig;
-import com.research.qmodel.model.AGraph;
 import com.research.qmodel.model.ProjectPull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
