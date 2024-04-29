@@ -43,6 +43,7 @@ public class DataPersistance {
             if (aGraph != null && aGraph.equals("[]")) {
                 project.setAGraph(aGraph);
                 aGraph.setProject(project);
+                System.out.println(aGraph);
                 aGraphRepository.save(aGraph);
                 projectRepository.save(project);
             }
