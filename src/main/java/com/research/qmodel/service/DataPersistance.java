@@ -43,7 +43,6 @@ public class DataPersistance {
             if (aGraph != null && aGraph.equals("[]")) {
                 project.setAGraph(aGraph);
                 aGraph.setProject(project);
-                LOGGER.info(aGraph.toString());
                 aGraphRepository.save(aGraph);
                 projectRepository.save(project);
             }
