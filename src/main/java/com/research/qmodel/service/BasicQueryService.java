@@ -84,12 +84,14 @@ public class BasicQueryService {
         try {
             requestEntity = new RequestEntity<>(headers, HttpMethod.GET, new URI(commitUrl));
         } catch (Exception e) {
+            LOGGER.error(e.getMessage());
             return null;
         }
         try {
             ResponseEntity<JsonNode> response = restTemplate.exchange(requestEntity, JsonNode.class);
             return response.getBody();
         } catch (Exception e) {
+            LOGGER.error(e.getMessage());
             return null;
         }
 
