@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,9 +27,12 @@ public class BasicQueryService {
     @Value("${app.mode}")
     private String mode;
     @Value("${qmodel.api.key}")
-    private String apiKey;
-    @Value("${app.batch_limit}")
-    private int BATCH_LIMIT;
+    private String[] apiKey;
+    private String currentKey;
+    @Value("${app.demo_batch_limit}")
+    private int DEMO_BATCH_LIMIT;
+    @Value("${app.prod_batch_limit}")
+    private int PROD_BATCH_LIMIT;
     @Value("${app.page_size}")
     private int PAGE_SIZE;
     @Value("${app.base_url}")
@@ -57,13 +61,14 @@ public class BasicQueryService {
     }
 
     private boolean isRun(int pageNumber) {
-        return mode.equals("demo") ? pageNumber < BATCH_LIMIT : true;
+        return mode.equals("demo") ? pageNumber < DEMO_BATCH_LIMIT : true;
     }
 
     private JsonNode getRowData(String url, String baseUrl, int pageNumber, int pageSize) {
         String apiUrl = String.format(url, baseUrl, "?page=" + pageNumber + "&per_page=" + pageSize);
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", apiKey);
+        currentKey = currentKey == null ? apiKey[0] : currentKey;
+        headers.set("Authorization", currentKey);
         RequestEntity<Void> requestEntity;
         try {
             requestEntity = new RequestEntity<>(headers, HttpMethod.GET, new URI(apiUrl));
@@ -71,15 +76,24 @@ public class BasicQueryService {
             JsonNode body = response.getBody();
             return body;
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            return null;
+            currentKey =  apiKey[1];
+            headers.set("Authorization", currentKey);
+            try {
+                requestEntity = new RequestEntity<>(headers, HttpMethod.GET, new URI(apiUrl));
+                ResponseEntity<JsonNode> response = restTemplate.exchange(requestEntity, JsonNode.class);
+                JsonNode body = response.getBody();
+                return body;
+            } catch (URISyntaxException ex) {
+                throw new RuntimeException(ex);
+            }
         }
 
     }
 
     public JsonNode getRowData(String commitUrl) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", apiKey);
+        currentKey = currentKey == null ? apiKey[0] : currentKey;
+        headers.set("Authorization", currentKey);
         RequestEntity<Void> requestEntity;
         try {
             requestEntity = new RequestEntity<>(headers, HttpMethod.GET, new URI(commitUrl));
@@ -91,8 +105,15 @@ public class BasicQueryService {
             ResponseEntity<JsonNode> response = restTemplate.exchange(requestEntity, JsonNode.class);
             return response.getBody();
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            return null;
+            currentKey = apiKey[1] ;
+            headers.set("Authorization", currentKey);
+            try {
+                requestEntity = new RequestEntity<>(headers, HttpMethod.GET, new URI(commitUrl));
+            } catch (URISyntaxException ex) {
+                throw new RuntimeException(ex);
+            }
+            ResponseEntity<JsonNode> response = restTemplate.exchange(requestEntity, JsonNode.class);
+            return response.getBody();
         }
 
     }
