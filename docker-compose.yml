@@ -22,6 +22,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8082:8080
+      - 4123:4123
     depends_on:
       - mysql
     networks:
