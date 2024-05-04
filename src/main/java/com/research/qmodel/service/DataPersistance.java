@@ -40,7 +40,7 @@ public class DataPersistance {
             if (project == null) {
                 project = new Project(repo.getOwner(), repo.getProjectName());
             }
-            if (aGraph != null && aGraph.equals("[]")) {
+            if (aGraph != null && !aGraph.equals("[]")) {
                 project.setAGraph(aGraph);
                 aGraph.setProject(project);
                 aGraphRepository.save(aGraph);
