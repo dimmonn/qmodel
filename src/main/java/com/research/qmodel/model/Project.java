@@ -13,7 +13,7 @@ import java.util.Objects;
 @Data
 @Entity
 @Table(name = "project")
-@IdClass(ProjectId.class)
+@IdClass(ProjectID.class)
 @NoArgsConstructor
 public class Project {
 

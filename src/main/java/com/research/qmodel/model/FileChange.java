@@ -38,7 +38,7 @@ public class FileChange {
             this.commit = new ArrayList<>();
             this.commit.add(commit);
         } else {
-            if (this.commit.stream().filter(c -> c.getId() == commit.getId()).findFirst().isEmpty()) {
+            if (this.commit.stream().filter(c -> c.getSha() == commit.getSha()).findFirst().isEmpty()) {
                 this.commit.add(commit);
             }
         }

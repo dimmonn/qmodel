@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Data
 @EqualsAndHashCode
-public class ProjectId implements Serializable {
+public class ProjectID implements Serializable {
     private String owner;
     private String projectName;
 }

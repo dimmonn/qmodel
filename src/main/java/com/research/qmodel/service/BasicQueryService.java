@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -28,6 +29,8 @@ public class BasicQueryService {
     private String mode;
     @Value("${qmodel.api.key}")
     private String[] apiKey;
+    @Value("${qmodel.api.key}")
+    private String[] apiKeyBackup;
     private String currentKey;
     @Value("${app.demo_batch_limit}")
     private int DEMO_BATCH_LIMIT;
@@ -76,7 +79,7 @@ public class BasicQueryService {
             JsonNode body = response.getBody();
             return body;
         } catch (Exception e) {
-            currentKey =  apiKey[1];
+            currentKey = apiKey[1];
             headers.set("Authorization", currentKey);
             try {
                 requestEntity = new RequestEntity<>(headers, HttpMethod.GET, new URI(apiUrl));
@@ -92,7 +95,11 @@ public class BasicQueryService {
 
     public JsonNode getRowData(String commitUrl) {
         HttpHeaders headers = new HttpHeaders();
-        currentKey = currentKey == null ? apiKey[0] : currentKey;
+        if (this.apiKey.length==0) {
+            apiKey = new String[apiKeyBackup.length];
+            System.arraycopy(apiKeyBackup, 0, apiKey, 0, apiKeyBackup.length);
+        }
+        currentKey = apiKey[0];
         headers.set("Authorization", currentKey);
         RequestEntity<Void> requestEntity;
         try {
@@ -105,16 +112,25 @@ public class BasicQueryService {
             ResponseEntity<JsonNode> response = restTemplate.exchange(requestEntity, JsonNode.class);
             return response.getBody();
         } catch (Exception e) {
-            currentKey = apiKey[1] ;
-            headers.set("Authorization", currentKey);
-            try {
-                requestEntity = new RequestEntity<>(headers, HttpMethod.GET, new URI(commitUrl));
-            } catch (URISyntaxException ex) {
-                throw new RuntimeException(ex);
+            LOGGER.error(e.getMessage());
+            if (e.getMessage().toLowerCase().contains("forbidden")) {
+                if (this.apiKey != null && this.apiKey.length != 0) {
+                    this.apiKey = Arrays.copyOfRange(apiKey, 1, apiKey.length);
+                }else{
+                    apiKey = new String[apiKeyBackup.length];
+                    System.arraycopy(apiKeyBackup, 0, apiKey, 0, apiKeyBackup.length);
+                    try {
+                        Thread.sleep(3200000);
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+                return getRowData(commitUrl);
             }
-            ResponseEntity<JsonNode> response = restTemplate.exchange(requestEntity, JsonNode.class);
-            return response.getBody();
+
         }
 
+        return null;
     }
+
 }
