@@ -41,18 +41,20 @@ public class FileChangesDeserializer extends JsonDeserializer<List<FileChange>> 
                 int deletions = file.get("deletions") != null ? file.get("deletions").asInt() : 0;
                 int changes = file.get("changes") != null ? file.get("changes").asInt() : 0;
                 String filename = file.get("filename") != null ? file.get("filename").asText() : null;
-                String sha = file.get("sha") != null ? file.get("sha").asText() : null;
-                JsonNode author = node.get("author");
+                JsonNode commit = node.get("commit");
                 Date date = null;
-                if (author != null) {
-                    JsonNode rowDate = author.get("date");
-                    if (rowDate != null) {
-                        DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT;
-                        Instant instant = Instant.from(formatter.parse(rowDate.asText()));
-                        date = Date.from(instant);
+                if (commit != null) {
+                    JsonNode author = commit.get("author");
+                    if (author != null) {
+                        JsonNode rowDate = author.get("date");
+                        if (rowDate != null) {
+                            DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT;
+                            Instant instant = Instant.from(formatter.parse(rowDate.asText()));
+                            date = Date.from(instant);
+                        }
                     }
                 }
-                result.add(new FileChange(null, date, null, additions, deletions, changes, filename));
+                result.add(new FileChange(null, date, null, additions, deletions, changes, filename, rowData.toString()));
             }
             return result;
         }

@@ -47,15 +47,21 @@ public class BasicQueryService {
     }
 
     public <T> T retrievemetrics(String url, TypeReference<T> targetType) {
-        List<JsonNode> allEntities = new ArrayList<>();
-        int pageNumber = 1;
+        List<T> allEntities = new ArrayList<>();
+        int pageNumber = 70;
         while (isRun(pageNumber)) {
             JsonNode body = getRowData(url, BASE_URL, pageNumber, PAGE_SIZE);
             if (body != null && body.size() > 0) {
-                List<JsonNode> rowBody = new ObjectMapper().convertValue(body, ArrayList.class);
-                allEntities.addAll(rowBody);
-                LOGGER.info("getting page number {}", pageNumber);
-                pageNumber++;
+                Class<T> targetTypeClass = (Class<T>) targetType.getType();
+                T t = objectMapper.convertValue(body, targetTypeClass);
+                boolean isAdded = t instanceof List ? ((List<T>) t).addAll(allEntities) : allEntities.add(t);
+                if (isAdded) {
+                    if (url.contains("actions/run")) {
+                        return t;
+                    }
+                    LOGGER.info("getting page number {}", pageNumber);
+                    pageNumber++;
+                }
             } else {
                 break;
             }
@@ -64,7 +70,7 @@ public class BasicQueryService {
     }
 
     private boolean isRun(int pageNumber) {
-        return mode.equals("demo") ? pageNumber < DEMO_BATCH_LIMIT : true;
+        return mode.equals("demo") ? pageNumber < 150 : true;
     }
 
     private JsonNode getRowData(String url, String baseUrl, int pageNumber, int pageSize) {
@@ -90,24 +96,11 @@ public class BasicQueryService {
                 throw new RuntimeException(ex);
             }
         }
-
     }
 
     public JsonNode getRowData(String commitUrl) {
-        HttpHeaders headers = new HttpHeaders();
-        if (this.apiKey.length==0) {
-            apiKey = new String[apiKeyBackup.length];
-            System.arraycopy(apiKeyBackup, 0, apiKey, 0, apiKeyBackup.length);
-        }
-        currentKey = apiKey[0];
-        headers.set("Authorization", currentKey);
-        RequestEntity<Void> requestEntity;
-        try {
-            requestEntity = new RequestEntity<>(headers, HttpMethod.GET, new URI(commitUrl));
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            return null;
-        }
+        RequestEntity<Void> requestEntity = setUpCallMeta(commitUrl);
+        if (requestEntity == null) return null;
         try {
             ResponseEntity<JsonNode> response = restTemplate.exchange(requestEntity, JsonNode.class);
             return response.getBody();
@@ -116,7 +109,7 @@ public class BasicQueryService {
             if (e.getMessage().toLowerCase().contains("forbidden")) {
                 if (this.apiKey != null && this.apiKey.length != 0) {
                     this.apiKey = Arrays.copyOfRange(apiKey, 1, apiKey.length);
-                }else{
+                } else {
                     apiKey = new String[apiKeyBackup.length];
                     System.arraycopy(apiKeyBackup, 0, apiKey, 0, apiKeyBackup.length);
                     try {
@@ -133,4 +126,35 @@ public class BasicQueryService {
         return null;
     }
 
+    private RequestEntity<Void> setUpCallMeta(String commitUrl) {
+        HttpHeaders headers = new HttpHeaders();
+        if (this.apiKey.length == 0) {
+            apiKey = new String[apiKeyBackup.length];
+            System.arraycopy(apiKeyBackup, 0, apiKey, 0, apiKeyBackup.length);
+        }
+        currentKey = apiKey[0];
+        headers.set("Authorization", currentKey);
+        RequestEntity<Void> requestEntity;
+        try {
+            requestEntity = new RequestEntity<>(headers, HttpMethod.GET, new URI(commitUrl));
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            return null;
+        }
+        return requestEntity;
+    }
+
+
+    public String getHtmlData(String commitUrl) {
+        RequestEntity<Void> requestEntity = setUpCallMeta(commitUrl);
+        if (requestEntity == null) return null;
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(requestEntity, String.class);
+            return response.getBody();
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+        }
+
+        return null;
+    }
 }

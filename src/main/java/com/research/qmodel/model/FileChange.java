@@ -16,22 +16,32 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
 public class FileChange {
+    @ToString.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ToString.Include
     @Temporal(TemporalType.TIMESTAMP)
     private Date changeDate;
     @ManyToMany(mappedBy = "fileChanges", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Commit> commit;
+    @ToString.Include
     @Column
     private int totalAdditions;
+    @ToString.Include
     @Column
     private int totalDeletions;
+    @ToString.Include
     @Column
     private int totalChanges;
+    @ToString.Include
     @Column
     private String fileName;
+    @ToString.Exclude
+    @Column(name = "raw_data", columnDefinition = "LONGTEXT")
+    private String rawData;
 
     public void addCommit(Commit commit) {
         if (this.commit == null || this.commit.isEmpty()) {

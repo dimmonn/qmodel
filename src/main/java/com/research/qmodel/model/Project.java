@@ -18,13 +18,10 @@ import java.util.Objects;
 public class Project {
 
     @Id
-    @Column(name = "owner")
-    private String owner;
+    private String projectOwner;
     @Id
-    @Column(name = "project_name")
     private String projectName;
     @JsonIgnore
-    @MapsId
     @OneToOne(mappedBy = "project", orphanRemoval = true, cascade = CascadeType.ALL)
     private AGraph aGraph;
 
@@ -36,8 +33,11 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProjectPull> projectPull;
 
-    public Project(String owner, String projectName) {
-        this.owner = owner;
+//    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    private Timeline timeLine;
+
+    public Project(String projectOwner, String projectName) {
+        this.projectOwner = projectOwner;
         this.projectName = projectName;
     }
 
@@ -47,6 +47,8 @@ public class Project {
         }
         if (!projectPull.contains(pull)) {
             pull.setProject(this);
+            pull.setProjectOwner(projectOwner);
+            pull.setProjectName(projectName);
             projectPull.add(pull);
             return true;
         }
@@ -59,6 +61,8 @@ public class Project {
         }
         if (!projectIssue.contains(issue)) {
             issue.setProject(this);
+            issue.setProjectName(projectName);
+            issue.setProjectOwner(projectOwner);
             projectIssue.add(issue);
             return true;
         }
@@ -75,18 +79,18 @@ public class Project {
         if (this == o) return true;
         if (!(o instanceof Project)) return false;
         Project project = (Project) o;
-        return owner.equals(project.owner) && projectName.equals(project.projectName);
+        return projectOwner.equals(project.projectOwner) && projectName.equals(project.projectName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(owner, projectName);
+        return Objects.hash(projectOwner, projectName);
     }
 
     @Override
     public String toString() {
         return "Project{" +
-                "owner='" + owner + '\'' +
+                "owner='" + projectOwner + '\'' +
                 ", projectName='" + projectName + '\'' +
                 '}';
     }

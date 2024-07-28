@@ -11,7 +11,8 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProjectID implements Serializable {
+public class PullID implements Serializable {
     private String projectOwner;
     private String projectName;
+    private Long id;
 }

@@ -6,7 +6,7 @@ services:
       - 3307:3306
     environment:
       - MYSQL_ROOT_PASSWORD=admin
-      - MYSQL_DATABASE=qmodel
+      - MYSQL_DATABASE=qmodel_demo
       - MYSQL_USER=admin
       - MYSQL_PASSWORD=admin
       - MYSQL_MAX_ALLOWED_PACKET=1G
@@ -21,10 +21,12 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 8082:8080
+      - 8082:8082
       - 4123:4123
     depends_on:
       - mysql
+    volumes:
+      - /Users/dpolishchuk/IdeaProjects/qmodel:/Users/dpolishchuk/IdeaProjects/qmodel
     networks:
       - elk
 
@@ -39,6 +41,8 @@ services:
       - mysql
     networks:
       - elk
+    extra_hosts:
+        - "host.docker.internal:host-gateway"
 
 networks:
   elk:

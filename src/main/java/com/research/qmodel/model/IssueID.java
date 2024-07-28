@@ -6,12 +6,12 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-
 @Data
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProjectID implements Serializable {
+public class IssueID implements Serializable {
     private String projectOwner;
     private String projectName;
+    private Long id;
 }

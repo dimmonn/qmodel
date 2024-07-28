@@ -1,32 +1,46 @@
 package com.research.qmodel.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.research.qmodel.annotations.ProjectPullDeserializer;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 @Data
 @Entity
 @Table(name = "project_pull")
+@IdClass(PullID.class)
 @JsonDeserialize(using = ProjectPullDeserializer.class)
 public class ProjectPull implements BaseMetric {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(length = 100)
     private Long id;
+    @Id
+    @Column(length = 100)
+    private String projectOwner;
+    @Id
+    @Column(length = 100)
+    private String projectName;
     @Column(columnDefinition = "LONGTEXT")
-    private String pull;
+    private String rawPull;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Timeline> timeLine;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<ProjectIssue> projectIssues;
+
     @Column(columnDefinition = "LONGTEXT")
     private String title;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumns({
-            @JoinColumn(name = "project_owner", referencedColumnName = "owner"),
-            @JoinColumn(name = "project_project_name", referencedColumnName = "project_name")
-    })
-
     private Project project;
     @Temporal(TemporalType.TIMESTAMP)
     private Date created_at;
@@ -36,18 +50,49 @@ public class ProjectPull implements BaseMetric {
     private Date merged_at;
     @Temporal(TemporalType.TIMESTAMP)
     private Date updated_at;
+    @Column
+    private String state;
+    @ElementCollection
+    private Set<String> labels;
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
+    private Reaction reaction;
 
+    /*Experimental mapping to fixing PR*/
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
+    @ToString.Exclude
+    private Set<ProjectIssue> projectIssue;
+
+    @Column
+    private boolean isBugFix;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ProjectPull)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         ProjectPull that = (ProjectPull) o;
-        return pull.equals(that.pull) && created_at.equals(that.created_at) && Objects.equals(closed_at, that.closed_at) && Objects.equals(merged_at, that.merged_at);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(pull, created_at, closed_at, merged_at);
+        return Objects.hash(id);
+    }
+
+    public void addIssue(ProjectIssue projectIssue) {
+        if (this.projectIssue == null) {
+            this.projectIssue = new HashSet<>();
+        }
+        if (!this.projectIssue.contains(projectIssue)) {
+            this.projectIssue.add(projectIssue);
+        }
+    }
+
+    public void addTimeLine(Timeline timeline) {
+        if (timeLine == null) {
+            timeLine = new HashSet<>();
+        }
+        timeLine.add(timeline);
+        timeline.setMessage(timeline.getMessage());
     }
 }

@@ -2,10 +2,7 @@ package com.research.qmodel.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.research.qmodel.model.AGraph;
-import com.research.qmodel.model.ProjectIssue;
-import com.research.qmodel.model.Project;
-import com.research.qmodel.model.ProjectPull;
+import com.research.qmodel.model.*;
 import com.research.qmodel.service.BasicQueryService;
 import com.research.qmodel.service.DataPersistance;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,19 +11,34 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URISyntaxException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 
 @RestController
 @RequestMapping(value = {"api/v1/metrics"})
-public class BaseGitQueryController {
+public class BaseGitQueryController implements FileJsonReader {
     private final BasicQueryService basicQueryService;
     private final DataPersistance dataPersistance;
 
     public BaseGitQueryController(BasicQueryService basicQueryService, DataPersistance dataPersistance) {
         this.basicQueryService = basicQueryService;
         this.dataPersistance = dataPersistance;
+    }
+
+    @GetMapping(value = "/repos/{owner}/{repo}/actions")
+    @ResponseStatus(HttpStatus.OK)
+    public Object getActions(@PathVariable(value = "owner")
+                             @Parameter(name = "owner", in = ParameterIn.PATH, description = "Owner of the project")
+                             String owner, @PathVariable(value = "repo")
+                             @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
+                             String repo) {
+
+        Actions actions = basicQueryService.retrievemetrics("%s" + String.format("repos/%s/%s/actions/runs", owner, repo), new TypeReference<>() {
+        });
+        return new ResponseEntity(dataPersistance.persistActions(List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), actions)), HttpStatus.OK);
     }
 
     @GetMapping(value = "/repos/{owner}/{repo}")
@@ -92,7 +104,7 @@ public class BaseGitQueryController {
     private <T> Map<Project, T> queryProvider(@RequestBody List<Project> repos, String url, TypeReference<? extends T> targetType) {
         Map<Project, T> pulls = new HashMap<>();
         for (Project project : repos) {
-            pulls.put(project, basicQueryService.retrievemetrics("%s" + String.format(url, project.getOwner(), project.getProjectName()) + "%s&state=closed", targetType));
+            pulls.put(project, basicQueryService.retrievemetrics("%s" + String.format(url, project.getProjectOwner(), project.getProjectName()) + "%s&state=closed", targetType));
         }
         return pulls;
     }
