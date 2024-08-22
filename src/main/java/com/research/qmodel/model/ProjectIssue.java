@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.research.qmodel.annotations.ProjectIssueDeserializer;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
@@ -16,6 +17,7 @@ import java.util.*;
 @Table(name = "project_issue")
 @IdClass(IssueID.class)
 @JsonDeserialize(using = ProjectIssueDeserializer.class)
+@Transactional
 public class ProjectIssue implements BaseMetric {
     @Id
     private Long id;
@@ -42,6 +44,11 @@ public class ProjectIssue implements BaseMetric {
     private Date updated_at;
     @Temporal(TemporalType.TIMESTAMP)
     private Date merged_at;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Commit> commits;
 
     /*Experimental mapping to fixing PR*/
     @ToString.Exclude
@@ -94,5 +101,17 @@ public class ProjectIssue implements BaseMetric {
 
     public void setFixPrNum(long fixPr) {
         this.fixPr = fixPr;
+    }
+
+    public void addCommits(List<Commit> foundCommits) {
+        if (commits == null) {
+            commits = new ArrayList<>();
+        }
+        for (Commit foundCommit : foundCommits) {
+            if (commits.contains(foundCommit)) {
+                continue;
+            }
+            commits.add(foundCommit);
+        }
     }
 }

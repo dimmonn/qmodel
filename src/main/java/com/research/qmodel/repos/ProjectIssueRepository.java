@@ -17,4 +17,8 @@ public interface ProjectIssueRepository extends JpaRepository<ProjectIssue, Issu
             "WHERE p = :pullId")
     List<ProjectIssue> findRelatedIssuesByPullId(@Param("pullId") Long pullId);
 
+    @Query("SELECT pi " +
+        "FROM ProjectIssue pi " +
+        "WHERE pi.projectName = :repoName AND pi.projectOwner = :repoOwner AND pi.fixPr > 0")
+    List<ProjectIssue> finAllFixedIssues(@Param("repoName") String repoName, @Param("repoOwner") String repoOwner);
 }

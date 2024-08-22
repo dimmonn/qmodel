@@ -7,6 +7,8 @@ import com.research.qmodel.model.*;
 import com.research.qmodel.repos.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -40,10 +42,10 @@ public class DataPersistance {
             Project project = null;
             if (!foundProject.isPresent()) {
                 project = new Project(repo.getProjectOwner(), repo.getProjectName());
-            }else {
+            } else {
                 project = foundProject.get();
             }
-            if (aGraph != null && !aGraph.getGraph().equals("[]")) {
+            if (aGraph != null && aGraph.getGraph() != null && !aGraph.getGraph().equals("[]")) {
                 project.setAGraph(aGraph);
                 aGraph.setProject(project);
                 aGraphRepository.save(aGraph);
@@ -116,5 +118,12 @@ public class DataPersistance {
         actions.setProject(projects.get(0));
         actionsRepository.save(actions);
         return actions;
+    }
+
+    public void persistCommits(List<Commit> commitsWithDefects) {
+        for (Commit commit : commitsWithDefects) {
+            LOGGER.info("Persisting commit with defects: {}", commit);
+        }
+        // TODO: Implement actual commit persistence with defects
     }
 }

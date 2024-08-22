@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.research.qmodel.dto.Project;
 import com.research.qmodel.model.*;
+import com.research.qmodel.repos.CommitRepository;
 import com.research.qmodel.repos.ProjectIssueRepository;
 import com.research.qmodel.repos.ProjectPullRepository;
 import com.research.qmodel.service.BasicQueryService;
@@ -29,6 +30,8 @@ public class ProjectPullDeserializer extends JsonDeserializer<ProjectPull> imple
     private ProjectPullRepository projectPullRepository;
     @Autowired
     private ProjectIssueRepository projectIssueRepository;
+    @Autowired
+    private CommitRepository commitRepository;
     @Autowired
     private BasicQueryService basicQueryService;
     @Autowired

@@ -1,13 +1,17 @@
 package com.research.qmodel.graph;
 
 import aj.org.objectweb.asm.TypeReference;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.research.qmodel.model.Actions;
+import com.research.qmodel.model.Commit;
+import com.research.qmodel.model.CommitID;
 import com.research.qmodel.model.ProjectID;
 import com.research.qmodel.repos.ActionsRepository;
+import com.research.qmodel.repos.CommitRepository;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.ResetCommand;
@@ -19,15 +23,28 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+import static org.springframework.context.annotation.ScopedProxyMode.TARGET_CLASS;
+import static org.springframework.web.context.WebApplicationContext.SCOPE_REQUEST;
+
 @Component
+@Scope(value = SCOPE_REQUEST, proxyMode = TARGET_CLASS)
 public class Graph extends GitMaintainable {
+
+    @Autowired
+    private CommitRepository commitRepository;
 
     private Map<String, Vertex> vertices;
     private final Logger LOGGER = LoggerFactory.getLogger(Graph.class);
@@ -154,20 +171,18 @@ public class Graph extends GitMaintainable {
         return maxDegree;
     }
 
-    public int getDepthOfCommitHistory() {
-        int maxDepth = 0;
-        for (String sha : vertices.keySet()) {
-            maxDepth = Math.max(maxDepth, getDepthFromInitialCommit(sha));
+    private int getDepthFromInitialCommit(String sha, Map<String, Integer> depthCache) {
+        if (depthCache.containsKey(sha)) {
+            return depthCache.get(sha);
         }
-        return maxDepth;
-    }
 
-    private int getDepthFromInitialCommit(String sha) {
         Set<String> visited = new HashSet<>();
-        return getDepthFromInitialCommitHelper(sha, visited);
+        int depth = getDepthFromInitialCommitHelper(sha, visited, depthCache);
+        depthCache.put(sha, depth);
+        return depth;
     }
 
-    private int getDepthFromInitialCommitHelper(String sha, Set<String> visited) {
+    private int getDepthFromInitialCommitHelper(String sha, Set<String> visited, Map<String, Integer> depthCache) {
         Deque<String> stack = new ArrayDeque<>();
         Map<String, Integer> depths = new HashMap<>();
 
@@ -181,10 +196,10 @@ public class Graph extends GitMaintainable {
             int currentDepth = depths.get(current);
             maxDepth = Math.max(maxDepth, currentDepth);
 
-            Vertex vertex = vertices.get(current);
+            Vertex vertex = getVertex(current);
             if (vertex != null) {
                 for (String neighbor : vertex.neighbors) {
-                    if (visited.add(neighbor)) { // Add to visited set
+                    if (visited.add(neighbor)) {
                         stack.push(neighbor);
                         depths.put(neighbor, currentDepth + 1);
                     }
@@ -192,14 +207,15 @@ public class Graph extends GitMaintainable {
             }
         }
 
+        depthCache.put(sha, maxDepth);
         return maxDepth;
     }
 
     public Graph buildGraph(String owner, String path, String repoPath) throws IOException, GitAPIException {
-        Graph commitGraph = new Graph();
-        Optional<Actions> foundAction = actionsRepository.findById(new ProjectID(owner, path));
         try (Git git = Git.open(new File(repoPath))) {
             List<Ref> branches = git.branchList().setListMode(ListBranchCommand.ListMode.REMOTE).call();
+
+            Map<RevCommit, List<Ref>> commitMeta = new HashMap<>();
             for (Ref branch : branches) {
                 try {
                     git.reset().setMode(ResetCommand.ResetType.HARD).call();
@@ -207,50 +223,101 @@ public class Graph extends GitMaintainable {
                     RevWalk revWalk = new RevWalk(git.getRepository());
                     Iterable<RevCommit> commits = git.log().call();
                     for (RevCommit commit : commits) {
-                        String sha = commit.getId().getName();
-                        if (foundAction.isPresent()) {
-                            Actions actions = foundAction.get();
-                            String allActions = actions.getAllActions();
-                            JsonNode rowActions = objectMapper.readTree(allActions);
-                            for (JsonNode rowAction : rowActions) {
-                                String actionSha = rowAction.path("head_sha").asText();
-                                if (actionSha.equals(sha)) {
-                                    String status = rowAction.path("status").asText();
-                                    String conclusion = rowAction.path("conclusion").asText();
-                                    Vertex vertex = commitGraph.getVertex(sha);
-                                    if (vertex == null) {
-                                        vertex = new Vertex(sha);
-                                        commitGraph.addVertex(sha);
-                                    }
-                                    if ("completed".equals(status)) {
-                                        if ("success".equals(conclusion)) {
-                                            vertex.incrementPassed();
-                                        } else {
-                                            vertex.incrementFailed();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        commitGraph.addVertex(sha);
-                        commitGraph.addBranch(sha, branch.getName());
-                        int parentCount = commit.getParentCount();
-                        for (int i = 0; i < parentCount; i++) {
-                            String parentSha = commit.getParent(i).getId().getName();
-                            commitGraph.addVertex(parentSha);
-                            commitGraph.addEdge(parentSha, sha); // parent -> child
-                        }
+                        commitMeta.computeIfAbsent(commit, k -> new ArrayList<>()).add(branch);
                     }
                     revWalk.close();
                 } catch (CheckoutConflictException e) {
                     LOGGER.warn("Checkout conflict for branch {}: {}", branch.getName(), e.getMessage());
                 }
             }
+
+            List<RevCommit> allCommits = new ArrayList<>(commitMeta.keySet());
+            Collections.sort(allCommits, Comparator.comparingInt(RevCommit::getCommitTime));
+
+            Map<String, Integer> depthCache = new HashMap<>();
+
+            for (RevCommit commit : allCommits) {
+                String sha = commit.getId().getName();
+                addVertex(sha);
+                List<Ref> refs = commitMeta.get(commit);
+                for (Ref ref : refs) {
+                    addBranch(sha, ref.getName());
+                }
+
+                int parentCount = commit.getParentCount();
+                for (int i = 0; i < parentCount; i++) {
+                    String parentSha = commit.getParent(i).getId().getName();
+                    addVertex(parentSha);
+                    addEdge(parentSha, sha); // parent -> child
+                }
+
+                int numberOfVertices = getNumberOfVertices();
+                int numberOfBranches = getNumberOfBranches();
+                int numberOfEdges = getNumberOfEdges();
+                int maxDegree = getMaxDegree();
+                double averageDegree = getAverageDegree();
+                int depthOfCommitHistory = getDepthFromInitialCommit(sha, depthCache);
+
+                Commit foundCommit = commitRepository.findById(new CommitID(sha)).orElse(null);
+                if (foundCommit != null) {
+                    try {
+                        foundCommit.setNumberOfVertices(numberOfVertices);
+                        foundCommit.setNumberOfBranches(numberOfBranches);
+                        foundCommit.setNumberOfEdges(numberOfEdges);
+                        foundCommit.setMaxDegree(maxDegree);
+                        foundCommit.setAverageDegree(averageDegree);
+                        foundCommit.setDepthOfCommitHistory(depthOfCommitHistory);
+                        commitRepository.save(foundCommit);
+                    } catch (Exception e) {
+                        LOGGER.error(e.getMessage(), e);
+                    }
+                }
+
+                Vertex vertex = getVertex(sha);
+                if (vertex != null) {
+                    vertex.addSnapshotProps(numberOfVertices,
+                            numberOfBranches,
+                            numberOfEdges,
+                            maxDegree,
+                            averageDegree,
+                            depthOfCommitHistory);
+                    int commitTime = commit.getCommitTime();
+
+                    Instant instant = Instant.ofEpochSecond(commitTime);
+                    vertex.setTimestamp(Date.from(instant));
+                }
+            }
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
         }
-        return commitGraph;
+        return this;
+    }
+
+    private void updateActionResullt(Optional<Actions> foundAction, String sha) throws JsonProcessingException {
+        if (foundAction.isPresent()) {
+            Actions actions = foundAction.get();
+            String allActions = actions.getAllActions();
+            JsonNode rowActions = objectMapper.readTree(allActions);
+            for (JsonNode rowAction : rowActions) {
+                String actionSha = rowAction.path("head_sha").asText();
+                if (actionSha.equals(sha)) {
+                    String status = rowAction.path("status").asText();
+                    String conclusion = rowAction.path("conclusion").asText();
+                    Vertex vertex = getVertex(sha);
+//                    if (vertex == null) {
+//                        vertex = new Vertex(sha);
+//                        addVertex(sha);
+//                    }
+                    if ("completed".equals(status)) {
+                        if ("success".equals(conclusion)) {
+                            vertex.incrementPassed();
+                        } else {
+                            vertex.incrementFailed();
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

@@ -29,14 +29,13 @@ public class CommitDeserializer extends JsonDeserializer<Commit> {
     public Commit deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         if (node != null) {
-//            Optional<Commit> foundCommit = commitRepository.findById(new CommitID(StringUtils.substringAfterLast(node.get("url").asText(), "/")));
-//            Commit commit;
-//            if (foundCommit.isPresent()) {
-//                commit = foundCommit.get();
-//            } else {
-//                commit = new Commit();
-//            }
-            Commit commit = new Commit();
+            Optional<Commit> foundCommit = commitRepository.findById(new CommitID(StringUtils.substringAfterLast(node.get("url").asText(), "/")));
+            Commit commit;
+            if (foundCommit.isPresent()) {
+                commit = foundCommit.get();
+            } else {
+                commit = new Commit();
+            }
             JsonNode author = node.get("author");
             JsonNode commentCount = node.get("comment_count");
             if (commentCount != null) {
@@ -48,8 +47,8 @@ public class CommitDeserializer extends JsonDeserializer<Commit> {
             }
             if (author != null) {
                 JsonNode rowDate = author.get("date");
-                commit.setAuthor(author.get("name").asText());
-                commit.setEmail(author.get("email").asText());
+                commit.setAuthor(author.path("name").asText());
+                commit.setEmail(author.path("email").asText());
                 if (rowDate != null) {
                     DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT;
                     Instant instant = Instant.from(formatter.parse(rowDate.asText()));

@@ -58,7 +58,18 @@ public abstract class GitMaintainable {
             node.put("subTitle", "Branches: " + String.join(", ", vertex.branches));
             node.put("arc__failed", vertex.getArcFailed());
             node.put("arc__passed", vertex.getArcPassed());
-            node.put("detail__zone", "Zone " + vertex.sha);  // Replace with actual logic
+            node.put("detail__zone", "Zone " + vertex.sha);
+            if (vertex.getTimestamp() != null) {
+                node.put("timestamp", vertex.getTimestamp().toString());
+            }
+            node.put("numberOfVertices", vertex.getNumberOfVertices());
+            node.put("numberOfBranches", vertex.getNumberOfBranches());
+            node.put("numberOfEdges", vertex.getNumberOfEdges());
+            node.put("maxDegree", vertex.getMaxDegree());
+            node.put("averageDegree", vertex.getAverageDegree());
+            node.put("depthOfCommitHistory", vertex.getDepthOfCommitHistory());
+
+
             nodes.add(node);
 
             // Create edges

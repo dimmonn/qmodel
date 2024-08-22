@@ -3,6 +3,7 @@ package com.research.qmodel.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.research.qmodel.model.Commit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,9 +47,10 @@ public class BasicQueryService {
         this.objectMapper = objectMapper;
     }
 
-    public <T> T retrievemetrics(String url, TypeReference<T> targetType) {
+    // TODO figure out how to handle actions
+/*    public <T> T retrievemetrics(String url, TypeReference<T> targetType) {
         List<T> allEntities = new ArrayList<>();
-        int pageNumber = 70;
+        int pageNumber = 1;
         while (isRun(pageNumber)) {
             JsonNode body = getRowData(url, BASE_URL, pageNumber, PAGE_SIZE);
             if (body != null && body.size() > 0) {
@@ -62,6 +64,22 @@ public class BasicQueryService {
                     LOGGER.info("getting page number {}", pageNumber);
                     pageNumber++;
                 }
+            } else {
+                break;
+            }
+        }
+        return objectMapper.convertValue(allEntities, targetType);
+    }*/
+    public <T> T retrievemetrics(String url, TypeReference<T> targetType) {
+        List<JsonNode> allEntities = new ArrayList<>();
+        int pageNumber = 1;
+        while (isRun(pageNumber)) {
+            JsonNode body = getRowData(url, BASE_URL, pageNumber, PAGE_SIZE);
+            if (body != null && body.size() > 0) {
+                List<JsonNode> rowBody = objectMapper.convertValue(body, ArrayList.class);
+                allEntities.addAll(rowBody);
+                LOGGER.info("getting page number {}", pageNumber);
+                pageNumber++;
             } else {
                 break;
             }
@@ -156,5 +174,11 @@ public class BasicQueryService {
         }
 
         return null;
+    }
+
+    public List<Commit> searchDefetsCommits(String owner, String repo) {
+
+        return null;
+
     }
 }

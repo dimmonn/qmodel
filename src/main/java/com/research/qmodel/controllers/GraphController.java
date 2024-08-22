@@ -45,11 +45,11 @@ public class GraphController implements FileJsonReader {
     @GetMapping(value = "/graph/data")
     @ResponseStatus(HttpStatus.OK)
     public String getData(@RequestParam(required = false) String owner, @RequestParam(required = false) String repo) throws GitAPIException, IOException {
-        String path = "/tmp/" + owner + "_" + repo;
+        String path = "/Users/dpolishchuk/" + owner + "_" + repo;
         gitGraph.cloneRepo(owner, repo, path);
         Graph graph = gitGraph.buildGraph(owner, repo, path);
         String filePath = "/Users/dpolishchuk/IdeaProjects/qmodel/" + owner + "_" + repo + ".json";
         gitGraph.exportGraph(filePath, graph.getVerticesMap());
-        return readJsonFile(filePath);
+        return readJsonFile("/Users/dpolishchuk/IdeaProjects/qmodel/facebook_react.json");
     }
 }
