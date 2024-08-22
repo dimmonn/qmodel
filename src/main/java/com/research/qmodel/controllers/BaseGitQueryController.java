@@ -3,33 +3,42 @@ package com.research.qmodel.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.research.qmodel.dto.ProjectAGraph;
+import com.research.qmodel.graph.GitMaintainable;
 import com.research.qmodel.model.*;
+import com.research.qmodel.repos.ProjectIssueRepository;
 import com.research.qmodel.service.BasicQueryService;
 import com.research.qmodel.service.DataPersistance;
 import com.research.qmodel.service.findbugs.BasicBugFinder;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import java.io.IOException;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 @RestController
 @RequestMapping(value = {"api/v1/metrics"})
-public class BaseGitQueryController implements FileJsonReader {
+public class BaseGitQueryController extends GitMaintainable implements FileJsonReader {
   private final BasicQueryService basicQueryService;
   private final DataPersistance dataPersistance;
   @Autowired private BasicBugFinder basicBugFinder;
+  @Autowired private ProjectIssueRepository projectIssueRepository;
 
   public BaseGitQueryController(
       BasicQueryService basicQueryService, DataPersistance dataPersistance) {
     this.basicQueryService = basicQueryService;
     this.dataPersistance = dataPersistance;
+  }
+
+  @GetMapping(value = "/repos")
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<List<Project>> listProjects() {
+    return new ResponseEntity(dataPersistance.retrieveProjects(), HttpStatus.OK);
   }
 
   @GetMapping(value = "/repos/{owner}/{repo}/actions")
@@ -52,7 +61,21 @@ public class BaseGitQueryController implements FileJsonReader {
         HttpStatus.OK);
   }
 
-  @GetMapping(value = "/repos/{owner}/{repo}/retrieveDefectiveCommits")
+  @GetMapping(value = "/repos/{owner}/{repo}/retrieveFixingCommits")
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<List<String>> searchFixingCommits(
+      @PathVariable(value = "owner")
+          @Parameter(name = "owner", in = ParameterIn.PATH, description = "Owner of the project")
+          String owner,
+      @PathVariable(value = "repo")
+          @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
+          String repo)
+      throws JsonProcessingException {
+    return new ResponseEntity<>(
+        basicBugFinder.findAllBugsFixingCommits(repo, owner, 2), HttpStatus.OK);
+  }
+
+  @GetMapping(value = "/repos/{owner}/{repo}/{id}/retrieveBugIntroducingCommits")
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<List<Commit>> searchDefectsCommits(
       @PathVariable(value = "owner")
@@ -60,9 +83,25 @@ public class BaseGitQueryController implements FileJsonReader {
           String owner,
       @PathVariable(value = "repo")
           @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
-          String repo) throws JsonProcessingException {
-    return new ResponseEntity(
-        basicBugFinder.findAllBugsIntroducingCommits(repo, owner, 2), HttpStatus.OK);
+          String repo,
+      @PathVariable(value = "id")
+          @Parameter(name = "id", in = ParameterIn.PATH, description = "Issue id")
+          Long id)
+      throws IOException, GitAPIException {
+    return new ResponseEntity<>(
+        basicBugFinder.findBugIntroducingCommits(owner, repo, id, 2), HttpStatus.OK);
+  }
+
+  @GetMapping(value = "/repos/{owner}/{repo}/retrieveBugIntroducingCommits")
+  @ResponseStatus(HttpStatus.OK)
+  public void searchAllDefectsCommits(
+      @PathVariable(value = "owner")
+          @Parameter(name = "owner", in = ParameterIn.PATH, description = "Owner of the project")
+          String owner,
+      @PathVariable(value = "repo")
+          @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
+          String repo) {
+    basicBugFinder.traceCommitsToOrigin(owner, repo, 2);
   }
 
   @GetMapping(value = "/repos/{owner}/{repo}")
@@ -78,18 +117,47 @@ public class BaseGitQueryController implements FileJsonReader {
         basicQueryService.retrievemetrics(
             "%s" + String.format("repos/%s/%s/commits", owner, repo) + "%s",
             new TypeReference<>() {});
-    return new ResponseEntity(
+    return new ResponseEntity<>(
         dataPersistance.persistGraph(
             List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), ag)),
         HttpStatus.OK);
   }
 
+  @DeleteMapping(value = "/repos/{owner}/{repo}/issues")
+  @ResponseStatus(HttpStatus.OK)
+  public void delete(
+      @PathVariable(value = "owner")
+          @Parameter(name = "owner", in = ParameterIn.PATH, description = "Owner of the project")
+          String owner,
+      @PathVariable(value = "repo")
+          @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
+          String repo) {
+    List<ProjectIssue> issues = projectIssueRepository.findByProject(owner, repo);
+    projectIssueRepository.deleteAll(issues);
+  }
+
+  @GetMapping(value = "/repos/{owner}/{repo}/forks")
+  @ResponseStatus(HttpStatus.OK)
+  public Object baseQueryForks(
+      @PathVariable(value = "owner")
+          @Parameter(name = "owner", in = ParameterIn.PATH, description = "Owner of the project")
+          String owner,
+      @PathVariable(value = "repo")
+          @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
+          String repo)
+      throws Exception {
+    String path = "/Users/dpolishchuk/" + owner + "_" + repo;
+    cloneRepo(owner, repo, path);
+    Set<String> forkedCommits = getForkedCommits(path);
+    return null;
+  }
+
   @GetMapping(value = "/repos/ag")
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<JsonNode> baseQueryBunchAg(@RequestBody List<Project> repos) {
+  public ResponseEntity<List<ProjectAGraph>> baseQueryBunchAg(@RequestBody List<Project> repos) {
     Map<Project, AGraph> ags =
         queryProvider(repos, "repos/%s/%s/commits", new TypeReference<>() {});
-    return new ResponseEntity(dataPersistance.persistGraph(repos, ags), HttpStatus.OK);
+    return new ResponseEntity<>(dataPersistance.persistGraph(repos, ags), HttpStatus.OK);
   }
 
   @GetMapping(value = "/repos/{owner}/{repo}/pulls")
@@ -105,7 +173,7 @@ public class BaseGitQueryController implements FileJsonReader {
         basicQueryService.retrievemetrics(
             "%s" + String.format("repos/%s/%s/pulls", owner, repo) + "%s&state=closed",
             new TypeReference<>() {});
-    return new ResponseEntity(
+    return new ResponseEntity<>(
         dataPersistance.persistPulls(
             List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), projectPull)),
         HttpStatus.OK);
@@ -132,7 +200,7 @@ public class BaseGitQueryController implements FileJsonReader {
         basicQueryService.retrievemetrics(
             "%s" + String.format("repos/%s/%s/issues", owner, repo) + "%s" + "&state=closed",
             new TypeReference<>() {});
-    return new ResponseEntity(
+    return new ResponseEntity<>(
         dataPersistance.persistIssues(
             List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), projectIssues)),
         HttpStatus.OK);
@@ -143,7 +211,7 @@ public class BaseGitQueryController implements FileJsonReader {
   public Object baseQueryBunchResolutionTime(@RequestBody List<Project> repos) {
     Map<Project, List<ProjectIssue>> pulls =
         queryProvider(repos, "repos/%s/%s/issues", new TypeReference<>() {});
-    return new ResponseEntity(dataPersistance.persistIssues(repos, pulls), HttpStatus.OK);
+    return new ResponseEntity<>(dataPersistance.persistIssues(repos, pulls), HttpStatus.OK);
   }
 
   private <T> Map<Project, T> queryProvider(

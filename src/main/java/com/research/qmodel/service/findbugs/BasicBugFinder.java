@@ -1,14 +1,15 @@
 package com.research.qmodel.service.findbugs;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.research.qmodel.model.AGraph;
+import com.research.qmodel.annotations.ChangePatchProcessor;
+import com.research.qmodel.errors.IssueNotFoundException;
 import com.research.qmodel.model.Commit;
+import com.research.qmodel.model.CommitID;
+import com.research.qmodel.model.FileChange;
 import com.research.qmodel.model.ProjectIssue;
 import com.research.qmodel.model.ProjectPull;
-import com.research.qmodel.model.PullID;
 import com.research.qmodel.repos.CommitRepository;
 import com.research.qmodel.repos.ProjectIssueRepository;
 import com.research.qmodel.repos.ProjectPullRepository;
@@ -16,89 +17,158 @@ import com.research.qmodel.service.BasicQueryService;
 import java.util.*;
 import java.io.*;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.blame.BlameResult;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BasicBugFinder {
+public class BasicBugFinder implements ChangePatchProcessor {
   @Autowired private CommitRepository commitRepository;
   @Autowired private ProjectIssueRepository projectIssueRepository;
   @Autowired private ObjectMapper objectMapper;
   @Autowired private BasicQueryService basicQueryService;
   @Autowired private ProjectPullRepository projectPullRepository;
+  private final Logger LOGGER = LoggerFactory.getLogger(BasicBugFinder.class);
 
-  public List<Commit> findAllBugsIntroducingCommits(String repoName, String repoOwner, int depth)
+  @Value("${qmodel.defect.labels:bug}")
+  private List<String> LABELS;
+
+  public List<String> findAllBugsFixingCommits(String repoName, String repoOwner, int depth)
       throws JsonProcessingException {
-    List<ProjectIssue> projectIssues =
-        projectIssueRepository.finAllFixedIssues(repoName, repoOwner);
-    List<Commit> commits = new ArrayList<>();
-    for (ProjectIssue projectIssue : projectIssues) {
-      ProjectPull fixPR = projectIssue.getFixPR();
-      if (fixPR == null) {
+    Queue<ProjectIssue> projectIssues =
+        new LinkedList<>(projectIssueRepository.finAllFixedIssues(repoName, repoOwner));
+    List<String> cachedCommits = new ArrayList<>();
+    while (!projectIssues.isEmpty()) {
+      LOGGER.info("Issues still remains in the queue: {}", projectIssues.size());
+      ProjectIssue projectIssue = projectIssues.poll();
+      if (projectIssue.getCommits() == null || !projectIssue.getCommits().isEmpty()) {
+        LOGGER.warn(
+            "Commits are not empty, had been added already: issue id# {}", projectIssue.getId());
         continue;
       }
-
+      ProjectPull fixPR = projectIssue.getFixPR();
+      if (fixPR == null) {
+        LOGGER.warn("There is no PR that resolves the issue: issue id# {}", projectIssue.getId());
+        continue;
+      }
       String pr = fixPR.getRawPull();
       JsonNode rawPr = objectMapper.readTree(pr);
       String commitsUrl = rawPr.path("commits_url").asText();
       JsonNode rowData = basicQueryService.getRowData(commitsUrl);
-      List<Commit> foundCommits = objectMapper.convertValue(rowData, new TypeReference<>() {});
-      foundCommits =
-          foundCommits.stream()
+      if (rowData == null) {
+        LOGGER.warn("commitsUrl is not available {}", commitsUrl);
+        continue;
+      }
+      List<String> retrievedCommits = new ArrayList<>();
+      for (JsonNode commitRow : rowData) {
+        String sha = commitRow.path("sha").asText();
+        if (sha.isEmpty()) {
+          LOGGER.warn("sha is not found for issue: issue id# {}", projectIssue.getId());
+          continue;
+        }
+        retrievedCommits.add(sha);
+      }
+      if (retrievedCommits.isEmpty()) {
+        LOGGER.warn(
+            "No commits had been found in PR {} for issue: issue id# {}",
+            fixPR.getId(),
+            projectIssue.getId());
+        continue;
+      }
+      List<Commit> foundCommitsInDb =
+          retrievedCommits.stream()
               .filter(Objects::nonNull)
-              .filter(c -> c.getSha() != null)
+              .filter(StringUtils::isNotBlank)
+              .map(c -> commitRepository.findById(new CommitID(c)).orElse(null))
+              .filter(Objects::nonNull)
               .collect(Collectors.toList());
-
-      if (foundCommits != null) {
-        projectIssue.addCommits(foundCommits);
+      if (foundCommitsInDb.isEmpty()) {
+        LOGGER.warn(
+            "No commits had been found in database for sha: {} and issue id# {}, maybe this commit does not belong to any branch on this repository, and may belong to a fork outside of the repository.",
+            retrievedCommits,
+            projectIssue.getId());
+        cachedCommits.addAll(retrievedCommits);
+        continue;
+      }
+      if (projectIssue.getCommits() == null || projectIssue.getCommits().isEmpty()) {
+        if (foundCommitsInDb.stream().anyMatch(e -> !e.getFileChanges().isEmpty())) {
+          if (projectIssue.getCommits() != null) {
+            projectIssue.getCommits().addAll(foundCommitsInDb);
+          }
+        } else {
+          LOGGER.warn(
+              "Changed files are empty for issue id# {}, and commits {}",
+              projectIssue.getId(),
+              foundCommitsInDb.stream().map(Commit::getSha).toList());
+          continue;
+        }
         try {
           projectIssueRepository.save(projectIssue);
+          LOGGER.info(
+              "Issues id# {} has been saved in the DB: commits are: {}",
+              projectIssue.getId(),
+              foundCommitsInDb.stream().map(Commit::getSha).toList());
         } catch (Exception e) {
-          System.out.println(e);
+          LOGGER.error(e.getMessage(), e);
+          continue;
+        }
+        if (fixPR.getCommits().isEmpty()) {
+          fixPR.addCommits(foundCommitsInDb);
+          try {
+            projectPullRepository.save(fixPR);
+            LOGGER.info(
+                "PR id# {} has been saved in the DB: commits are: {}",
+                fixPR.getId(),
+                foundCommitsInDb.stream().map(Commit::getSha).toList());
+          } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+          }
         }
       }
-      if (fixPR != null) {
-        fixPR.addCommits(foundCommits);
-        try {
-
-          projectPullRepository.save(fixPR);
-        } catch (Exception e) {
-          System.out.println(e);
-        }
-      }
-      commits.addAll(foundCommits);
     }
-    return commits;
+    return cachedCommits;
   }
 
-  // Function to find bug-introducing commits using a pull request number
-  public Set<String> findBugIntroducingCommits(String repoPath, String prNumber, int depth)
-      throws IOException {
-    // Step 1: Get the list of commits in the pull request
-    List<String> commitsInPR = getCommitsFromPR(repoPath, prNumber);
-    if (commitsInPR.isEmpty()) {
-      throw new IllegalStateException("No commits found in the PR");
+  public List<Commit> findBugIntroducingCommits(String owner, String repo, Long issueId, int depth)
+      throws IOException, GitAPIException {
+    ProjectIssue foundIssue = projectIssueRepository.findIssueById(repo, owner, issueId);
+    if (foundIssue == null) {
+      throw new IssueNotFoundException("Issue with id " + issueId + " is not found.");
     }
+    if (foundIssue.getBugIntroducingCommits() != null
+        && !foundIssue.getBugIntroducingCommits().isEmpty()) {}
 
-    // Step 2: Use the last commit in the PR as the "bug-fixing" commit
-    String bugFixingCommit = commitsInPR.get(commitsInPR.size() - 1);
+    List<Commit> candidateCommits = new ArrayList<>();
+    List<Commit> commits = foundIssue.getCommits();
 
-    // Step 3: Identify the files modified in the bug-fixing commit
-    List<String> modifiedFiles = getModifiedFiles(repoPath, bugFixingCommit);
+    for (Commit commit : commits) {
+      String currentCommitSha = commit.getSha();
+      String repoPath = "/Users/dpolishchuk/" + owner + "_" + repo;
 
-    Set<String> candidateCommits = new HashSet<>();
+      for (FileChange fileChange : commit.getFileChanges()) {
+        Set<Integer> modifiedLines = getChangedLineNumbers(fileChange.getPatch());
 
-    // Step 4: Trace the history of each modified line in each modified file
-    for (String file : modifiedFiles) {
-      List<String> modifiedLines = getModifiedLines(repoPath, bugFixingCommit, file);
-      for (String line : modifiedLines) {
-        String initialCommit = traceLineToOrigin(repoPath, file, line, bugFixingCommit, depth);
-        if (initialCommit != null) {
-          candidateCommits.add(initialCommit);
+        for (int line : modifiedLines) {
+          List<Commit> bugIntroducingCommitsCandidates =
+              traceLineToCommit(repoPath, fileChange.getFileName(), line, currentCommitSha, depth);
+
+          if (bugIntroducingCommitsCandidates != null
+              && !bugIntroducingCommitsCandidates.isEmpty()) {
+            candidateCommits.addAll(bugIntroducingCommitsCandidates);
+          }
         }
       }
     }
-
     return candidateCommits;
   }
 
@@ -124,19 +194,150 @@ public class BasicBugFinder {
     return parseDiffForModifiedLines(runGitCommand(repoPath, command));
   }
 
-  // Trace the origin of a modified line using git blame
-  private String traceLineToOrigin(
-      String repoPath, String file, String line, String startingCommit, int depth)
-      throws IOException {
-    String currentCommit = startingCommit;
+  public void traceCommitsToOrigin(String owner, String repo, int depth) {
+    String repoPath = "/Users/dpolishchuk/" + owner + "_" + repo;
+    Queue<ProjectIssue> projectIssues =
+        new LinkedList<>(projectIssueRepository.finAllFixedIssues(repo, owner));
+    FileRepositoryBuilder builder = new FileRepositoryBuilder();
+    try (Repository repository =
+            builder.setGitDir(new File(repoPath + "/.git")).readEnvironment().findGitDir().build();
+        Git git = new Git(repository)) {
 
-    for (int i = 0; i < depth; i++) {
-      String command = String.format("git blame -L %s,%s --porcelain %s", line, line, file);
-      currentCommit = runGitCommandAndExtractCommit(repoPath, command);
-      if (currentCommit == null) break;
+      while (!projectIssues.isEmpty()) {
+        ProjectIssue issue = projectIssues.poll();
+        LOGGER.info("Issues still left in the queue: {}", projectIssues.size());
+        if (issue.getFixPR() == null
+            || issue.getCommits() == null
+            || issue.getCommits().isEmpty()
+            || (issue.getBugIntroducingCommits() != null
+                && !issue.getBugIntroducingCommits().isEmpty())) {
+          continue;
+        }
+        List<String> fixingCommits = issue.getCommits().stream().map(Commit::getSha).toList();
+
+        for (Commit commit : issue.getCommits()) {
+          String currentCommitSha = commit.getSha();
+          lineLoop:
+          for (FileChange file : commit.getFileChanges()) {
+            List<Integer> changedLines = new ArrayList<>(file.getChangedLines());
+
+            for (Integer line : changedLines) {
+              for (int i = 0; i < depth; i++) {
+                try {
+                  String blamedCommitSha =
+                      getBlamedCommit(git, repository, file.getFileName(), line, currentCommitSha);
+                  if (fixingCommits.contains(blamedCommitSha)) {
+                    LOGGER.info("Fixing commits contains blamed commit: {}", blamedCommitSha);
+                    currentCommitSha = blamedCommitSha;
+                    continue;
+                  }
+                  if (blamedCommitSha == null || blamedCommitSha.equals(currentCommitSha)) {
+                    LOGGER.info(
+                        "Blamed commit sha is null, or blamed commit sha is  {} current commit sha",
+                        blamedCommitSha);
+                    break lineLoop;
+                  }
+
+                  RevCommit blamedCommit =
+                      repository.parseCommit(ObjectId.fromString(blamedCommitSha));
+                  if (blamedCommit != null) {
+                    Optional<Commit> foundCommit =
+                        commitRepository.findById(new CommitID(blamedCommitSha));
+                    if (foundCommit.isPresent()) {
+                      Commit bugCommit = foundCommit.get();
+                      LOGGER.info("Found bug introducing commit candidate: {}", bugCommit.getSha());
+                      issue.addBugIntroducing(bugCommit);
+                      currentCommitSha = blamedCommitSha;
+                    }
+                  } else {
+                    LOGGER.info("Blamed commit is not found.");
+                    break;
+                  }
+                } catch (Exception e) {
+                  LOGGER.error(e.getMessage(), e);
+                }
+              }
+            }
+          }
+        }
+        try {
+          projectIssueRepository.save(issue);
+        } catch (Exception e) {
+          LOGGER.error(e.getMessage(), e);
+        }
+      }
+    } catch (Exception e) {
+      LOGGER.error(e.getMessage(), e);
+    }
+  }
+
+  public List<Commit> traceLineToCommit(
+      String repoPath, String file, int line, String startingCommit, int depth)
+      throws IOException, GitAPIException {
+    List<Commit> bugIntroducingCommits = new ArrayList<>();
+    Set<String> visitedCommits = new HashSet<>();
+    String currentCommitSha = startingCommit;
+
+    FileRepositoryBuilder builder = new FileRepositoryBuilder();
+    try (Repository repository =
+        builder.setGitDir(new File(repoPath + "/.git")).readEnvironment().findGitDir().build()) {
+      try (Git git = new Git(repository)) {
+        for (int i = 0; i < depth; i++) {
+          if (visitedCommits.contains(currentCommitSha)) {
+            break;
+          }
+          visitedCommits.add(currentCommitSha);
+          String blamedCommitSha = getBlamedCommit(git, repository, file, line, currentCommitSha);
+          if (blamedCommitSha == null || blamedCommitSha.equals(currentCommitSha)) {
+            break;
+          }
+
+          // Retrieve the commit details and add to results
+          RevCommit blamedCommit = repository.parseCommit(ObjectId.fromString(blamedCommitSha));
+          if (blamedCommit != null) {
+            Optional<Commit> foundCommit = commitRepository.findById(new CommitID(blamedCommitSha));
+            if (foundCommit.isPresent()) {
+              bugIntroducingCommits.add(foundCommit.get());
+              currentCommitSha = blamedCommitSha;
+            }
+          } else {
+            break;
+          }
+        }
+      }
     }
 
-    return currentCommit;
+    return bugIntroducingCommits;
+  }
+
+  private String getBlamedCommit(
+      Git git, Repository repository, String file, int line, String startingCommit)
+      throws GitAPIException, IOException {
+    ObjectId commitId = repository.resolve(startingCommit);
+
+    // Run blame on the specified file and line
+    BlameResult blameResult = git.blame().setFilePath(file).setStartCommit(commitId).call();
+
+    if (blameResult != null) {
+      int totalLinesInBlame = blameResult.getResultContents().size();
+      if (line - 1 < totalLinesInBlame && line - 1 >= 0) {
+        RevCommit sourceCommit = blameResult.getSourceCommit(line - 1);
+        if (sourceCommit != null) {
+          return sourceCommit.getName();
+        }
+      } else {
+        System.out.println(
+            "Skipping line "
+                + line
+                + ": out of bounds for blame result with "
+                + totalLinesInBlame
+                + " lines.");
+      }
+    } else {
+      System.out.println(
+          "Blame result is null for file: " + file + " in commit: " + startingCommit);
+    }
+    return null;
   }
 
   // Run a git command and return the output lines
@@ -169,5 +370,5 @@ public class BasicBugFinder {
   private List<String> parseDiffForModifiedLines(List<String> diffOutput) {
     // Implement parsing logic to extract line numbers of modified lines from git diff output
     return Arrays.asList("1", "2", "3"); // Placeholder example
-
+  }
 }

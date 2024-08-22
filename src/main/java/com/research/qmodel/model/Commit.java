@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class Commit {
   private String sha;
 
   @ToString.Exclude
-  @Column(name = "raw_data", columnDefinition = "LONGTEXT")
+  @Column(columnDefinition = "LONGTEXT")
   private String rawData;
 
   @EqualsAndHashCode.Exclude
@@ -40,9 +39,8 @@ public class Commit {
   @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private AGraph aGraph;
 
-  @ToString.Include
-  @EqualsAndHashCode.Exclude
-  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @ManyToMany(
+      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
   private List<FileChange> fileChanges;
 
   @ToString.Include @Column @EqualsAndHashCode.Exclude private int numOfFilesChanged;
@@ -50,38 +48,19 @@ public class Commit {
   @ToString.Include @Column @EqualsAndHashCode.Exclude private String email;
 
   @Column(columnDefinition = "LONGTEXT")
+  @EqualsAndHashCode.Exclude
   private String message;
 
   @ToString.Include @Column @EqualsAndHashCode.Exclude private int commentCount;
 
-  @Column @EqualsAndHashCode.Exclude int numberOfVertices = 0;
-
-  @Column @EqualsAndHashCode.Exclude int numberOfBranches = 0;
-
-  @Column @EqualsAndHashCode.Exclude int numberOfEdges = 0;
-
-  @Column @EqualsAndHashCode.Exclude int maxDegree = 0;
-
-  @Column @EqualsAndHashCode.Exclude double averageDegree = 0;
-
-  @Column @EqualsAndHashCode.Exclude int depthOfCommitHistory = 0;
-
-  //    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-  //    @JoinTable(
-  //            name = "commit_parents",
-  //            joinColumns = {
-  //                    @JoinColumn(name = "child_sha", referencedColumnName = "sha")
-  //            },
-  //            inverseJoinColumns = {
-  //                    @JoinColumn(name = "parent_sha", referencedColumnName = "sha")
-  //            }
-  //    )
-  //    @EqualsAndHashCode.Exclude
-  //    private List<Commit> parents = new ArrayList<>();
-
-  //    public void addParent(Commit parent) {
-  //        if (!parents.contains(parent)) {
-  //            parents.add(parent);
-  //        }
-  //    }
+  @Column @EqualsAndHashCode.Exclude Integer numberOfVertices;
+  @Column @EqualsAndHashCode.Exclude Integer numberOfBranches;
+  @Column @EqualsAndHashCode.Exclude Integer numberOfEdges;
+  @Column @EqualsAndHashCode.Exclude Integer maxDegree;
+  @Column @EqualsAndHashCode.Exclude Double averageDegree;
+  @Column @EqualsAndHashCode.Exclude Integer minDepthOfCommitHistory;
+  @Column @EqualsAndHashCode.Exclude Integer maxDepthOfCommitHistory;
+  @Column @EqualsAndHashCode.Exclude Integer mergeCount;
+  @Column @EqualsAndHashCode.Exclude Integer branchLength;
+  @Column @EqualsAndHashCode.Exclude Boolean isMerge;
 }

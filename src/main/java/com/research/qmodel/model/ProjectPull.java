@@ -75,7 +75,7 @@ public class ProjectPull implements BaseMetric {
 
   /*Experimental mapping to fixing PR*/
   @JsonIgnore
-  @ManyToMany(fetch = FetchType.EAGER)
+  @ManyToMany(fetch = FetchType.LAZY)
   @ToString.Exclude
   private Set<ProjectIssue> projectIssue;
 

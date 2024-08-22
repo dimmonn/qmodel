@@ -11,11 +11,11 @@ public class GitGraph {
     private final Logger LOGGER = LoggerFactory.getLogger(GitGraph.class);
 
     public static void main(String[] args) throws GitAPIException, IOException {
-//        Graph gitGraph = new Graph();
-//        String path = "/tmp/TraceMachina";
-//        gitGraph.cloneRepo("TraceMachina", "nativelink", path);
-//
-//        Graph graph = gitGraph.buildGraph(path, repo, path);
+        Graph gitGraph = new Graph();
+        String path = "/Users/dpolishchuk/dimmonn_test";
+        gitGraph.cloneRepo("dimmonn", "test", path);
+
+        Graph graph = gitGraph.buildGraph(null, null, path);
 //        graph.exportGraph("graph_data.json");
 //
 //        System.out.println("Number of vertices (commits): " + graph.getNumberOfVertices());

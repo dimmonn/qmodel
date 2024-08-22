@@ -24,32 +24,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 @RestController
 @RequestMapping(value = {"api"})
 public class GraphController implements FileJsonReader {
-    @Autowired
-    private Graph gitGraph;
+  @Autowired private Graph gitGraph;
 
-    @GetMapping(value = "/health")
-    @ResponseStatus(HttpStatus.OK)
-    public void health() {
-    }
+  @GetMapping(value = "/health")
+  @ResponseStatus(HttpStatus.OK)
+  public void health() {}
 
-    @GetMapping(value = "/graph/fields")
-    @ResponseStatus(HttpStatus.OK)
-    public String getFields() {
-        return readJsonFile("/Users/dpolishchuk/IdeaProjects/qmodel/graph_fields.json");
-    }
+  @GetMapping(value = "/graph/fields")
+  @ResponseStatus(HttpStatus.OK)
+  public String getFields() {
+    return readJsonFile("/Users/dpolishchuk/IdeaProjects/qmodel/graph_fields.json");
+  }
 
-    @GetMapping(value = "/graph/data")
-    @ResponseStatus(HttpStatus.OK)
-    public String getData(@RequestParam(required = false) String owner, @RequestParam(required = false) String repo) throws GitAPIException, IOException {
-        String path = "/Users/dpolishchuk/" + owner + "_" + repo;
-        gitGraph.cloneRepo(owner, repo, path);
-        Graph graph = gitGraph.buildGraph(owner, repo, path);
-        String filePath = "/Users/dpolishchuk/IdeaProjects/qmodel/" + owner + "_" + repo + ".json";
-        gitGraph.exportGraph(filePath, graph.getVerticesMap());
-        return readJsonFile("/Users/dpolishchuk/IdeaProjects/qmodel/facebook_react.json");
-    }
+  @GetMapping(value = "/graph/data")
+  @ResponseStatus(HttpStatus.OK)
+  public String getData(
+      @RequestParam(required = false) String owner, @RequestParam(required = false) String repo)
+      throws GitAPIException, IOException {
+    String path = "/Users/dpolishchuk/" + owner + "_" + repo;
+    gitGraph.cloneRepo(owner, repo, path);
+    Graph graph = gitGraph.buildGraph(owner, repo, path);
+    String filePath = "/Users/dpolishchuk/IdeaProjects/qmodel/" + owner + "_" + repo + ".json";
+    gitGraph.exportGraph(filePath, graph.getVerticesMap());
+    return readJsonFile("/Users/dpolishchuk/IdeaProjects/qmodel/" + owner + "_" + repo + ".json");
+  }
 }

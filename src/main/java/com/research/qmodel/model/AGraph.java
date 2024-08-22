@@ -29,21 +29,18 @@ public class AGraph implements BaseMetric {
     @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
     private Project project;
 
-    @ToString.Include
     @JsonIgnore
     @OneToMany(mappedBy = "aGraph", cascade = CascadeType.ALL)
     private Set<Commit> commits;
 
-    public boolean addCoommit(Commit commit) {
+    public void addCommit(Commit commit) {
         if (commits == null) {
             commits = new HashSet<>();
         }
         if (!commits.contains(commit)) {
             commit.setAGraph(this);
             commits.add(commit);
-            return true;
         }
-        return false;
     }
 
 }
