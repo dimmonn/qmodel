@@ -6,6 +6,10 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.research.qmodel.model.FileChange;
 import com.research.qmodel.service.BasicQueryService;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class FileChangesDeserializer extends JsonDeserializer<List<FileChange>> {
+public class FileChangesDeserializer extends JsonDeserializer<List<FileChange>> implements ChangePatchProcessor{
     private final Logger LOGGER = LoggerFactory.getLogger(FileChangesDeserializer.class);
     private final BasicQueryService basicQueryService;
 
@@ -42,6 +46,9 @@ public class FileChangesDeserializer extends JsonDeserializer<List<FileChange>> 
                 int changes = file.get("changes") != null ? file.get("changes").asInt() : 0;
                 String filename = file.get("filename") != null ? file.get("filename").asText() : null;
                 JsonNode commit = node.get("commit");
+                String patch = file.path("patch").asText();
+              Set<Integer> changedLineNumbers = getChangedLineNumbers(patch);
+              String sha = file.path("sha").asText();
                 Date date = null;
                 if (commit != null) {
                     JsonNode author = commit.get("author");
@@ -54,10 +61,11 @@ public class FileChangesDeserializer extends JsonDeserializer<List<FileChange>> 
                         }
                     }
                 }
-                result.add(new FileChange(null, date, null, additions, deletions, changes, filename, rowData.toString()));
+                result.add(new FileChange(null,sha, date, null, additions, deletions, changes, filename, patch, changedLineNumbers, rowData.toString()));
             }
             return result;
         }
         return null;
     }
+
 }

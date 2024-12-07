@@ -42,6 +42,9 @@ public class Project {
     }
 
     public boolean addProjectPull(ProjectPull pull) {
+      if (pull==null) {
+        return false;
+      }
         if (projectPull == null) {
             projectPull = new ArrayList<>();
         }

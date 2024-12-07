@@ -122,4 +122,10 @@ public class ProjectPull implements BaseMetric {
       commits.add(foundCommit);
     }
   }
+  public static void main(String[] args){
+    B b = new ProjectPull().new B();
+    System.out.println();
+  }
+  class B{}
+  class A extends B{}
 }

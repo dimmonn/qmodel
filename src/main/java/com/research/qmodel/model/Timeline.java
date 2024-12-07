@@ -3,6 +3,7 @@ package com.research.qmodel.model;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.research.qmodel.annotations.TimelineDeserializer;
 import jakarta.persistence.*;
+import java.util.Date;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -39,6 +40,11 @@ public class Timeline {
     private ProjectPull projectPull;
     @ElementCollection
     private Set<Long> pullIds;
+
+    @EqualsAndHashCode.Exclude
+    @Temporal(TemporalType.TIMESTAMP)
+    @ToString.Include
+    private Date createdAt;
 
     public void addPullId(Long timelineId) {
         if (pullIds == null) {

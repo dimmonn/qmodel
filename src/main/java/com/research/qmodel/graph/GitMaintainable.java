@@ -34,7 +34,7 @@ public abstract class GitMaintainable {
                     .setURI(cloneUrl)
                     .setDirectory(cloneDirectory)
                     .setTimeout(REQUEST_TIMEOUT)
-                    .setProgressMonitor(new SimpleProgressMonitor())
+                    /*.setProgressMonitor(new SimpleProgressMonitor())*/
                     .call();
             LOGGER.info("Repository " + owner + "/" + projectName + " cloned successfully.");
         } catch (GitAPIException e) {

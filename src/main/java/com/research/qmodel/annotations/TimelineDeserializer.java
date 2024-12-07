@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.research.qmodel.model.Timeline;
 import com.research.qmodel.repos.TimelineRepository;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +40,14 @@ public class TimelineDeserializer extends JsonDeserializer<Timeline> implements 
 //        }
         Timeline timeline = new Timeline();
         timeline.setRawData(node.toString());
-        if (node.get("message") != null) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+      try {
+        timeline.setCreatedAt(dateFormat.parse(node.path("created_at").asText()));
+      } catch (ParseException e) {
+        throw new RuntimeException(e);
+      }
+
+      if (node.get("message") != null) {
             timeline.setMessage(node.get("message").asText());
         }
         if (node.get("pull_request_url") != null) {

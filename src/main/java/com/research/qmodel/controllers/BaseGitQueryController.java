@@ -9,14 +9,13 @@ import com.research.qmodel.service.DataPersistance;
 import com.research.qmodel.service.findbugs.BasicBugFinder;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import java.io.IOException;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 @RestController
@@ -30,6 +29,12 @@ public class BaseGitQueryController implements FileJsonReader {
       BasicQueryService basicQueryService, DataPersistance dataPersistance) {
     this.basicQueryService = basicQueryService;
     this.dataPersistance = dataPersistance;
+  }
+
+  @GetMapping(value = "/repos")
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<List<Project>> listProjects() {
+    return new ResponseEntity(dataPersistance.retrieveProjects(), HttpStatus.OK);
   }
 
   @GetMapping(value = "/repos/{owner}/{repo}/actions")
@@ -52,7 +57,21 @@ public class BaseGitQueryController implements FileJsonReader {
         HttpStatus.OK);
   }
 
-  @GetMapping(value = "/repos/{owner}/{repo}/retrieveDefectiveCommits")
+  @GetMapping(value = "/repos/{owner}/{repo}/retrieveFixingCommits")
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<List<Commit>> searchFixingCommits(
+      @PathVariable(value = "owner")
+          @Parameter(name = "owner", in = ParameterIn.PATH, description = "Owner of the project")
+          String owner,
+      @PathVariable(value = "repo")
+          @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
+          String repo)
+      throws JsonProcessingException {
+    return new ResponseEntity<>(
+        basicBugFinder.findAllBugsFixingCommits(repo, owner, 2), HttpStatus.OK);
+  }
+
+  @GetMapping(value = "/repos/{owner}/{repo}/{id}/retrieveBugIntroducingCommits")
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<List<Commit>> searchDefectsCommits(
       @PathVariable(value = "owner")
@@ -60,9 +79,28 @@ public class BaseGitQueryController implements FileJsonReader {
           String owner,
       @PathVariable(value = "repo")
           @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
-          String repo) throws JsonProcessingException {
-    return new ResponseEntity(
-        basicBugFinder.findAllBugsIntroducingCommits(repo, owner, 2), HttpStatus.OK);
+          String repo,
+      @PathVariable(value = "id")
+          @Parameter(name = "id", in = ParameterIn.PATH, description = "Issue id")
+          Long id)
+      throws IOException, GitAPIException {
+    return new ResponseEntity<>(
+        basicBugFinder.findBugIntroducingCommits(owner, repo, id, 2), HttpStatus.OK);
+  }
+
+
+  @GetMapping(value = "/repos/{owner}/{repo}/retrieveBugIntroducingCommits")
+  @ResponseStatus(HttpStatus.OK)
+  public void searchAllDefectsCommits(
+      @PathVariable(value = "owner")
+      @Parameter(name = "owner", in = ParameterIn.PATH, description = "Owner of the project")
+      String owner,
+      @PathVariable(value = "repo")
+      @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
+      String repo)
+      throws IOException, GitAPIException {
+
+        basicBugFinder.traceCommitsToOrigin(owner, repo, 2);
   }
 
   @GetMapping(value = "/repos/{owner}/{repo}")

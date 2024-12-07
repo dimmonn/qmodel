@@ -40,8 +40,6 @@ public class Commit {
   @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private AGraph aGraph;
 
-  @ToString.Include
-  @EqualsAndHashCode.Exclude
   @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private List<FileChange> fileChanges;
 
@@ -50,6 +48,7 @@ public class Commit {
   @ToString.Include @Column @EqualsAndHashCode.Exclude private String email;
 
   @Column(columnDefinition = "LONGTEXT")
+  @EqualsAndHashCode.Exclude
   private String message;
 
   @ToString.Include @Column @EqualsAndHashCode.Exclude private int commentCount;
@@ -65,6 +64,9 @@ public class Commit {
   @Column @EqualsAndHashCode.Exclude double averageDegree = 0;
 
   @Column @EqualsAndHashCode.Exclude int depthOfCommitHistory = 0;
+
+  @Column @EqualsAndHashCode.Exclude int mergeCount = 0;
+  @Column @EqualsAndHashCode.Exclude int branchLength = 0;
 
   //    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   //    @JoinTable(
