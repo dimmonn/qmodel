@@ -46,8 +46,8 @@ public class TimelineDeserializer extends JsonDeserializer<Timeline> implements 
       timeline.setMessage(node.get("message").asText());
     }
     if (node.get("pull_request_url") != null) {
-      Long timelineId = parseToID(node.get("pull_request_url").asText());
-      timeline.addPullId(timelineId);
+      Long pullID = parseToID(node.get("pull_request_url").asText());
+      timeline.addPullId(pullID);
     }
     String prUrl = node.path("source").path("issue").path("pull_request").path("url").asText();
     if (prUrl != null && !prUrl.isEmpty()) {

@@ -24,18 +24,21 @@ public class DataPersistance {
   private final ProjectRepository projectRepository;
   private final Logger LOGGER = LoggerFactory.getLogger(DataPersistance.class);
   private final ActionsRepository actionsRepository;
+  private final CommitRepository commitRepository;
 
   public DataPersistance(
       AGraphRepository aGraphRepository,
       ProjectIssueRepository projectIssueRepository,
       ProjectPullRepository projectPullRepository,
       ProjectRepository projectRepository,
-      ActionsRepository actionsRepository) {
+      ActionsRepository actionsRepository,
+      CommitRepository commitRepository) {
     this.aGraphRepository = aGraphRepository;
     this.projectIssueRepository = projectIssueRepository;
     this.projectPullRepository = projectPullRepository;
     this.projectRepository = projectRepository;
     this.actionsRepository = actionsRepository;
+    this.commitRepository = commitRepository;
   }
 
   public List<ProjectAGraph> persistGraph(List<Project> repos, Map<Project, AGraph> ags) {
@@ -45,11 +48,8 @@ public class DataPersistance {
           projectRepository.findById(new ProjectID(repo.getProjectOwner(), repo.getProjectName()));
       AGraph aGraph = ags.get(repo);
       Project project = null;
-      if (!foundProject.isPresent()) {
-        project = new Project(repo.getProjectOwner(), repo.getProjectName());
-      } else {
-        project = foundProject.get();
-      }
+      project =
+          foundProject.orElseGet(() -> new Project(repo.getProjectOwner(), repo.getProjectName()));
       if (aGraph != null && aGraph.getGraph() != null && !aGraph.getGraph().equals("[]")) {
         project.setAGraph(aGraph);
         aGraph.setProject(project);
@@ -98,15 +98,12 @@ public class DataPersistance {
 
       List<ProjectIssue> projectIssue = pimap.get(repo);
       Project project;
-      if (!foundProject.isPresent()) {
-        project = new Project(repo.getProjectOwner(), repo.getProjectName());
-      } else {
-        project = foundProject.get();
-      }
+      project =
+          foundProject.orElseGet(() -> new Project(repo.getProjectOwner(), repo.getProjectName()));
       if (projectIssue != null) {
-        for (int i = 0; i < projectIssue.size(); i++) {
-          if (projectIssue.get(i) != null) {
-            project.addProjectIssue(projectIssue.get(i));
+        for (ProjectIssue issue : projectIssue) {
+          if (issue != null) {
+            project.addProjectIssue(issue);
           }
         }
         projectRepository.save(project);
@@ -133,11 +130,10 @@ public class DataPersistance {
     return actions;
   }
 
-  public void persistCommits(List<Commit> commitsWithDefects) {
-    for (Commit commit : commitsWithDefects) {
-      LOGGER.info("Persisting commit with defects: {}", commit);
+  public void persistCommits(List<Commit> commits) {
+    for (Commit commit : commits) {
+      commitRepository.save(commit);
     }
-    // TODO: Implement actual commit persistence with defects
   }
 
   public List<Project> retrieveProjects() {

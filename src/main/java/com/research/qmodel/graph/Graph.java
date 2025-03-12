@@ -6,17 +6,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.research.qmodel.model.Actions;
 import com.research.qmodel.model.Commit;
 import com.research.qmodel.model.CommitID;
-import com.research.qmodel.model.ProjectIssue;
 import com.research.qmodel.repos.ActionsRepository;
 import com.research.qmodel.repos.CommitRepository;
 import java.util.Map.Entry;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.ListBranchCommand.ListMode;
-import org.eclipse.jgit.api.ResetCommand;
 import org.eclipse.jgit.api.ResetCommand.ResetType;
 import org.eclipse.jgit.api.errors.CheckoutConflictException;
-import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
@@ -27,7 +23,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
 import static org.springframework.context.annotation.ScopedProxyMode.TARGET_CLASS;
@@ -52,8 +47,16 @@ public class Graph extends GitMaintainable {
     vertices.putIfAbsent(sha, new Vertex(sha));
   }
 
+
   public void addEdge(String parentSha, String childSha) {
-    vertices.get(parentSha).addNeighbor(childSha);
+    Vertex parent = vertices.get(parentSha);
+    Vertex child = vertices.get(childSha);
+
+    if (parent != null && child != null) {
+      parent.addNeighbor(childSha);
+      parent.incrementOutDegree();
+      child.incrementInDegree();
+    }
   }
 
   public void addBranch(String sha, String branch) {
@@ -156,14 +159,6 @@ public class Graph extends GitMaintainable {
     return vertexCount == 0 ? 0 : (double) edgeCount / vertexCount;
   }
 
-  public int getMaxDegree() {
-    int maxDegree = 0;
-    for (Vertex vertex : vertices.values()) {
-      maxDegree = Math.max(maxDegree, vertex.neighbors.size());
-    }
-    return maxDegree;
-  }
-
   public Graph buildGraph(String owner, String path, String repoPath) {
     try (Git git = Git.open(new File(repoPath))) {
       List<Ref> branches = git.branchList().setListMode(ListMode.REMOTE).call();
@@ -230,7 +225,8 @@ public class Graph extends GitMaintainable {
         int numberOfVertices = getNumberOfVertices();
 
         int numberOfEdges = getNumberOfEdges();
-        int maxDegree = getMaxDegree();
+        int inDegree = vertex.getInDegree();
+        int outDegree = vertex.getOutDegree();
         double averageDegree = getAverageDegree();
         int minDepthOfCommitHistory = getMinimumDepth(sha, new HashMap<>());
         int maxDepthOfCommitHistory = getMaximumDepth(sha, new HashMap<>());
@@ -238,12 +234,13 @@ public class Graph extends GitMaintainable {
         if (foundCommit != null) {
           try {
             LOGGER.info(
-                "Saving commit graph properties commit id# {}, mergeCount# {}, numberOfVertices# {}, numberOfEdges# {},maxDegree# {},averageDegree# {}, minDepthOfCommitHistory# {}, maxDepthOfCommitHistory# {}, isMerge# {}",
+                "Saving commit graph properties commit id# {}, mergeCount# {}, numberOfVertices# {}, numberOfEdges# {},inDegree# {},outDegree# {},averageDegree# {}, minDepthOfCommitHistory# {}, maxDepthOfCommitHistory# {}, isMerge# {}",
                 foundCommit.getSha(),
                 mergeCount,
                 numberOfVertices,
                 numberOfEdges,
-                maxDegree,
+                inDegree,
+                outDegree,
                 averageDegree,
                 minDepthOfCommitHistory,
                 maxDepthOfCommitHistory,
@@ -251,7 +248,8 @@ public class Graph extends GitMaintainable {
             foundCommit.setMergeCount(mergeCount);
             foundCommit.setNumberOfVertices(numberOfVertices);
             foundCommit.setNumberOfEdges(numberOfEdges);
-            foundCommit.setMaxDegree(maxDegree);
+            foundCommit.setInDegree(inDegree);
+            foundCommit.setInDegree(outDegree);
             foundCommit.setNumberOfBranches(vertex.branches.size());
             foundCommit.setAverageDegree(averageDegree);
             foundCommit.setMinDepthOfCommitHistory(minDepthOfCommitHistory);
@@ -268,7 +266,6 @@ public class Graph extends GitMaintainable {
               numberOfVertices,
               vertex.getNumberOfBranches(),
               numberOfEdges,
-              maxDegree,
               averageDegree,
               maxDepthOfCommitHistory,
               minDepthOfCommitHistory,

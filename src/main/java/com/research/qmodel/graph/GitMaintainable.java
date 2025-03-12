@@ -79,7 +79,8 @@ public abstract class GitMaintainable {
       node.put("numberOfVertices", vertex.getNumberOfVertices());
       node.put("numberOfBranches", vertex.getNumberOfBranches());
       node.put("numberOfEdges", vertex.getNumberOfEdges());
-      node.put("maxDegree", vertex.getMaxDegree());
+      node.put("inDegree", vertex.getInDegree());
+      node.put("outDegree", vertex.getOutDegree());
       node.put("averageDegree", vertex.getAverageDegree());
       node.put("maxDepthOfCommitHistory", vertex.getMaxDepthOfCommitHistory());
       node.put("minDepthOfCommitHistory", vertex.getMinDepthOfCommitHistory());

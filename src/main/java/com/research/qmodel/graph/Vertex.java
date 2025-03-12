@@ -22,11 +22,21 @@ public class Vertex {
   private int numberOfVertices;
   private int numberOfBranches;
   private int numberOfEdges;
-  private int maxDegree;
   private double averageDegree;
   private int maxDepthOfCommitHistory;
   private int minDepthOfCommitHistory;
   private boolean isMerge;
+  private int inDegree;
+  private int outDegree;
+
+  public void incrementInDegree() {
+    this.inDegree++;
+  }
+
+  public void incrementOutDegree() {
+    this.outDegree++;
+  }
+
 
   public Vertex(String sha) {
     this.sha = sha;
@@ -62,7 +72,6 @@ public class Vertex {
       int numberOfVertices,
       int numberOfBranches,
       int numberOfEdges,
-      int maxDegree,
       double averageDegree,
       int maxDepthOfCommitHistory,
       int minDepthOfCommitHistory,
@@ -70,7 +79,6 @@ public class Vertex {
     this.numberOfVertices = numberOfVertices;
     this.numberOfBranches = numberOfBranches;
     this.numberOfEdges = numberOfEdges;
-    this.maxDegree = maxDegree;
     this.averageDegree = averageDegree;
     this.maxDepthOfCommitHistory = maxDepthOfCommitHistory;
     this.minDepthOfCommitHistory = minDepthOfCommitHistory;

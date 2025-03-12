@@ -7,9 +7,13 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.research.qmodel.model.*;
+import com.research.qmodel.repos.ProjectIssueRepository;
 import com.research.qmodel.repos.ProjectPullRepository;
 import com.research.qmodel.service.BasicQueryService;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -18,6 +22,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -34,6 +39,10 @@ public class ProjectIssueDeserializer extends JsonDeserializer<ProjectIssue>
   private final BasicQueryService basicQueryService;
   private final ObjectMapper objectMapper;
   private final ProjectPullRepository projectPullRepository;
+  private final ProjectIssueRepository projectIssueRepository;
+
+  @Value("${issue.reference.keywords}")
+  private final List<String> keywords;
 
   @Override
   public ProjectIssue deserialize(
@@ -62,7 +71,7 @@ public class ProjectIssueDeserializer extends JsonDeserializer<ProjectIssue>
             } else {
               timeline.setProjectIssue(projectIssue);
               projectIssue.addTimeLine(timeline);
-              if (timeline.getPullIds() != null) {
+              if (timeline.getPullIds() != null&& new ObjectMapper().readTree(timeline.getRawData()).path("source").path("issue").path("timeline_url").asText().contains("/"+owner+"/"+projectName)) {
                 for (Long pullId : timeline.getPullIds()) {
                   Optional<ProjectPull> foundPull =
                       projectPullRepository.findById(new PullID(owner, projectName, pullId));
@@ -166,6 +175,46 @@ public class ProjectIssueDeserializer extends JsonDeserializer<ProjectIssue>
         LOGGER.error(e.getMessage());
       }
     }
+
+    if (projectIssue.getFixPR() == null && projectIssue.getProjectPull() != null) {
+      Pattern pattern = Pattern.compile(
+          "\\b(" + String.join("|", keywords) + ")\\s+(?:issue\\s*)?#?(\\d+)\\b",
+          Pattern.CASE_INSENSITIVE
+      );
+
+      projectIssue.getProjectPull().stream()
+          .filter(Objects::nonNull)
+          .forEach(
+              p -> {
+                Set<Long> issueIds =
+                    p.getTimeLine().stream()
+                        .map(Timeline::getMessage)
+                        .filter(Objects::nonNull)
+                        .flatMap(
+                            msg -> {
+                              Matcher matcher = pattern.matcher(msg);
+                              return matcher
+                                  .results()
+                                  .map(
+                                      m ->
+                                          Long.valueOf(
+                                              m.group(
+                                                  2))); // Java 9+ Matcher.results() for efficiency
+                            })
+                        .collect(Collectors.toSet()); // Use Set to avoid duplicate DB calls
+
+                List<ProjectIssue> issues =
+                    projectIssueRepository.findIssuesByIds(
+                        p.getProjectName(), p.getProjectOwner(), issueIds);
+
+                issues.forEach(
+                    issue -> {
+                      issue.setFixPR(p);
+                      issue.setPrThatFixesIssue(p.getId());
+                    });
+              });
+    }
+
     return projectIssue;
   }
 }

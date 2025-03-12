@@ -74,6 +74,10 @@ public class ProjectIssue implements BaseMetric {
 
   @Column private long fixPr;
 
+  public void setPrThatFixesIssue(long fixPr) {
+    this.fixPr = fixPr;
+  }
+
   @ToString.Exclude
   @JsonIgnore
   @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)

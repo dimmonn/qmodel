@@ -75,11 +75,12 @@ public class BasicQueryService extends BasicKeyManager {
       }
       return objectMapper.convertValue(allEntities, targetType);
   }*/
-  public <T> T retrievemetrics(String url, TypeReference<T> targetType) {
+  public <T> T retrievemetrics(
+      String url, TypeReference<T> targetType, String urlCondition, String pageCondition) {
     List<JsonNode> allEntities = new ArrayList<>();
     int pageNumber = 1;
     while (isRun(pageNumber)) {
-      JsonNode body = getRowData(url, BASE_URL, pageNumber, PAGE_SIZE);
+      JsonNode body = getRowData(url, BASE_URL, pageNumber, PAGE_SIZE, urlCondition, pageCondition, false);
       if (body != null && !body.isEmpty()) {
         List<JsonNode> rowBody = objectMapper.convertValue(body, new TypeReference<>() {});
         allEntities.addAll(rowBody);
@@ -92,6 +93,20 @@ public class BasicQueryService extends BasicKeyManager {
     return objectMapper.convertValue(allEntities, targetType);
   }
 
+  public <T> T retrievemetricsObject(
+      String url, TypeReference<T> targetType, String urlCondition, String pageCondition) {
+    List<JsonNode> allEntities = new ArrayList<>();
+    int pageNumber = 1;
+
+      JsonNode body = getRowData(url, BASE_URL, pageNumber, PAGE_SIZE, urlCondition, pageCondition, true);
+      if (body != null && !body.isEmpty()) {
+        JsonNode rowBody = objectMapper.convertValue(body, new TypeReference<>() {});
+        allEntities.add(rowBody);
+      }
+
+    return objectMapper.convertValue(allEntities, targetType);
+  }
+
   private <T> List<List<T>> partitionList(List<T> list, int size) {
     List<List<T>> partitions = new ArrayList<>();
     for (int i = 0; i < list.size(); i += size) {
@@ -101,11 +116,24 @@ public class BasicQueryService extends BasicKeyManager {
   }
 
   private boolean isRun(int pageNumber) {
-    return mode.equals("demo") ? pageNumber < 600000 : true;
+    return !mode.equals("demo") || pageNumber < 200000;
   }
 
-  private JsonNode getRowData(String url, String baseUrl, int pageNumber, int pageSize) {
-    String apiUrl = String.format(url, baseUrl, "?page=" + pageNumber + "&per_page=" + pageSize);
+  private JsonNode getRowData(
+      String url,
+      String baseUrl,
+      int pageNumber,
+      int pageSize,
+      String urlCondition,
+      String pageCondition,
+      boolean skipPages) {
+    String apiUrl =
+        skipPages
+            ? String.format(url, baseUrl, "")
+            : String.format(
+                url,
+                baseUrl,
+                urlCondition + "page=" + pageNumber + pageCondition + "per_page=" + pageSize);
     HttpHeaders headers = new HttpHeaders();
     String currentKey = getNextKey(false);
     headers.set("Authorization", currentKey);
@@ -121,13 +149,12 @@ public class BasicQueryService extends BasicKeyManager {
       try {
         requestEntity = new RequestEntity<>(headers, HttpMethod.GET, new URI(apiUrl));
         ResponseEntity<JsonNode> response = restTemplate.exchange(requestEntity, JsonNode.class);
-        JsonNode body = response.getBody();
-        return body;
-      } catch (URISyntaxException ex) {
+        return response.getBody();
+      } catch (Exception ex) {
         LOGGER.error(ex.getMessage(), ex);
-        throw new RuntimeException(ex);
       }
     }
+    return null;
   }
 
   public JsonNode getRowData(String commitUrl) {
@@ -219,7 +246,7 @@ public class BasicQueryService extends BasicKeyManager {
     // Iterate through the string with the right pointer.
     for (int right = 0; right < s.length(); right++) {
       char currentChar = s.charAt(right);
-      //abcabcbb
+      // abcabcbb
       // If the character already exists in the window, move the left pointer.
       if (charIndexMap.containsKey(currentChar)) {
         // Move left pointer to the position after the last occurrence.

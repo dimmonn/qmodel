@@ -7,7 +7,10 @@ import com.research.qmodel.model.AGraph;
 import com.research.qmodel.model.Commit;
 import com.research.qmodel.model.FileChange;
 import com.research.qmodel.repos.AGraphRepository;
+
+import com.research.qmodel.repos.CommitRepository;
 import com.research.qmodel.service.BasicQueryService;
+import java.util.HashSet;
 import java.util.Objects;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
@@ -25,14 +28,15 @@ public class AGraphDeserializer extends JsonDeserializer<AGraph> {
   private final ObjectMapper objectMapper;
   private final Logger LOGGER = LoggerFactory.getLogger(AGraphDeserializer.class);
   private final AGraphRepository aGraphRepository;
-
+  private final CommitRepository commitRepository;
   public AGraphDeserializer(
       BasicQueryService basicQueryService,
       ObjectMapper objectMapper,
-      AGraphRepository aGraphRepository) {
+      AGraphRepository aGraphRepository, CommitRepository commitRepository) {
     this.basicQueryService = basicQueryService;
     this.objectMapper = objectMapper;
     this.aGraphRepository = aGraphRepository;
+    this.commitRepository = commitRepository;
   }
 
   @SneakyThrows
@@ -62,13 +66,14 @@ public class AGraphDeserializer extends JsonDeserializer<AGraph> {
           && rawCommit.get("commit").get("author").get("date") != null
           && rawCommit.get("url") != null) {
         Commit commit = objectMapper.convertValue(rawCommit.get("commit"), Commit.class);
+
         objectMapper.enable(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY);
         JsonNode sha = rawCommit.get("sha");
         if (sha != null) {
           commit.setSha(sha.asText());
           commit.setRawData(rawCommit.toString());
         }
-
+        commit.setAGraph(aGraph);
         SimpleModule module = new SimpleModule();
         module.addDeserializer(List.class, new FileChangesDeserializer(basicQueryService));
         objectMapper.registerModule(module);
@@ -89,6 +94,7 @@ public class AGraphDeserializer extends JsonDeserializer<AGraph> {
         for (FileChange fileChange : files) {
           fileChange.addCommit(commit);
         }
+        commitRepository.save(commit);
       }
     }
     return aGraph;

@@ -26,11 +26,11 @@ public class AGraph implements BaseMetric {
 
     @ToString.Include
     @JsonIgnore
-    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.MERGE)
     private Project project;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "aGraph", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "aGraph", cascade = CascadeType.MERGE)
     private Set<Commit> commits;
 
     public void addCommit(Commit commit) {

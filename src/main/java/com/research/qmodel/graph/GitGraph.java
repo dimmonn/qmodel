@@ -22,7 +22,7 @@ public class GitGraph {
 //        System.out.println("Number of edges (parent-child relationships): " + graph.getNumberOfEdges());
 //        System.out.println("Number of branches: " + graph.getNumberOfBranches());
 //        System.out.println("Average degree: " + graph.getAverageDegree());
-//        System.out.println("Maximum degree: " + graph.getMaxDegree());
+//        System.out.println("Maximum degree: " + graph.getInDegree());
 //        System.out.println("Depth of commit history: " + graph.getDepthOfCommitHistory());
     }
 }

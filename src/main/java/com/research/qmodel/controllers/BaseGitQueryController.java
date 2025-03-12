@@ -3,6 +3,10 @@ package com.research.qmodel.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.research.qmodel.dto.ProjectAGraph;
 import com.research.qmodel.graph.GitMaintainable;
 import com.research.qmodel.model.*;
@@ -13,6 +17,8 @@ import com.research.qmodel.service.findbugs.BasicBugFinder;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import java.io.IOException;
+import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +34,8 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
   private final DataPersistance dataPersistance;
   @Autowired private BasicBugFinder basicBugFinder;
   @Autowired private ProjectIssueRepository projectIssueRepository;
+
+  @Autowired private ProjectNameCache projectNameCache;
 
   public BaseGitQueryController(
       BasicQueryService basicQueryService, DataPersistance dataPersistance) {
@@ -54,7 +62,9 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
     Actions actions =
         basicQueryService.retrievemetrics(
             "%s" + String.format("repos/%s/%s/actions/runs", owner, repo),
-            new TypeReference<>() {});
+            new TypeReference<>() {},
+            "?",
+            "&");
     return new ResponseEntity(
         dataPersistance.persistActions(
             List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), actions)),
@@ -104,6 +114,81 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
     basicBugFinder.traceCommitsToOrigin(owner, repo, 2);
   }
 
+  /*
+  TODO
+  */
+  private Set<String> getForks(String owner, String repo) {
+
+    List<Map<String, JsonNode>> retrievemetrics =
+        basicQueryService.retrievemetrics(
+            "%s" + String.format("repos/%s/%s/forks", owner, repo) + "%s",
+            new TypeReference<>() {},
+            "?",
+            "&");
+    return retrievemetrics.parallelStream()
+        .map(o -> o.get("full_name").asText())
+        .collect(Collectors.toSet());
+  }
+
+  //
+  //  private static Set<String> getCommits(String repo) throws IOException {
+  //    Set<String> commits = new HashSet<>();
+  //    String url = GITHUB_API_BASE + repo + "/commits?per_page=" + MAX_RESULTS;
+  //
+  //    JsonNode response = makeApiRequest(url);
+  //    if (response != null) {
+  //      for (JsonNode commit : response) {
+  //        commits.add(commit.get("sha").asText());
+  //      }
+  //    }
+  //    return commits;
+  //  }
+
+  /*
+  TODO
+  */
+
+  @GetMapping(value = "/repos/{owner}/{repo}/forked")
+  @ResponseStatus(HttpStatus.OK)
+  public Set<String> forkedCommits(
+      @PathVariable(value = "owner")
+          @Parameter(name = "owner", in = ParameterIn.PATH, description = "Owner of the project")
+          String owner,
+      @PathVariable(value = "repo")
+          @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
+          String repo) {
+    projectNameCache.setProjectOwner(owner);
+    projectNameCache.setProjectName(repo);
+    Set<String> forks = getForks(owner, repo);
+    for (String fork : forks) {
+      String[] forkedName = fork.split("/");
+
+      JsonNode branches =
+          basicQueryService.retrievemetrics(
+              "%s" + String.format("repos/%s/%s/branches", forkedName[0], forkedName[1]) + "%s",
+              new TypeReference<>() {},
+              "?",
+              "&");
+      for (JsonNode branch : branches) {
+        String commitId =
+            StringUtils.substringAfterLast(branch.path("commit").path("url").asText(), "/");
+        AGraph forkedCommit =
+            basicQueryService.retrievemetricsObject(
+                "%s" + String.format("repos/%s/%s/commits/%s", owner, repo, commitId) + "%s",
+                new TypeReference<>() {},
+                "?",
+                "?");
+
+        Set<Commit> commits = forkedCommit.getCommits();
+        dataPersistance.persistCommits(new ArrayList<>(commits));
+
+        System.out.println();
+      }
+    }
+
+    return forks;
+  }
+
   @GetMapping(value = "/repos/{owner}/{repo}")
   @ResponseStatus(HttpStatus.OK)
   public Object baseQueryAg(
@@ -116,7 +201,9 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
     AGraph ag =
         basicQueryService.retrievemetrics(
             "%s" + String.format("repos/%s/%s/commits", owner, repo) + "%s",
-            new TypeReference<>() {});
+            new TypeReference<>() {},
+            "?",
+            "?");
     return new ResponseEntity<>(
         dataPersistance.persistGraph(
             List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), ag)),
@@ -172,7 +259,9 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
     List<ProjectPull> projectPull =
         basicQueryService.retrievemetrics(
             "%s" + String.format("repos/%s/%s/pulls", owner, repo) + "%s&state=closed",
-            new TypeReference<>() {});
+            new TypeReference<>() {},
+            "?",
+            "?");
     return new ResponseEntity<>(
         dataPersistance.persistPulls(
             List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), projectPull)),
@@ -199,7 +288,9 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
     List<ProjectIssue> projectIssues =
         basicQueryService.retrievemetrics(
             "%s" + String.format("repos/%s/%s/issues", owner, repo) + "%s" + "&state=closed",
-            new TypeReference<>() {});
+            new TypeReference<>() {},
+            "?",
+            "?");
     return new ResponseEntity<>(
         dataPersistance.persistIssues(
             List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), projectIssues)),
@@ -224,7 +315,9 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
               "%s"
                   + String.format(url, project.getProjectOwner(), project.getProjectName())
                   + "%s&state=closed",
-              targetType));
+              targetType,
+              "?",
+              "?"));
     }
     return pulls;
   }
