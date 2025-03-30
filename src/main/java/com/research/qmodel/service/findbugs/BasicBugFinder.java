@@ -50,7 +50,6 @@ public class BasicBugFinder implements ChangePatchProcessor {
   @Value("${qmodel.defect.labels:bug}")
   private List<String> LABELS;
 
-
   @Autowired private DataPersistance dataPersistance;
 
   public List<String> findAllBugsFixingCommits(String repoName, String repoOwner, int depth)
