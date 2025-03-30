@@ -5,26 +5,33 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.research.qmodel.annotations.ChangePatchProcessor;
 import com.research.qmodel.errors.IssueNotFoundException;
+import com.research.qmodel.graph.Graph;
+import com.research.qmodel.model.AGraph;
 import com.research.qmodel.model.Commit;
 import com.research.qmodel.model.CommitID;
 import com.research.qmodel.model.FileChange;
+import com.research.qmodel.model.Project;
 import com.research.qmodel.model.ProjectIssue;
 import com.research.qmodel.model.ProjectPull;
 import com.research.qmodel.repos.CommitRepository;
 import com.research.qmodel.repos.ProjectIssueRepository;
 import com.research.qmodel.repos.ProjectPullRepository;
 import com.research.qmodel.service.BasicQueryService;
+import com.research.qmodel.service.DataPersistance;
 import java.util.*;
 import java.io.*;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ResetCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.blame.BlameResult;
 import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.transport.FetchResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,15 +50,23 @@ public class BasicBugFinder implements ChangePatchProcessor {
   @Value("${qmodel.defect.labels:bug}")
   private List<String> LABELS;
 
+  @Autowired private DataPersistance dataPersistance;
+
   public List<String> findAllBugsFixingCommits(String repoName, String repoOwner, int depth)
       throws JsonProcessingException {
-    Queue<ProjectIssue> projectIssues =
+    Graph g = new Graph();
+
+    Queue<ProjectIssue> fixedIssues =
         new LinkedList<>(projectIssueRepository.finAllFixedIssues(repoName, repoOwner));
     List<String> cachedCommits = new ArrayList<>();
-    while (!projectIssues.isEmpty()) {
-      LOGGER.info("Issues still remains in the queue: {}", projectIssues.size());
-      ProjectIssue projectIssue = projectIssues.poll();
-      if (projectIssue.getCommits() == null || !projectIssue.getCommits().isEmpty()) {
+    while (!fixedIssues.isEmpty()) {
+      LOGGER.info("Issues still remains in the queue: {}", fixedIssues.size());
+      ProjectIssue projectIssue = fixedIssues.poll();
+      if (projectIssue == null) {
+        LOGGER.warn("Project issue is null, continuing..");
+        continue;
+      }
+      if (projectIssue.getCommits() != null && !projectIssue.getCommits().isEmpty()) {
         LOGGER.warn(
             "Commits are not empty, had been added already: issue id# {}", projectIssue.getId());
         continue;
@@ -85,19 +100,32 @@ public class BasicBugFinder implements ChangePatchProcessor {
             projectIssue.getId());
         continue;
       }
+      cachedCommits.addAll(retrievedCommits);
       List<Commit> foundCommitsInDb =
           retrievedCommits.stream()
               .filter(Objects::nonNull)
               .filter(StringUtils::isNotBlank)
-              .map(c -> commitRepository.findById(new CommitID(c)).orElse(null))
+              .map(
+                  c ->
+                      commitRepository
+                          .findById(new CommitID(c))
+                          .orElseGet(
+                              () -> {
+                                AGraph graphWithoutForks =
+                                    basicQueryService.retrieveCommitBySha(repoOwner, repoName, c);
+                                dataPersistance.persistGraph(
+                                    List.of(new Project(repoOwner, repoName)),
+                                    Map.of(new Project(repoOwner, repoName), graphWithoutForks));
+                                return commitRepository.findById(new CommitID(c)).orElse(null);
+                              }))
               .filter(Objects::nonNull)
               .collect(Collectors.toList());
+
       if (foundCommitsInDb.isEmpty()) {
         LOGGER.warn(
             "No commits had been found in database for sha: {} and issue id# {}, maybe this commit does not belong to any branch on this repository, and may belong to a fork outside of the repository.",
             retrievedCommits,
             projectIssue.getId());
-        cachedCommits.addAll(retrievedCommits);
         continue;
       }
       if (projectIssue.getCommits() == null || projectIssue.getCommits().isEmpty()) {
@@ -312,11 +340,38 @@ public class BasicBugFinder implements ChangePatchProcessor {
 
   private String getBlamedCommit(
       Git git, Repository repository, String file, int line, String startingCommit)
-      throws GitAPIException, IOException {
+      throws IOException, GitAPIException {
+    BlameResult blameResult = null;
     ObjectId commitId = repository.resolve(startingCommit);
 
-    // Run blame on the specified file and line
-    BlameResult blameResult = git.blame().setFilePath(file).setStartCommit(commitId).call();
+    if (commitId == null) {
+      System.out.println("Commit " + startingCommit + " not found. Fetching from origin...");
+      try {
+        git.fetch()
+            .setRemote("origin")
+            .setRefSpecs("+refs/*:refs/remotes/origin/*") // Fetch all refs to find the commit
+            .call();
+
+        // Re-resolve the commit after fetching
+        commitId = repository.resolve(startingCommit);
+
+        if (commitId == null) {
+          System.out.println("Commit " + startingCommit + " still missing after fetch.");
+          return null;
+        }
+      } catch (Exception fetchException) {
+        System.out.println("Error fetching commit: " + fetchException.getMessage());
+        return null;
+      }
+    }
+
+    // Now attempt git blame
+    try {
+      blameResult = findBlamedRef(git, file, commitId);
+    } catch (Exception blameException) {
+      checkoutOrphanedCommit(git, repository, startingCommit);
+      blameResult = findBlamedRef(git, file, commitId);
+    }
 
     if (blameResult != null) {
       int totalLinesInBlame = blameResult.getResultContents().size();
@@ -338,6 +393,58 @@ public class BasicBugFinder implements ChangePatchProcessor {
           "Blame result is null for file: " + file + " in commit: " + startingCommit);
     }
     return null;
+  }
+
+  private void checkoutOrphanedCommit(Git git, Repository repository, String commitSha)
+      throws GitAPIException, IOException {
+
+    git.fetch()
+        .setRemote("origin")
+        .setRefSpecs(
+            "+"
+                + commitSha
+                + ":refs/remotes/origin/temp_commit_"
+                + new Random().nextInt(10))
+        .call();
+
+    try {
+      resolveLockIssue(git.getRepository().getDirectory().toPath().toString());
+      git.stashCreate().setIncludeUntracked(true).call();
+      git.reset().setMode(ResetCommand.ResetType.HARD).setRef(commitSha).call();
+      String tempBranch = "temp_commit_" + commitSha.substring(0, 7);
+      git.branchCreate()
+          .setName(tempBranch)
+          .setStartPoint(commitSha) // This avoids detached HEAD state
+          .setForce(true)
+          .call();
+
+      git.checkout().setName(tempBranch).call();
+      System.out.println("Checked out orphaned commit " + commitSha + " via branch " + tempBranch);
+
+    } catch (Exception e) {
+      throw new IOException("Failed to checkout orphaned commit: " + commitSha, e);
+    }
+  }
+
+  private void resolveLockIssue(String repoPath) throws IOException, InterruptedException {
+    File lockFile = new File(repoPath + "/index.lock");
+
+    if (lockFile.exists()) {
+      System.out.println("Found stale lock file: " + lockFile.getPath());
+      if (lockFile.delete()) {
+        System.out.println("Successfully deleted the lock file.");
+      } else {
+        System.out.println("Failed to delete the lock file.");
+      }
+    }
+
+    // Optional: Delay before retrying to avoid immediate race conditions
+    Thread.sleep(1000); // Wait a bit before retrying
+  }
+
+  private static BlameResult findBlamedRef(Git git, String file, ObjectId commitId)
+      throws GitAPIException {
+    return git.blame().setFilePath(file).setStartCommit(commitId).setFollowFileRenames(true).call();
   }
 
   // Run a git command and return the output lines
