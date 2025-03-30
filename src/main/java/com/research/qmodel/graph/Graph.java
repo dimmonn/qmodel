@@ -60,7 +60,10 @@ public class Graph extends GitMaintainable {
   }
 
   public void addBranch(String sha, String branch) {
-    vertices.get(sha).addBranch(branch);
+    Vertex vertex = getVertex(sha);
+    if (vertex != null) {
+      vertex.addBranch(branch);
+    }
   }
 
   public Set<String> getVertices() {
@@ -137,6 +140,7 @@ public class Graph extends GitMaintainable {
 
   public int getNumberOfEdges() {
     int edgeCount = 0;
+    //TODO It's a defect, most likely we need particular neighbors
     for (Vertex vertex : vertices.values()) {
       edgeCount += vertex.neighbors.size();
     }
@@ -181,23 +185,23 @@ public class Graph extends GitMaintainable {
 
       List<RevCommit> allCommits = new ArrayList<>(commitMeta.keySet());
       allCommits.sort(Comparator.comparingInt(RevCommit::getCommitTime));
-      int mergeCount = 0;
       int counter = 0;
       Queue<RevCommit> revCommits =
           new LinkedList<>(allCommits);
       while (!revCommits.isEmpty()) {
         RevCommit commit = revCommits.poll();
+      int mergeCount = commit.getParentCount() > 1 ? 1 : 0;
         LOGGER.info("{} are left to process.", allCommits.size() - (++counter));
         String sha = commit.getId().getName();
         Commit foundCommit = commitRepository.findById(new CommitID(sha)).orElse(null);
         if (foundCommit != null) {
-          if (foundCommit.getMinDepthOfCommitHistory() != null) {
-            LOGGER.info("{} has been processed already, continuing.", sha);
-            continue;
-          }
+//          if (foundCommit.getMinDepthOfCommitHistory() != null) {
+//            LOGGER.info("{} has been processed already, continuing.", sha);
+//            continue;
+//          }
         }
 
-        boolean isMerge = false;
+        boolean isMerge = commit.getParentCount() > 1;
         if (commit.getParentCount() > 1) {
           mergeCount++;
           if (foundCommit != null) {
@@ -205,21 +209,24 @@ public class Graph extends GitMaintainable {
           }
         }
 
-        addVertex(sha);
+        if (!vertices.containsKey(sha)) {
+          addVertex(sha);
+        }
         List<Ref> refs = commitMeta.get(commit);
         Vertex vertex = getVertex(sha);
         for (Ref ref : refs) {
           addBranch(sha, ref.getName());
-          if (foundCommit != null) {
-            foundCommit.setBranchLength(vertex.branches.size());
-          }
         }
-
+        if (foundCommit != null) {
+          foundCommit.setBranchLength(vertex.branches.size());
+        }
         int parentCount = commit.getParentCount();
         for (int i = 0; i < parentCount; i++) {
           String parentSha = commit.getParent(i).getId().getName();
           addVertex(parentSha);
-          addEdge(parentSha, sha);
+          if (!getVertex(parentSha).neighbors.contains(sha)) {
+            addEdge(parentSha, sha);
+          }
         }
 
         int numberOfVertices = getNumberOfVertices();
@@ -249,7 +256,7 @@ public class Graph extends GitMaintainable {
             foundCommit.setNumberOfVertices(numberOfVertices);
             foundCommit.setNumberOfEdges(numberOfEdges);
             foundCommit.setInDegree(inDegree);
-            foundCommit.setInDegree(outDegree);
+            foundCommit.setOutDegree(outDegree);
             foundCommit.setNumberOfBranches(vertex.branches.size());
             foundCommit.setAverageDegree(averageDegree);
             foundCommit.setMinDepthOfCommitHistory(minDepthOfCommitHistory);
@@ -283,6 +290,7 @@ public class Graph extends GitMaintainable {
   }
 
   public int getMinimumDepth(String sha, Map<String, Integer> depthCache) {
+
     if (depthCache.containsKey(sha)) {
       return depthCache.get(sha);
     }
@@ -294,10 +302,10 @@ public class Graph extends GitMaintainable {
     int minDepth = Integer.MAX_VALUE;
     for (String parentSha : parents) {
       int parentDepth = getMinimumDepth(parentSha, depthCache);
-      minDepth = Math.min(minDepth, parentDepth);
+      minDepth = Math.min(minDepth, parentDepth + 1);
     }
-    depthCache.put(sha, minDepth + 1);
-    return minDepth + 1;
+    depthCache.put(sha, minDepth);
+    return minDepth;
   }
 
   public int getMaximumDepth(String sha, Map<String, Integer> depthCache) {
@@ -313,11 +321,11 @@ public class Graph extends GitMaintainable {
     int maxDepth = Integer.MIN_VALUE;
     for (String parentSha : parents) {
       int parentDepth = getMaximumDepth(parentSha, depthCache);
-      maxDepth = Math.max(maxDepth, parentDepth);
+      maxDepth = Math.max(maxDepth, parentDepth + 1);
     }
 
-    depthCache.put(sha, maxDepth + 1);
-    return maxDepth + 1;
+    depthCache.put(sha, maxDepth);
+    return maxDepth;
   }
 
   private void updateActionResullt(Optional<Actions> foundAction, String sha)

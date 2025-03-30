@@ -1,14 +1,14 @@
 version: '3'
 services:
-  mysql:
+  mysql-qmodel:
     image: mysql:8.0
     ports:
       - 3307:3306
     environment:
       - MYSQL_ROOT_PASSWORD=admin
       - MYSQL_DATABASE=qmodel_demo
-      - MYSQL_USER=admin
-      - MYSQL_PASSWORD=admin
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
       - MYSQL_MAX_ALLOWED_PACKET=1G
     command: --max-allowed-packet=200M
     volumes:
@@ -16,19 +16,19 @@ services:
     networks:
       - elk
 
-  qmodel:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - 8082:8082
-      - 4123:4123
-    depends_on:
-      - mysql
-    volumes:
-      - /Users/dpolishchuk/IdeaProjects/qmodel:/Users/dpolishchuk/IdeaProjects/qmodel
-    networks:
-      - elk
+#   qmodel:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     ports:
+#       - 8082:8082
+#       - 4123:4123
+#     depends_on:
+#       - mysql
+#     volumes:
+#       - /Users/dpolishchuk/IdeaProjects/qmodel:/Users/dpolishchuk/IdeaProjects/qmodel
+#     networks:
+#       - elk
 
   grafana:
     image: grafana/grafana:latest
@@ -38,7 +38,7 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
     depends_on:
-      - mysql
+      - mysql-qmodel
     networks:
       - elk
     extra_hosts:

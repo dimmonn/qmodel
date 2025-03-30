@@ -3,10 +3,13 @@ package com.research.qmodel.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.research.qmodel.model.AGraph;
 import com.research.qmodel.model.Commit;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -80,7 +83,8 @@ public class BasicQueryService extends BasicKeyManager {
     List<JsonNode> allEntities = new ArrayList<>();
     int pageNumber = 1;
     while (isRun(pageNumber)) {
-      JsonNode body = getRowData(url, BASE_URL, pageNumber, PAGE_SIZE, urlCondition, pageCondition, false);
+      JsonNode body =
+          getRowData(url, BASE_URL, pageNumber, PAGE_SIZE, urlCondition, pageCondition, false);
       if (body != null && !body.isEmpty()) {
         List<JsonNode> rowBody = objectMapper.convertValue(body, new TypeReference<>() {});
         allEntities.addAll(rowBody);
@@ -98,11 +102,12 @@ public class BasicQueryService extends BasicKeyManager {
     List<JsonNode> allEntities = new ArrayList<>();
     int pageNumber = 1;
 
-      JsonNode body = getRowData(url, BASE_URL, pageNumber, PAGE_SIZE, urlCondition, pageCondition, true);
-      if (body != null && !body.isEmpty()) {
-        JsonNode rowBody = objectMapper.convertValue(body, new TypeReference<>() {});
-        allEntities.add(rowBody);
-      }
+    JsonNode body =
+        getRowData(url, BASE_URL, pageNumber, PAGE_SIZE, urlCondition, pageCondition, true);
+    if (body != null && !body.isEmpty()) {
+      JsonNode rowBody = objectMapper.convertValue(body, new TypeReference<>() {});
+      allEntities.add(rowBody);
+    }
 
     return objectMapper.convertValue(allEntities, targetType);
   }
@@ -116,7 +121,7 @@ public class BasicQueryService extends BasicKeyManager {
   }
 
   private boolean isRun(int pageNumber) {
-    return !mode.equals("demo") || pageNumber < 200000;
+    return !mode.equals("demo") || pageNumber < 400000;
   }
 
   private JsonNode getRowData(
@@ -263,8 +268,43 @@ public class BasicQueryService extends BasicKeyManager {
     return maxLength;
   }
 
-  public static void main(String[] args) {
-    int i = lengthOfLongestSubstring("abcabcbb");
-    System.out.println(i);
+  public AGraph retrieveForks(String owner, String repo, Set<String> forks) {
+    AGraph latestAgraphSnapshot = null;
+    for (String fork : forks) {
+      String[] forkedName = fork.split("/");
+      JsonNode branches =
+          retrievemetrics(
+              "%s" + String.format("repos/%s/%s/branches", forkedName[0], forkedName[1]) + "%s",
+              new TypeReference<>() {},
+              "?",
+              "&");
+      for (JsonNode branch : branches) {
+        String commitId =
+            StringUtils.substringAfterLast(branch.path("commit").path("url").asText(), "/");
+        AGraph agraph =
+            retrievemetricsObject(
+                "%s" + String.format("repos/%s/%s/commits/%s", owner, repo, commitId) + "%s",
+                new TypeReference<>() {},
+                "?",
+                "?");
+        if (latestAgraphSnapshot == null) {
+          latestAgraphSnapshot = agraph;
+        } else {
+          for (Commit commit : agraph.getCommits()) {
+            latestAgraphSnapshot.addCommit(commit);
+          }
+        }
+      }
+    }
+    return latestAgraphSnapshot;
+  }
+
+  public AGraph retrieveCommitBySha(String owner, String repo, String sha) {
+
+    return retrievemetricsObject(
+        "%s" + String.format("repos/%s/%s/commits/%s", owner, repo, sha) + "%s",
+        new TypeReference<>() {},
+        "?",
+        "&");
   }
 }

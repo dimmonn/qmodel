@@ -51,8 +51,6 @@ public class GraphController implements FileJsonReader {
     String filePath = "/Users/dpolishchuk/IdeaProjects/qmodel/" + owner + "_" + repo + ".json";
     gitGraph.exportGraph(filePath, graph.getVerticesMap());
     Graph b = new Graph();
-    Map<String, Vertex> verticesMap = b.getVerticesMap();
-    System.out.println();
     return readJsonFile("/Users/dpolishchuk/IdeaProjects/qmodel/" + owner + "_" + repo + ".json");
   }
 }

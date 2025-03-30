@@ -41,7 +41,7 @@ public abstract class GitMaintainable {
       File cloneDirectory = new File(cloneDirectoryPath);
 
       if (cloneDirectory.exists()) {
-        LOGGER.warn("Project " + owner + "/" + projectName + " exists.");
+        LOGGER.warn("Project " + owner + "/" + projectName + " xexists.");
         return;
       }
       Git.cloneRepository()

@@ -28,7 +28,6 @@ public class AGraphDeserializer extends JsonDeserializer<AGraph> {
   private final ObjectMapper objectMapper;
   private final Logger LOGGER = LoggerFactory.getLogger(AGraphDeserializer.class);
   private final AGraphRepository aGraphRepository;
-  private final CommitRepository commitRepository;
   public AGraphDeserializer(
       BasicQueryService basicQueryService,
       ObjectMapper objectMapper,
@@ -36,7 +35,6 @@ public class AGraphDeserializer extends JsonDeserializer<AGraph> {
     this.basicQueryService = basicQueryService;
     this.objectMapper = objectMapper;
     this.aGraphRepository = aGraphRepository;
-    this.commitRepository = commitRepository;
   }
 
   @SneakyThrows
@@ -94,7 +92,6 @@ public class AGraphDeserializer extends JsonDeserializer<AGraph> {
         for (FileChange fileChange : files) {
           fileChange.addCommit(commit);
         }
-        commitRepository.save(commit);
       }
     }
     return aGraph;

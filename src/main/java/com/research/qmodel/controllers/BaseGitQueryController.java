@@ -160,36 +160,36 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
     projectNameCache.setProjectOwner(owner);
     projectNameCache.setProjectName(repo);
     Set<String> forks = getForks(owner, repo);
-    for (String fork : forks) {
-      String[] forkedName = fork.split("/");
-
-      JsonNode branches =
-          basicQueryService.retrievemetrics(
-              "%s" + String.format("repos/%s/%s/branches", forkedName[0], forkedName[1]) + "%s",
-              new TypeReference<>() {},
-              "?",
-              "&");
-      for (JsonNode branch : branches) {
-        String commitId =
-            StringUtils.substringAfterLast(branch.path("commit").path("url").asText(), "/");
-        AGraph forkedCommit =
-            basicQueryService.retrievemetricsObject(
-                "%s" + String.format("repos/%s/%s/commits/%s", owner, repo, commitId) + "%s",
-                new TypeReference<>() {},
-                "?",
-                "?");
-
-        Set<Commit> commits = forkedCommit.getCommits();
-        dataPersistance.persistCommits(new ArrayList<>(commits));
-
-        System.out.println();
-      }
-    }
-
+    AGraph aGraph = basicQueryService.retrieveForks(owner, repo, forks);
+    dataPersistance.persistGraph(
+        List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), aGraph));
     return forks;
   }
 
-  @GetMapping(value = "/repos/{owner}/{repo}")
+
+  @GetMapping(value = "/repos/{owner}/{repo}/commits/{sha}")
+  @ResponseStatus(HttpStatus.OK)
+  public Object retrieveCommit(
+      @PathVariable(value = "owner")
+      @Parameter(name = "owner", in = ParameterIn.PATH, description = "Owner of the project")
+      String owner,
+      @PathVariable(value = "repo")
+      @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
+      String repo, @PathVariable(value = "sha")
+  @Parameter(name = "sha", in = ParameterIn.PATH, description = "commit sha")
+  String sha) {
+    projectNameCache.setProjectOwner(owner);
+    projectNameCache.setProjectName(repo);
+
+    AGraph graphWithoutForks = basicQueryService.retrieveCommitBySha(owner, repo, sha);
+
+    return new ResponseEntity<>(
+        dataPersistance.persistGraph(
+            List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), graphWithoutForks)),
+        HttpStatus.OK);
+  }
+
+  @GetMapping(value = "/repos/{owner}/{repo}/commits")
   @ResponseStatus(HttpStatus.OK)
   public Object baseQueryAg(
       @PathVariable(value = "owner")
@@ -198,15 +198,21 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
       @PathVariable(value = "repo")
           @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
           String repo) {
-    AGraph ag =
+    projectNameCache.setProjectOwner(owner);
+    projectNameCache.setProjectName(repo);
+/*    AGraph graphWithForks = basicQueryService.retrieveForks(owner, repo, getForks(owner, repo));
+    dataPersistance.persistGraph(
+        List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), graphWithForks));*/
+    AGraph graphWithoutForks =
         basicQueryService.retrievemetrics(
             "%s" + String.format("repos/%s/%s/commits", owner, repo) + "%s",
             new TypeReference<>() {},
             "?",
-            "?");
+            "&");
+
     return new ResponseEntity<>(
         dataPersistance.persistGraph(
-            List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), ag)),
+            List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), graphWithoutForks)),
         HttpStatus.OK);
   }
 

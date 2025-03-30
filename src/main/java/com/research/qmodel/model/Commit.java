@@ -1,26 +1,42 @@
 package com.research.qmodel.model;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.research.qmodel.annotations.CommitDeserializer;
-import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.springframework.data.relational.core.mapping.Table;
-import javax.persistence.IdClass;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.EqualsAndHashCode.Exclude;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.proxy.HibernateProxy;
+import org.springframework.data.relational.core.mapping.Table;
 
 @Entity
 @Table(name = "commit")
 @JsonDeserialize(using = CommitDeserializer.class)
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
+@RequiredArgsConstructor
 @IdClass(CommitID.class)
-@EqualsAndHashCode
 @ToString(onlyExplicitlyIncluded = true)
 public class Commit {
   @Id
+  @Column(name = "sha")
   @ToString.Include
   private String sha;
 
@@ -33,12 +49,14 @@ public class Commit {
   @ToString.Include
   private Date commitDate;
 
-  @EqualsAndHashCode.Exclude
-  @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+  @Exclude
+  @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @ToString.Exclude
   private AGraph aGraph;
 
   @ManyToMany(
       cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+  @ToString.Exclude
   private List<FileChange> fileChanges;
 
   @ToString.Include @Column @EqualsAndHashCode.Exclude private int numOfFilesChanged;
@@ -65,4 +83,28 @@ public class Commit {
   @Column @EqualsAndHashCode.Exclude String projectName;
   @Column
   @EqualsAndHashCode.Exclude String projectOwner;
+
+  @Override
+  public final boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null)
+      return false;
+    Class<?> oEffectiveClass =
+        o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer()
+            .getPersistentClass() : o.getClass();
+    Class<?> thisEffectiveClass =
+        this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer()
+            .getPersistentClass() : this.getClass();
+    if (thisEffectiveClass != oEffectiveClass)
+      return false;
+    Commit commit = (Commit) o;
+    return getSha() != null && Objects.equals(getSha(), commit.getSha());
+  }
+
+  @Override
+  public final int hashCode() {
+    return Objects.hash(sha);
+  }
+
 }

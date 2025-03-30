@@ -98,9 +98,7 @@ public class ProjectPull implements BaseMetric {
     if (this.projectIssue == null) {
       this.projectIssue = new HashSet<>();
     }
-    if (!this.projectIssue.contains(projectIssue)) {
-      this.projectIssue.add(projectIssue);
-    }
+    this.projectIssue.add(projectIssue);
   }
 
   public void addTimeLine(Timeline timeline) {
@@ -122,10 +120,4 @@ public class ProjectPull implements BaseMetric {
       commits.add(foundCommit);
     }
   }
-  public static void main(String[] args){
-    B b = new ProjectPull().new B();
-    System.out.println();
-  }
-  class B{}
-  class A extends B{}
 }
