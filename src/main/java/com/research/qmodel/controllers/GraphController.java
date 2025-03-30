@@ -3,6 +3,7 @@ package com.research.qmodel.controllers;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.research.qmodel.graph.Graph;
+import com.research.qmodel.graph.Vertex;
 import com.research.qmodel.model.AGraph;
 import com.research.qmodel.model.Project;
 import com.research.qmodel.model.ProjectIssue;
@@ -49,6 +50,8 @@ public class GraphController implements FileJsonReader {
     Graph graph = gitGraph.buildGraph(owner, repo, path);
     String filePath = "/Users/dpolishchuk/IdeaProjects/qmodel/" + owner + "_" + repo + ".json";
     gitGraph.exportGraph(filePath, graph.getVerticesMap());
+    Graph b = new Graph();
+    Map<String, Vertex> verticesMap = b.getVerticesMap();
     return readJsonFile("/Users/dpolishchuk/IdeaProjects/qmodel/" + owner + "_" + repo + ".json");
   }
 }
