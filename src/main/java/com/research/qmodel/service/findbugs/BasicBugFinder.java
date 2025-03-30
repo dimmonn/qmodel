@@ -54,6 +54,7 @@ public class BasicBugFinder implements ChangePatchProcessor {
 
   public List<String> findAllBugsFixingCommits(String repoName, String repoOwner, int depth)
       throws JsonProcessingException {
+    Graph graph = new Graph();
     Queue<ProjectIssue> fixedIssues =
         new LinkedList<>(projectIssueRepository.finAllFixedIssues(repoName, repoOwner));
     List<String> cachedCommits = new ArrayList<>();
