@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.research.qmodel.annotations.ChangePatchProcessor;
 import com.research.qmodel.errors.IssueNotFoundException;
 import com.research.qmodel.graph.Graph;
-import com.research.qmodel.graph.Vertex;
 import com.research.qmodel.model.AGraph;
 import com.research.qmodel.model.Commit;
 import com.research.qmodel.model.CommitID;
@@ -55,9 +54,6 @@ public class BasicBugFinder implements ChangePatchProcessor {
 
   public List<String> findAllBugsFixingCommits(String repoName, String repoOwner, int depth)
       throws JsonProcessingException {
-    Graph g = new Graph();
-    Graph g1 = new Graph();
-    Map<String, Vertex> verticesMap = g1.getVerticesMap();
     Queue<ProjectIssue> fixedIssues =
         new LinkedList<>(projectIssueRepository.finAllFixedIssues(repoName, repoOwner));
     List<String> cachedCommits = new ArrayList<>();
