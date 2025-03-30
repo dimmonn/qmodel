@@ -47,6 +47,7 @@ public class BasicBugFinder implements ChangePatchProcessor {
   @Autowired private ProjectPullRepository projectPullRepository;
   private final Logger LOGGER = LoggerFactory.getLogger(BasicBugFinder.class);
 
+
   @Value("${qmodel.defect.labels:bug}")
   private List<String> LABELS;
 
