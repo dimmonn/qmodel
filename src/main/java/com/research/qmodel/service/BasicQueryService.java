@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class BasicQueryService extends BasicKeyManager {
+public class BasicQueryService extends GitHubIssuesFetcher {
   final RestTemplate restTemplate;
   private final ObjectMapper objectMapper;
   private final Logger LOGGER = LoggerFactory.getLogger(BasicQueryService.class);
@@ -79,10 +79,23 @@ public class BasicQueryService extends BasicKeyManager {
       return objectMapper.convertValue(allEntities, targetType);
   }*/
   public <T> T retrievemetrics(
-      String url, TypeReference<T> targetType, String urlCondition, String pageCondition) {
+      String url,
+      TypeReference<T> targetType,
+      String urlCondition,
+      String pageCondition,
+      boolean withCoursor) {
     List<JsonNode> allEntities = new ArrayList<>();
     int pageNumber = 1;
-    while (isRun(pageNumber)) {
+    if (withCoursor) {
+      try {
+        JsonNode body = getRowDataWithCursor(url);
+        List<JsonNode> rowBody = objectMapper.convertValue(body, new TypeReference<>() {});
+        allEntities.addAll(rowBody);
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+    }
+    while (isRun(pageNumber) && !withCoursor) {
       JsonNode body =
           getRowData(url, BASE_URL, pageNumber, PAGE_SIZE, urlCondition, pageCondition, false);
       if (body != null && !body.isEmpty()) {
@@ -121,7 +134,7 @@ public class BasicQueryService extends BasicKeyManager {
   }
 
   private boolean isRun(int pageNumber) {
-    return !mode.equals("demo") || pageNumber < 400000;
+    return !mode.equals("demo") || pageNumber < 500000;
   }
 
   private JsonNode getRowData(
@@ -148,6 +161,7 @@ public class BasicQueryService extends BasicKeyManager {
       ResponseEntity<JsonNode> response = restTemplate.exchange(requestEntity, JsonNode.class);
       JsonNode body = response.getBody();
       return body;
+
     } catch (Exception e) {
       currentKey = getNextKey(true);
       headers.set("Authorization", currentKey);
@@ -159,6 +173,20 @@ public class BasicQueryService extends BasicKeyManager {
         LOGGER.error(ex.getMessage(), ex);
       }
     }
+    return null;
+  }
+
+  public JsonNode getRowDataWithCursor(String commitUrl) {
+    RequestEntity<Void> requestEntity = setUpCallMeta(commitUrl, true);
+    if (requestEntity == null) return null;
+    try {
+      return getRowData(requestEntity.getUrl().toString(), commitUrl.split("/")[1], commitUrl.split("/")[2]);
+
+    } catch (Exception e) {
+      getNextKey(true);
+      LOGGER.error(e.getMessage());
+    }
+
     return null;
   }
 
@@ -190,6 +218,30 @@ public class BasicQueryService extends BasicKeyManager {
     return requestEntity;
   }
 
+  String parseToCommitUrl(String urlFormat) {
+    // Format the base URL
+    String url = String.format(urlFormat, "https://api.github.com/", "");
+
+    // String commitUrl = String.format(urlFormat, "", projOwner, projName);
+
+    return url;
+  }
+
+  private RequestEntity<Void> setUpCallMeta(String commitUrl, boolean withCursor) {
+    HttpHeaders headers = new HttpHeaders();
+    String currentKey = getNextKey(false);
+    headers.set("Authorization", currentKey);
+    RequestEntity<Void> requestEntity;
+    try {
+      String url = parseToCommitUrl(commitUrl);
+      requestEntity = new RequestEntity<>(headers, HttpMethod.GET, new URI(url));
+    } catch (Exception e) {
+      LOGGER.error(e.getMessage());
+      return null;
+    }
+    return requestEntity;
+  }
+
   public String getHtmlData(String commitUrl) {
     RequestEntity<Void> requestEntity = setUpCallMeta(commitUrl);
     if (requestEntity == null) return null;
@@ -203,71 +255,6 @@ public class BasicQueryService extends BasicKeyManager {
     return null;
   }
 
-  public static int[] twoSum(int[] nums, int target) {
-    Map<Integer, Integer> cache = new HashMap<>();
-
-    for (int i = 0; i < nums.length; i++) {
-      int delta = target - nums[i];
-      if (cache.containsKey(target - delta)) {
-        return new int[] {cache.get(target - delta), i};
-      }
-      cache.put(delta, i);
-    }
-    return null;
-  }
-
-  // Input: s = "a b c abc bb"
-  // Output: 3
-  // Explanation: The answer is "abc", with the length of 3.
-  public static int lengthOfLongestSubstring(String s) {
-    char[] letters = s.toCharArray();
-    int[] trackingDublicates = new int[26];
-    int left = 0;
-    int result = 0;
-    for (int right = 0; right < letters.length; right++) {
-      // pw wke w
-      // abcabcbb
-      if (trackingDublicates[(int) letters[right] - 'a'] >= 1) {
-        if (letters[right] == letters[right - 1]) {
-          left = right;
-          continue;
-        }
-
-        left++;
-      }
-
-      trackingDublicates[(int) letters[right] - 'a']++;
-      result = Math.max(result, right - left + 1);
-    }
-    return result;
-  }
-
-  public int lengthOfLongestSubstring1(String s) {
-    // Map to store the last index of each character.
-    Map<Character, Integer> charIndexMap = new HashMap<>();
-    int maxLength = 0;
-    int left = 0; // Left pointer of the sliding window.
-
-    // Iterate through the string with the right pointer.
-    for (int right = 0; right < s.length(); right++) {
-      char currentChar = s.charAt(right);
-      // abcabcbb
-      // If the character already exists in the window, move the left pointer.
-      if (charIndexMap.containsKey(currentChar)) {
-        // Move left pointer to the position after the last occurrence.
-        left = Math.max(left, charIndexMap.get(currentChar) + 1);
-      }
-
-      // Update the last index of the current character.
-      charIndexMap.put(currentChar, right);
-
-      // Calculate the length of the current valid window and update maxLength.
-      maxLength = Math.max(maxLength, right - left + 1);
-    }
-
-    return maxLength;
-  }
-
   public AGraph retrieveForks(String owner, String repo, Set<String> forks) {
     AGraph latestAgraphSnapshot = null;
     for (String fork : forks) {
@@ -277,7 +264,8 @@ public class BasicQueryService extends BasicKeyManager {
               "%s" + String.format("repos/%s/%s/branches", forkedName[0], forkedName[1]) + "%s",
               new TypeReference<>() {},
               "?",
-              "&");
+              "&",
+              false);
       for (JsonNode branch : branches) {
         String commitId =
             StringUtils.substringAfterLast(branch.path("commit").path("url").asText(), "/");

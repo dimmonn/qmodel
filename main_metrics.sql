@@ -1,0 +1,20 @@
+/*Issues Opened:*/
+select concat(project_owner, '_', project_project_name) as project, date(created_at) as time, count(*) as issues_opened from project_issue group by project_owner, project_project_name, date(created_at) order by date(created_at) asc;
+/*Issues Closed:*/
+SELECT CONCAT(project_owner, '_', project_project_name) AS project, DATE(closed_at) AS time, COUNT(*) AS issues_closed FROM project_issue WHERE closed_at IS NOT NULL GROUP BY project_owner, project_project_name, DATE(closed_at) ORDER BY DATE(closed_at) ASC;
+/*Total Developers Over Time:*/
+SELECT CONCAT(p.project_owner, '_', p.project_name) AS project, DATE(c.commit_date) AS time, COUNT(DISTINCT c.author) AS num_developers FROM commit c JOIN agraph ag ON c.a_graph_id = ag.id JOIN project p ON ag.project_project_owner = p.project_owner AND ag.project_project_name = p.project_name GROUP BY p.project_owner, p.project_name, DATE(c.commit_date) ORDER BY DATE(c.commit_date) ASC;
+/*Total Developers:*/
+SELECT ag.project_project_owner AS repo_owner, ag.project_project_name AS repo_project_name, COUNT(DISTINCT c.author) AS num_developers FROM commit c JOIN agraph ag ON c.a_graph_id = ag.id GROUP BY ag.project_project_owner, ag.project_project_name ORDER BY num_developers DESC;
+/*Total Deletions Per Commit Over Time:*/
+SELECT CONCAT(p.project_owner, '_', p.project_name) AS project, DATE(c.commit_date) AS time, SUM(fc.total_deletions) AS total_deletions FROM file_change fc JOIN commit_file_changes cfc ON fc.id = cfc.file_changes_id JOIN commit c ON cfc.commit_sha = c.sha JOIN agraph ag ON c.a_graph_id = ag.id JOIN project p ON ag.project_project_owner = p.project_owner AND ag.project_project_name = p.project_name GROUP BY p.project_owner, p.project_name, c.commit_date ORDER BY c.commit_date ASC;
+/*Total Changes Per Commit Over Time:*/
+SELECT CONCAT(p.project_owner, '_', p.project_name) AS project, DATE(c.commit_date) AS time, SUM(fc.total_changes) AS total_changes FROM file_change fc JOIN commit_file_changes cfc ON fc.id = cfc.file_changes_id JOIN commit c ON cfc.commit_sha = c.sha JOIN agraph ag ON c.a_graph_id = ag.id JOIN project p ON ag.project_project_owner = p.project_owner AND ag.project_project_name = p.project_name GROUP BY p.project_owner, p.project_name, c.commit_date ORDER BY c.commit_date ASC;
+/*Total Additions Per Commit Over Time:*/
+SELECT CONCAT(p.project_owner, '_', p.project_name) AS project, DATE(c.commit_date) AS time, SUM(fc.total_additions) AS total_additions FROM file_change fc JOIN commit_file_changes cfc ON fc.id = cfc.file_changes_id JOIN commit c ON cfc.commit_sha = c.sha JOIN agraph ag ON c.a_graph_id = ag.id JOIN project p ON ag.project_project_owner = p.project_owner AND ag.project_project_name = p.project_name GROUP BY p.project_owner, p.project_name, c.commit_date ORDER BY c.commit_date ASC;
+/*Commit Activity Over Time:*/
+SELECT CONCAT(p.project_owner, '_', p.project_name) AS project, DATE(c.commit_date) AS time, COUNT(c.sha) AS commitCount FROM commit c JOIN agraph ag ON c.a_graph_id = ag.id JOIN project p ON p.project_owner = ag.project_project_owner AND p.project_name = ag.project_project_name GROUP BY p.project_owner, p.project_name, time ORDER BY time ASC;
+/*Pull Request Review Time:*/
+SELECT CONCAT(project_owner, '_', project_project_name) AS project, DATE(created_at) AS time, AVG(TIMESTAMPDIFF(DAY, created_at, closed_at)) AS avg_review_time FROM project_pull where project_pull.closed_at IS NOT NULL GROUP BY project_owner, project_project_name, time ORDER BY time ASC;
+/*Issue Resolution Time:*/
+SELECT CONCAT(project_owner, ':', project_project_name) AS project, DATE(created_at) AS time, AVG(TIMESTAMPDIFF(DAY, created_at, closed_at)) AS avg_review_time FROM project_issue where project_issue.closed_at IS NOT NULL GROUP BY project_owner, project_project_name, time ORDER BY time ASC;

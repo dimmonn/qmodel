@@ -10,6 +10,7 @@ import com.research.qmodel.dto.Project;
 import com.research.qmodel.model.*;
 import com.research.qmodel.service.BasicQueryService;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -43,6 +44,26 @@ public class ProjectPullDeserializer extends JsonDeserializer<ProjectPull>
       //            }
     }
     ProjectPull projectPull = new ProjectPull();
+    if (StringUtils.isNotBlank(node.path("assignees").toString())
+        && !node.path("assignees").toString().equals("[]")
+        && !node.path("assignees").isNull()) {
+      for (JsonNode assignee : node.path("assignees")) {
+        projectPull.addAssignee(assignee.path("login").asText());
+      }
+    }
+
+    String url = node.path("url").asText();
+    if (StringUtils.isNotEmpty(url)) {
+      url = url + "/reviews";
+      JsonNode reviews = basicQueryService.getRowData(url);
+      for (JsonNode review : reviews) {
+        JsonNode reviewer = review.path("user").path("login");
+        if (reviewer != null && StringUtils.isNotEmpty(reviewer.asText())) {
+          projectPull.addReviewer(reviewer.asText());
+        }
+      }
+    }
+
     if (node.get("title") != null) {
       projectPull.setTitle(node.get("title").asText());
     }
@@ -71,7 +92,7 @@ public class ProjectPullDeserializer extends JsonDeserializer<ProjectPull>
         LOGGER.error("Ignoring updated_at {}", e.getMessage());
       }
     }
-    if (node.get("merged_at") != null) {
+    if (node.get("merged_at") != null && !node.get("merged_at").asText().equals("null")) {
       try {
         projectPull.setMerged_at(dateFormat.parse(node.get("merged_at").asText()));
       } catch (ParseException e) {
@@ -116,7 +137,8 @@ public class ProjectPullDeserializer extends JsonDeserializer<ProjectPull>
         }
       }
     }
-
+    LOGGER.info(
+        "received project pull " + projectPull.getProjectName() + " id: " + projectPull.getId());
     return projectPull;
   }
 }

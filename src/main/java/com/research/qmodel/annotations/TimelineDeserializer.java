@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.research.qmodel.model.Timeline;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -37,7 +38,11 @@ public class TimelineDeserializer extends JsonDeserializer<Timeline> implements 
     timeline.setRawData(node.toString());
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     try {
-      timeline.setCreatedAt(dateFormat.parse(node.path("created_at").asText()));
+      if (StringUtils.isNotEmpty(node.path("created_at").asText())) {
+        timeline.setCreatedAt(dateFormat.parse(node.path("created_at").asText()));
+      } else if (StringUtils.isNotEmpty(node.path("submitted_at").asText())){
+        timeline.setCreatedAt(dateFormat.parse(node.path("submitted_at").asText()));
+      }
     } catch (ParseException e) {
       LOGGER.error(e.getMessage());
     }

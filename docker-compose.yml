@@ -16,6 +16,8 @@ services:
     networks:
       - elk
 
+
+
 #   qmodel:
 #     build:
 #       context: .

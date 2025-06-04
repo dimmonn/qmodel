@@ -6,6 +6,7 @@ import com.research.qmodel.annotations.ProjectPullDeserializer;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -73,6 +74,10 @@ public class ProjectPull implements BaseMetric {
   @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
   private Reaction reaction;
 
+  @ToString.Exclude @EqualsAndHashCode.Exclude @ElementCollection private Set<String> assignees;
+
+  @ToString.Exclude @EqualsAndHashCode.Exclude @ElementCollection private Set<String> reviewers;
+
   /*Experimental mapping to fixing PR*/
   @JsonIgnore
   @ManyToMany(fetch = FetchType.LAZY)
@@ -107,6 +112,20 @@ public class ProjectPull implements BaseMetric {
     }
     timeLine.add(timeline);
     timeline.setMessage(timeline.getMessage());
+  }
+
+  public void addAssignee(String assignee) {
+    if (this.assignees == null) {
+      this.assignees = new HashSet<>();
+    }
+    this.assignees.add(assignee);
+  }
+
+  public void addReviewer(String reviewer) {
+    if (this.reviewers == null) {
+      this.reviewers = new HashSet<>();
+    }
+    this.reviewers.add(reviewer);
   }
 
   public void addCommits(List<Commit> foundCommits) {

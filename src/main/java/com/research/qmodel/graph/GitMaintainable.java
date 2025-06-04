@@ -6,16 +6,19 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectDatabase;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectLoader;
+import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.ObjectWalk;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.revwalk.filter.RevFilter;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +44,7 @@ public abstract class GitMaintainable {
       File cloneDirectory = new File(cloneDirectoryPath);
 
       if (cloneDirectory.exists()) {
-        LOGGER.warn("Project " + owner + "/" + projectName + " xexists.");
+        LOGGER.warn("Project {}/{} exists.", owner, projectName);
         return;
       }
       Git.cloneRepository()
@@ -69,7 +72,9 @@ public abstract class GitMaintainable {
       Map<String, Object> node = new HashMap<>();
       node.put("id", vertex.sha);
       node.put("title", "Commit " + vertex.sha);
-      node.put("subTitle", "Branches: " + String.join(", ", vertex.branches));
+      if (vertex != null && vertex.getBranches() != null) {
+        node.put("subTitle", "Branches: " + String.join(", ", vertex.branches));
+      }
       node.put("arc__failed", vertex.getArcFailed());
       node.put("arc__passed", vertex.getArcPassed());
       node.put("detail__zone", "Zone " + vertex.sha);
@@ -141,7 +146,7 @@ public abstract class GitMaintainable {
     return commitHashes;
   }
 
-  public static Set<String> getReferencedCommits(String repoPath) throws Exception {
+  public Set<String> getReferencedCommits(String repoPath) throws Exception {
     Set<String> referencedHashes = new HashSet<>();
 
     try (Git git = Git.open(new File(repoPath))) {
@@ -168,5 +173,59 @@ public abstract class GitMaintainable {
     Set<String> referencedCommits = getReferencedCommits(repoPath);
     allCommits.removeAll(referencedCommits);
     return allCommits;
+  }
+
+  // TODO find unique branch
+  public String findBranchCommitWasBornIn(String sha, Repository repository)
+      throws IOException, GitAPIException {
+    ObjectId commitId = repository.resolve(sha);
+    if (commitId == null) {
+      throw new IllegalArgumentException("Commit not found: " + sha);
+    }
+
+    RevCommit targetCommit;
+    try (RevWalk revWalk = new RevWalk(repository)) {
+      targetCommit = revWalk.parseCommit(commitId);
+    }
+
+    try (Git git = new Git(repository)) {
+      List<Ref> branches = git.branchList().setListMode(ListBranchCommand.ListMode.ALL).call();
+
+      String bestBranch = null;
+      int maxDepth = -1;
+
+      for (Ref branch : branches) {
+        if (branch.getName().contains("HEAD") || branch.getName().contains("refs/heads/master")) {
+          continue;
+        }
+        RevCommit branchTip;
+        try (RevWalk walk = new RevWalk(repository)) {
+          branchTip = walk.parseCommit(branch.getObjectId());
+
+          // Walk first-parent only
+          RevCommit current = branchTip;
+          int depth = 0;
+          while (current != null) {
+            if (current.equals(targetCommit)) {
+              if (depth > maxDepth) {
+                maxDepth = depth;
+                bestBranch = branch.getName();
+              }
+              break;
+            }
+            if (current.getParentCount() > 0) {
+              current = walk.parseCommit(current.getParent(0)); // First-parent
+              depth++;
+            } else {
+              break;
+            }
+          }
+        }
+      }
+
+      return bestBranch != null
+          ? bestBranch.replace("refs/heads/", "").replace("refs/remotes/", "")
+          : null;
+    }
   }
 }

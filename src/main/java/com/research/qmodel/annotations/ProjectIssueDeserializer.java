@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.research.qmodel.model.*;
 import com.research.qmodel.repos.ProjectIssueRepository;
 import com.research.qmodel.repos.ProjectPullRepository;
+import com.research.qmodel.repos.ProjectRepository;
 import com.research.qmodel.service.BasicQueryService;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -40,6 +41,7 @@ public class ProjectIssueDeserializer extends JsonDeserializer<ProjectIssue>
   private final ObjectMapper objectMapper;
   private final ProjectPullRepository projectPullRepository;
   private final ProjectIssueRepository projectIssueRepository;
+  private final ProjectRepository projectRepository;
 
   @Value("${issue.reference.keywords}")
   private final List<String> keywords;
@@ -50,14 +52,32 @@ public class ProjectIssueDeserializer extends JsonDeserializer<ProjectIssue>
     JsonNode node = jsonParser.getCodec().readTree(jsonParser);
     String owner = node.path("url").asText().split("/")[4];
     String projectName = node.path("url").asText().split("/")[5];
+
     if (node.path("html_url").asText().split("/")[5].equals("pull")) {
       return null;
     }
     ProjectIssue projectIssue = new ProjectIssue();
     projectIssue.setProjectOwner(owner);
     projectIssue.setProjectName(projectName);
+    ProjectIssue foundIssue =
+        projectIssueRepository.findIssueById(owner, projectName, node.get("number").asLong());
+    if (foundIssue != null) {
+      return foundIssue;
+    }
+    if (StringUtils.isNotBlank(node.path("assignees").toString())
+        && !node.path("assignees").isNull()
+        && !node.path("assignees").toString().equals("[]")) {
+      for (JsonNode assignee : node.path("assignees")) {
+        projectIssue.addAssignees(assignee.path("login").asText());
+      }
+    }
+
     List<Timeline> timelines;
     JsonNode timelineUrl = node.get("timeline_url");
+    if (StringUtils.isNotEmpty(node.path("pull_request").asText())) {
+      LOGGER.warn("Skipping pull request {}", node.path("html_url").asText());
+      return null;
+    }
     if (timelineUrl != null) {
       if (projectIssue.getProjectPull() == null) {
 
@@ -71,7 +91,14 @@ public class ProjectIssueDeserializer extends JsonDeserializer<ProjectIssue>
             } else {
               timeline.setProjectIssue(projectIssue);
               projectIssue.addTimeLine(timeline);
-              if (timeline.getPullIds() != null&& new ObjectMapper().readTree(timeline.getRawData()).path("source").path("issue").path("timeline_url").asText().contains("/"+owner+"/"+projectName)) {
+              if (timeline.getPullIds() != null
+                  && new ObjectMapper()
+                      .readTree(timeline.getRawData())
+                      .path("source")
+                      .path("issue")
+                      .path("timeline_url")
+                      .asText()
+                      .contains("/" + owner + "/" + projectName)) {
                 for (Long pullId : timeline.getPullIds()) {
                   Optional<ProjectPull> foundPull =
                       projectPullRepository.findById(new PullID(owner, projectName, pullId));
@@ -143,26 +170,19 @@ public class ProjectIssueDeserializer extends JsonDeserializer<ProjectIssue>
 
         String htmlIssueData = basicQueryService.getHtmlData(htmlIssue.asText());
         Document doc = Jsoup.parse(htmlIssueData);
-        Elements spans = doc.select("span[data-issue-and-pr-hovercards-enabled]");
+        Elements spans = doc.select("span");
         for (Element span : spans) {
-          Elements links = span.select("a[data-hovercard-type=pull_request]");
-          for (Element link : links) {
-            String prUrl = link.attr("href");
-            if (StringUtils.substringAfterLast(prUrl, "https://github.com/")
-                .equals(
-                    StringUtils.join(
-                        owner,
-                        "/",
-                        projectName,
-                        "/",
-                        "pull",
-                        "/",
-                        StringUtils.substringAfterLast(prUrl, "/")))) {
-              String fixPR = StringUtils.substringAfterLast(prUrl, "/");
-              projectIssue.setFixPrNum(Long.parseLong(fixPR));
+          String spanText = span.text();
+          if (spanText.startsWith("#")
+              && span.parent() != null
+              && StringUtils.isBlank(span.parent().text().split("#")[0])) {
+            String prIdStr = spanText.substring(1);
+            long fixPR = Long.parseLong(prIdStr);
+            if (projectIssue.getId() != fixPR) {
+              projectIssue.setFixPrNum(fixPR);
+
               Optional<ProjectPull> foundPull =
-                  projectPullRepository.findById(
-                      new PullID(owner, projectName, Long.parseLong(fixPR)));
+                  projectPullRepository.findById(new PullID(owner, projectName, fixPR));
               if (foundPull.isPresent()) {
                 ProjectPull fix = foundPull.get();
                 fix.setBugFix(true);
@@ -177,10 +197,10 @@ public class ProjectIssueDeserializer extends JsonDeserializer<ProjectIssue>
     }
 
     if (projectIssue.getFixPR() == null && projectIssue.getProjectPull() != null) {
-      Pattern pattern = Pattern.compile(
-          "\\b(" + String.join("|", keywords) + ")\\s+(?:issue\\s*)?#?(\\d+)\\b",
-          Pattern.CASE_INSENSITIVE
-      );
+      Pattern pattern =
+          Pattern.compile(
+              "\\b(" + String.join("|", keywords) + ")\\s+(?:issue\\s*)?#?(\\d+)\\b",
+              Pattern.CASE_INSENSITIVE);
 
       projectIssue.getProjectPull().stream()
           .filter(Objects::nonNull)
@@ -214,6 +234,11 @@ public class ProjectIssueDeserializer extends JsonDeserializer<ProjectIssue>
                     });
               });
     }
+
+    Optional<Project> foundProject = projectRepository.findById(new ProjectID(owner, projectName));
+    Project project = foundProject.orElseGet(() -> new Project(owner, projectName));
+    project.addProjectIssue(projectIssue);
+    projectRepository.save(project);
 
     return projectIssue;
   }

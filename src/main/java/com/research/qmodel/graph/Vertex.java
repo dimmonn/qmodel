@@ -1,10 +1,8 @@
 package com.research.qmodel.graph;
 
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -15,7 +13,8 @@ import java.util.Set;
 public class Vertex {
   String sha;
   Set<String> neighbors;
-  Set<String> branches;
+  List<String> branches;
+  List<String> subGraphNodes;
   private int arc__failed;
   private int arc__passed;
   private Date timestamp;
@@ -28,6 +27,7 @@ public class Vertex {
   private boolean isMerge;
   private int inDegree;
   private int outDegree;
+  private int mergeCount;
 
   public void incrementInDegree() {
     this.inDegree++;
@@ -37,19 +37,13 @@ public class Vertex {
     this.outDegree++;
   }
 
-
   public Vertex(String sha) {
     this.sha = sha;
     this.neighbors = new HashSet<>();
-    this.branches = new HashSet<>();
   }
 
   public void addNeighbor(String neighborSha) {
     neighbors.add(neighborSha);
-  }
-
-  public void addBranch(String branch) {
-    branches.add(branch);
   }
 
   public void incrementFailed() {
@@ -69,7 +63,10 @@ public class Vertex {
   }
 
   public void addSnapshotProps(
+      List<String> subGraphNodes,
+      List<String> branches,
       int numberOfVertices,
+      int mergeCount,
       int numberOfBranches,
       int numberOfEdges,
       double averageDegree,
@@ -83,9 +80,15 @@ public class Vertex {
     this.maxDepthOfCommitHistory = maxDepthOfCommitHistory;
     this.minDepthOfCommitHistory = minDepthOfCommitHistory;
     this.isMerge = isMerge;
+    this.branches = branches;
+    this.mergeCount = mergeCount;
+    this.subGraphNodes = subGraphNodes;
   }
 
   public int getNumberOfBranches() {
-    return branches.size();
+    if (branches != null) {
+      return branches.size();
+    }
+    return 0;
   }
 }

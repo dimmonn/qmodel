@@ -64,7 +64,8 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
             "%s" + String.format("repos/%s/%s/actions/runs", owner, repo),
             new TypeReference<>() {},
             "?",
-            "&");
+            "&",
+            false);
     return new ResponseEntity(
         dataPersistance.persistActions(
             List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), actions)),
@@ -110,8 +111,9 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
           String owner,
       @PathVariable(value = "repo")
           @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
-          String repo) {
-    basicBugFinder.traceCommitsToOrigin(owner, repo, 2);
+          String repo,
+      @RequestParam(required = false, defaultValue = "2") int depth) {
+    basicBugFinder.traceCommitsToOrigin(owner, repo, depth);
   }
 
   /*
@@ -124,7 +126,8 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
             "%s" + String.format("repos/%s/%s/forks", owner, repo) + "%s",
             new TypeReference<>() {},
             "?",
-            "&");
+            "&",
+            false);
     return retrievemetrics.parallelStream()
         .map(o -> o.get("full_name").asText())
         .collect(Collectors.toSet());
@@ -166,18 +169,18 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
     return forks;
   }
 
-
   @GetMapping(value = "/repos/{owner}/{repo}/commits/{sha}")
   @ResponseStatus(HttpStatus.OK)
   public Object retrieveCommit(
       @PathVariable(value = "owner")
-      @Parameter(name = "owner", in = ParameterIn.PATH, description = "Owner of the project")
-      String owner,
+          @Parameter(name = "owner", in = ParameterIn.PATH, description = "Owner of the project")
+          String owner,
       @PathVariable(value = "repo")
-      @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
-      String repo, @PathVariable(value = "sha")
-  @Parameter(name = "sha", in = ParameterIn.PATH, description = "commit sha")
-  String sha) {
+          @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
+          String repo,
+      @PathVariable(value = "sha")
+          @Parameter(name = "sha", in = ParameterIn.PATH, description = "commit sha")
+          String sha) {
     projectNameCache.setProjectOwner(owner);
     projectNameCache.setProjectName(repo);
 
@@ -200,7 +203,7 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
           String repo) {
     projectNameCache.setProjectOwner(owner);
     projectNameCache.setProjectName(repo);
-/*    AGraph graphWithForks = basicQueryService.retrieveForks(owner, repo, getForks(owner, repo));
+    /*    AGraph graphWithForks = basicQueryService.retrieveForks(owner, repo, getForks(owner, repo));
     dataPersistance.persistGraph(
         List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), graphWithForks));*/
     AGraph graphWithoutForks =
@@ -208,7 +211,8 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
             "%s" + String.format("repos/%s/%s/commits", owner, repo) + "%s",
             new TypeReference<>() {},
             "?",
-            "&");
+            "&",
+            false);
 
     return new ResponseEntity<>(
         dataPersistance.persistGraph(
@@ -267,7 +271,8 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
             "%s" + String.format("repos/%s/%s/pulls", owner, repo) + "%s&state=closed",
             new TypeReference<>() {},
             "?",
-            "?");
+            "&",
+            false);
     return new ResponseEntity<>(
         dataPersistance.persistPulls(
             List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), projectPull)),
@@ -293,14 +298,17 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
           String repo) {
     List<ProjectIssue> projectIssues =
         basicQueryService.retrievemetrics(
-            "%s" + String.format("repos/%s/%s/issues", owner, repo) + "%s" + "&state=closed",
+            "%s" + String.format("repos/%s/%s/issues", owner, repo) + "%s" + "?state=closed",
             new TypeReference<>() {},
             "?",
-            "?");
-    return new ResponseEntity<>(
-        dataPersistance.persistIssues(
-            List.of(new Project(owner, repo)), Map.of(new Project(owner, repo), projectIssues)),
-        HttpStatus.OK);
+            "?",
+            true);
+    return projectIssues.size();
+    //    return new ResponseEntity<>(
+    //        dataPersistance.persistIssues(
+    //            List.of(new Project(owner, repo)), Map.of(new Project(owner, repo),
+    // projectIssues)),
+    //        HttpStatus.OK);
   }
 
   @GetMapping(value = "/repos/fixtime")
@@ -323,7 +331,8 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
                   + "%s&state=closed",
               targetType,
               "?",
-              "?"));
+              "?",
+              false));
     }
     return pulls;
   }

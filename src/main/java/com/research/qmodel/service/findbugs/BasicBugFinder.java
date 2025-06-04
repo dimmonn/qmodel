@@ -13,6 +13,7 @@ import com.research.qmodel.model.FileChange;
 import com.research.qmodel.model.Project;
 import com.research.qmodel.model.ProjectIssue;
 import com.research.qmodel.model.ProjectPull;
+import com.research.qmodel.model.Timeline;
 import com.research.qmodel.repos.CommitRepository;
 import com.research.qmodel.repos.ProjectIssueRepository;
 import com.research.qmodel.repos.ProjectPullRepository;
@@ -47,7 +48,6 @@ public class BasicBugFinder implements ChangePatchProcessor {
   @Autowired private ProjectPullRepository projectPullRepository;
   private final Logger LOGGER = LoggerFactory.getLogger(BasicBugFinder.class);
 
-
   @Value("${qmodel.defect.labels:bug}")
   private List<String> LABELS;
 
@@ -59,7 +59,7 @@ public class BasicBugFinder implements ChangePatchProcessor {
         new LinkedList<>(projectIssueRepository.finAllFixedIssues(repoName, repoOwner));
     List<String> cachedCommits = new ArrayList<>();
     while (!fixedIssues.isEmpty()) {
-      LOGGER.info("Issues still remains in the queue: {}", fixedIssues.size());
+      LOGGER.info("Issues still remains in the queue: {}", Optional.of(fixedIssues.size()));
       ProjectIssue projectIssue = fixedIssues.poll();
       if (projectIssue == null) {
         LOGGER.warn("Project issue is null, continuing..");
@@ -73,7 +73,22 @@ public class BasicBugFinder implements ChangePatchProcessor {
       ProjectPull fixPR = projectIssue.getFixPR();
       if (fixPR == null) {
         LOGGER.warn("There is no PR that resolves the issue: issue id# {}", projectIssue.getId());
-        continue;
+        Set<ProjectPull> fixingCandidates = projectIssue.getProjectPull();
+        for (ProjectPull fixingCandidate : fixingCandidates) {
+          Set<Timeline> timeLines = fixingCandidate.getTimeLine();
+          for (Timeline timeline : timeLines) {
+            if (timeline.getRawData().contains(String.valueOf(projectIssue.getId()))) {
+              fixPR = fixingCandidate;
+              break;
+            }
+          }
+        }
+        if (fixPR == null && !fixingCandidates.isEmpty()) {
+          fixPR = fixingCandidates.stream().findAny().orElse(null);
+        }
+        if (fixPR == null) {
+          continue;
+        }
       }
       String pr = fixPR.getRawPull();
       JsonNode rawPr = objectMapper.readTree(pr);
@@ -225,76 +240,119 @@ public class BasicBugFinder implements ChangePatchProcessor {
     String repoPath = "/Users/dpolishchuk/" + owner + "_" + repo;
     Queue<ProjectIssue> projectIssues =
         new LinkedList<>(projectIssueRepository.finAllFixedIssues(repo, owner));
+
     FileRepositoryBuilder builder = new FileRepositoryBuilder();
+
     try (Repository repository =
             builder.setGitDir(new File(repoPath + "/.git")).readEnvironment().findGitDir().build();
         Git git = new Git(repository)) {
 
       while (!projectIssues.isEmpty()) {
         ProjectIssue issue = projectIssues.poll();
-        LOGGER.info("Issues still left in the queue: {}", projectIssues.size());
-        if (issue.getFixPR() == null
-            || issue.getCommits() == null
-            || issue.getCommits().isEmpty()
-            || (issue.getBugIntroducingCommits() != null
-                && !issue.getBugIntroducingCommits().isEmpty())) {
-          continue;
-        }
-        List<String> fixingCommits = issue.getCommits().stream().map(Commit::getSha).toList();
+        LOGGER.info("Issues still left in the queue: {}", Optional.of(projectIssues.size()));
 
-        for (Commit commit : issue.getCommits()) {
-          String currentCommitSha = commit.getSha();
-          lineLoop:
-          for (FileChange file : commit.getFileChanges()) {
-            List<Integer> changedLines = new ArrayList<>(file.getChangedLines());
+        // Skip if no commits associated
+        if (issue.getCommits() == null || issue.getCommits().isEmpty()) continue;
 
-            for (Integer line : changedLines) {
-              for (int i = 0; i < depth; i++) {
+        Set<String> visited = new HashSet<>();
+
+        for (Commit fixCommit : issue.getCommits()) {
+          RevCommit revFix;
+          try {
+            revFix = repository.parseCommit(ObjectId.fromString(fixCommit.getSha()));
+          } catch (Exception e) {
+            checkoutOrphanedCommit(git, repository, fixCommit.getSha());
+            try {
+              revFix = repository.parseCommit(ObjectId.fromString(fixCommit.getSha()));
+            } catch (Exception e1) {
+              LOGGER.error("failed to pick up orphaned commit", e1);
+              continue;
+            }
+          }
+          if (revFix.getParentCount() == 0) {
+            LOGGER.warn("No parent found for commit {}", fixCommit.getSha());
+            continue;
+          }
+
+          for (RevCommit parent : revFix.getParents()) {
+            for (FileChange file : fixCommit.getFileChanges()) {
+              for (Integer line : file.getChangedLines()) {
                 try {
-                  String blamedCommitSha =
-                      getBlamedCommit(git, repository, file.getFileName(), line, currentCommitSha);
-                  if (fixingCommits.contains(blamedCommitSha)) {
-                    LOGGER.info("Fixing commits contains blamed commit: {}", blamedCommitSha);
-                    currentCommitSha = blamedCommitSha;
-                    continue;
-                  }
-                  if (blamedCommitSha == null || blamedCommitSha.equals(currentCommitSha)) {
-                    LOGGER.info(
-                        "Blamed commit sha is null, or blamed commit sha is  {} current commit sha",
-                        blamedCommitSha);
-                    break lineLoop;
-                  }
-
-                  RevCommit blamedCommit =
-                      repository.parseCommit(ObjectId.fromString(blamedCommitSha));
-                  if (blamedCommit != null) {
-                    Optional<Commit> foundCommit =
-                        commitRepository.findById(new CommitID(blamedCommitSha));
-                    if (foundCommit.isPresent()) {
-                      Commit bugCommit = foundCommit.get();
-                      LOGGER.info("Found bug introducing commit candidate: {}", bugCommit.getSha());
-                      issue.addBugIntroducing(bugCommit);
-                      currentCommitSha = blamedCommitSha;
-                    }
-                  } else {
-                    LOGGER.info("Blamed commit is not found.");
-                    break;
-                  }
+                  recursivelyTraceLine(
+                      git,
+                      repository,
+                      file.getFileName(),
+                      line,
+                      parent.getName(), // Start tracing from parent of the fix
+                      depth,
+                      visited,
+                      issue);
                 } catch (Exception e) {
-                  LOGGER.error(e.getMessage(), e);
+                  LOGGER.error(
+                      "Trace error for line {} in {}: {}",
+                      line,
+                      file.getFileName(),
+                      e.getMessage(),
+                      e);
                 }
               }
             }
           }
         }
+
         try {
           projectIssueRepository.save(issue);
         } catch (Exception e) {
-          LOGGER.error(e.getMessage(), e);
+          LOGGER.error("Error saving issue {}: {}", issue.getId(), e.getMessage(), e);
         }
       }
+
     } catch (Exception e) {
-      LOGGER.error(e.getMessage(), e);
+      LOGGER.error("Fatal error during SZZ tracing: {}", e.getMessage(), e);
+    }
+  }
+
+  private void recursivelyTraceLine(
+      Git git,
+      Repository repo,
+      String file,
+      int line,
+      String blameContextSha,
+      int depth,
+      Set<String> visitedLineCommitPairs,
+      ProjectIssue issue)
+      throws Exception {
+
+    if (depth <= 0) {
+      LOGGER.debug("Depth exhausted for {}:{}@{}", file, Optional.of(line), blameContextSha);
+      return;
+    }
+
+    String visitKey = file + ":" + line + "@" + blameContextSha;
+    if (visitedLineCommitPairs.contains(visitKey)) return;
+
+    visitedLineCommitPairs.add(visitKey);
+
+    String blamedSha = getBlamedCommit(git, repo, file, line, blameContextSha);
+    if (blamedSha == null || blamedSha.equals(blameContextSha)) {
+      LOGGER.warn("Blame returned null for {}:{}@{}", file, Optional.of(line), blameContextSha);
+      return;
+    }
+
+    Optional<Commit> blamed = commitRepository.findById(new CommitID(blamedSha));
+    if (blamed.isPresent()) {
+      Commit blamedCommit = blamed.get();
+      RevCommit revCommit = repo.parseCommit(ObjectId.fromString(blamedSha));
+
+      issue.addBugIntroducing(blamedCommit);
+      for (int i = 0; i < revCommit.getParentCount(); i++) {
+        RevCommit parent = revCommit.getParent(i);
+        recursivelyTraceLine(
+            git, repo, file, line, parent.getName(), depth - 1, visitedLineCommitPairs, issue);
+      }
+    } else {
+      LOGGER.warn(
+          "Blamed commit {} not found for line {} in file {}", blamedSha, Optional.of(line), file);
     }
   }
 
@@ -364,7 +422,6 @@ public class BasicBugFinder implements ChangePatchProcessor {
       }
     }
 
-    // Now attempt git blame
     try {
       blameResult = findBlamedRef(git, file, commitId);
     } catch (Exception blameException) {
@@ -396,32 +453,27 @@ public class BasicBugFinder implements ChangePatchProcessor {
 
   private void checkoutOrphanedCommit(Git git, Repository repository, String commitSha)
       throws GitAPIException, IOException {
-
     git.fetch()
         .setRemote("origin")
         .setRefSpecs(
-            "+"
-                + commitSha
-                + ":refs/remotes/origin/temp_commit_"
-                + new Random().nextInt(10))
+            "+" + commitSha + ":refs/remotes/origin/temp_commit_" + new Random().nextInt(10))
         .call();
 
     try {
       resolveLockIssue(git.getRepository().getDirectory().toPath().toString());
+      git.clean().setCleanDirectories(true).setForce(true).call();
       git.stashCreate().setIncludeUntracked(true).call();
       git.reset().setMode(ResetCommand.ResetType.HARD).setRef(commitSha).call();
       String tempBranch = "temp_commit_" + commitSha.substring(0, 7);
       git.branchCreate()
           .setName(tempBranch)
-          .setStartPoint(commitSha) // This avoids detached HEAD state
+          .setStartPoint(commitSha)
           .setForce(true)
           .call();
-
       git.checkout().setName(tempBranch).call();
-      System.out.println("Checked out orphaned commit " + commitSha + " via branch " + tempBranch);
-
+      LOGGER.info("Checked out orphaned commit {} via branch {}", commitSha, tempBranch);
     } catch (Exception e) {
-      throw new IOException("Failed to checkout orphaned commit: " + commitSha, e);
+      LOGGER.error("Failed to process commit in szz {}", commitSha, e);
     }
   }
 
@@ -436,9 +488,7 @@ public class BasicBugFinder implements ChangePatchProcessor {
         System.out.println("Failed to delete the lock file.");
       }
     }
-
-    // Optional: Delay before retrying to avoid immediate race conditions
-    Thread.sleep(1000); // Wait a bit before retrying
+    Thread.sleep(1000);
   }
 
   private static BlameResult findBlamedRef(Git git, String file, ObjectId commitId)

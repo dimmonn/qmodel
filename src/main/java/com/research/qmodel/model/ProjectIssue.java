@@ -6,18 +6,21 @@ import com.research.qmodel.annotations.ProjectIssueDeserializer;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.*;
 
-@Data
 @Entity
 @Table(name = "project_issue")
 @IdClass(IssueID.class)
 @JsonDeserialize(using = ProjectIssueDeserializer.class)
 @Transactional
+@Setter
+@Getter
 public class ProjectIssue implements BaseMetric {
   @Id private Long id;
   @Id private String projectOwner;
@@ -78,6 +81,9 @@ public class ProjectIssue implements BaseMetric {
     this.fixPr = fixPr;
   }
 
+  @ToString.Exclude @EqualsAndHashCode.Exclude @ElementCollection
+  private Set<String> assignees = new HashSet<>();
+
   @ToString.Exclude
   @JsonIgnore
   @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -101,6 +107,13 @@ public class ProjectIssue implements BaseMetric {
       timeLine = new HashSet<>();
     }
     timeLine.add(timeline);
+  }
+
+  public void addAssignees(String assignee) {
+    if (this.assignees == null) {
+      this.assignees = new HashSet<>();
+    }
+    this.assignees.add(assignee);
   }
 
   public void addProjectPull(ProjectPull projectPull) {
@@ -137,5 +150,15 @@ public class ProjectIssue implements BaseMetric {
 
       bugIntroducingCommits.add(foundCommit);
     }
+  }
+
+  @Override
+  public void setProject(Project project) {
+    this.project = project;
+  }
+
+  @Override
+  public void setReaction(Reaction reaction) {
+    this.reaction = reaction;
   }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.research.qmodel.annotations.CommitDeserializer;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -15,6 +16,7 @@ import jakarta.persistence.TemporalType;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.EqualsAndHashCode.Exclude;
@@ -78,11 +80,16 @@ public class Commit {
   @Column @EqualsAndHashCode.Exclude Integer minDepthOfCommitHistory;
   @Column @EqualsAndHashCode.Exclude Integer maxDepthOfCommitHistory;
   @Column @EqualsAndHashCode.Exclude Integer mergeCount;
-  @Column @EqualsAndHashCode.Exclude Integer branchLength;
   @Column @EqualsAndHashCode.Exclude Boolean isMerge;
   @Column @EqualsAndHashCode.Exclude String projectName;
   @Column
   @EqualsAndHashCode.Exclude String projectOwner;
+  @Column private String state;
+  @ElementCollection
+  private Set<String> branches;
+  @ElementCollection
+  private Set<String> subGraphNodes;
+
 
   @Override
   public final boolean equals(Object o) {
