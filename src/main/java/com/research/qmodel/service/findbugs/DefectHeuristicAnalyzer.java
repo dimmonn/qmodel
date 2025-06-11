@@ -1,57 +1,55 @@
 package com.research.qmodel.service.findbugs;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class DefectHeuristicAnalyzer {
-  public boolean isPotentialDefect(String patch) {
-    if (patch == null || patch.isEmpty()) return false;
+  public boolean isPotentiallyDefectivePatch(String patch) {
+    if (patch == null || patch.isBlank()) return false;
 
     String[] lines = patch.split("\n");
-    int riskScore = 0;
-
     for (String line : lines) {
-      // Only examine removed lines (original code)
-      if (line.startsWith("-")) {
-        String stripped = line.substring(1).trim();
+      line = line.trim();
 
-        // Heuristic patterns
-        if (stripped.matches(".*\\b(if|else|for|while|switch)\\b.*")) {
-          riskScore += 2; // control-flow change
+      // Skip hunk headers and unchanged lines
+      if (line.startsWith("@@") || line.startsWith(" ")) continue;
+
+      // Analyze REMOVED lines for suspicious deletions
+      if (line.startsWith("-")) {
+        String removed = line.substring(1).trim().toLowerCase();
+        if (StringUtils.containsIgnoreCase(removed,"null")
+            || StringUtils.containsIgnoreCase(removed,"assert")
+            || StringUtils.containsIgnoreCase(removed,"validate")) {
+          return true; // Possibly removed validation/check
         }
-        if (stripped.matches(".*\\btry\\b.*") || stripped.matches(".*\\bcatch\\b.*")) {
-          riskScore += 2; // removed exception handling
-        }
-        if (stripped.matches(".*==\\s*null.*") || stripped.matches(".*!=\\s*null.*")) {
-          riskScore += 2; // removed null check
-        }
-        if (stripped.matches(".*assert.*")) {
-          riskScore += 2; // removed assertion
-        }
-        if (stripped.matches(".*(FIXME|TODO|hack|workaround).*")) {
-          riskScore += 3; // developer warning
-        }
-        if (stripped.matches(".*System\\.out\\.println.*") || stripped.matches(".*logger\\..*")) {
-          riskScore -= 1; // likely not defect
-        }
-        if (stripped.matches(".*(\\{|\\})\\s*")) {
-          riskScore += 1; // structural change
+        if (StringUtils.containsIgnoreCase(removed,"if") && StringUtils.containsIgnoreCase(removed,"(") && StringUtils.containsIgnoreCase(removed,")")) {
+          return true; // Removed a conditional block
         }
       }
 
-      // Detect function signature changes (less accurate)
-      if (line.startsWith("-")
-          && line.matches(
-              "-\\s*(public|private|protected)?\\s*(static)?\\s*\\w+\\s+\\w+\\s*\\(.*\\).*")) {
-        riskScore += 2;
+      // Analyze ADDED lines for suspicious additions
+      if (line.startsWith("+")) {
+        String added = line.substring(1).trim().toLowerCase();
+        if (StringUtils.containsIgnoreCase(added, "todo")
+            || StringUtils.containsIgnoreCase(added, "fixme")) {
+          return true;
+        }
+        if (StringUtils.containsIgnoreCase(added,"system.out") || StringUtils.containsIgnoreCase(added,"printstacktrace")) {
+          return true;
+        }
+        if (added.matches(".*catch\\s*\\(.*\\)\\s*\\{\\s*\\}")) {
+          return true; // empty catch block
+        }
       }
     }
 
-    return riskScore >= 3;
+    return false; // No signals detected
   }
-  public static void main(String[] args){
+
+  public static void main(String[] args) {
     boolean potentialDefect =
         new DefectHeuristicAnalyzer()
-            .isPotentialDefect(
-                "here is how patch might look like\n"
-                    + "@@ -12,4 +12,6 @@ public static void main(String[] args) {\n"
+            .isPotentiallyDefectivePatch(
+                "@@ -12,4 +12,6 @@ public static void main(String[] args) {\n"
                     + "         SpringApplication.run(TestApplication.class, args);\n"
                     + "     }\n"
                     + " \n"
