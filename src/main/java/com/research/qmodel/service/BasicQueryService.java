@@ -134,7 +134,7 @@ public class BasicQueryService extends GitHubIssuesFetcher {
   }
 
   private boolean isRun(int pageNumber) {
-    return !mode.equals("demo") || pageNumber < 500000;
+    return !mode.equals("demo") || pageNumber < 4000;
   }
 
   private JsonNode getRowData(

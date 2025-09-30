@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.research.qmodel.annotations.ProjectIssueDeserializer;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,7 +53,7 @@ public class ProjectIssue implements BaseMetric {
   @JsonIgnore
   @ToString.Exclude
   @ManyToMany(fetch = FetchType.LAZY)
-  private List<Commit> commits;
+  private List<Commit> fixingCommits;
 
   @JsonIgnore
   @ManyToMany(
@@ -130,14 +129,14 @@ public class ProjectIssue implements BaseMetric {
   }
 
   public void addCommits(List<Commit> foundCommits) {
-    if (commits == null) {
-      commits = new ArrayList<>();
+    if (fixingCommits == null) {
+      fixingCommits = new ArrayList<>();
     }
     for (Commit foundCommit : foundCommits) {
-      if (commits.contains(foundCommit)) {
+      if (fixingCommits.contains(foundCommit)) {
         continue;
       }
-      commits.add(foundCommit);
+      fixingCommits.add(foundCommit);
     }
   }
 

@@ -112,7 +112,7 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
       @PathVariable(value = "repo")
           @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
           String repo,
-      @RequestParam(required = false, defaultValue = "2") int depth) {
+      @RequestParam(required = false, defaultValue = "1") int depth) {
     basicBugFinder.traceCommitsToOrigin(owner, repo, depth);
   }
 

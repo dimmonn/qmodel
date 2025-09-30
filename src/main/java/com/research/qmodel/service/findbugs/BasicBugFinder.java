@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.research.qmodel.annotations.ChangePatchProcessor;
 import com.research.qmodel.errors.IssueNotFoundException;
-import com.research.qmodel.graph.Graph;
 import com.research.qmodel.model.AGraph;
 import com.research.qmodel.model.Commit;
 import com.research.qmodel.model.CommitID;
@@ -28,11 +27,9 @@ import org.eclipse.jgit.api.ResetCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.blame.BlameResult;
 import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
-import org.eclipse.jgit.transport.FetchResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +62,7 @@ public class BasicBugFinder implements ChangePatchProcessor {
         LOGGER.warn("Project issue is null, continuing..");
         continue;
       }
-      if (projectIssue.getCommits() != null && !projectIssue.getCommits().isEmpty()) {
+      if (projectIssue.getFixingCommits() != null && !projectIssue.getFixingCommits().isEmpty()) {
         LOGGER.warn(
             "Commits are not empty, had been added already: issue id# {}", projectIssue.getId());
         continue;
@@ -142,10 +139,10 @@ public class BasicBugFinder implements ChangePatchProcessor {
             projectIssue.getId());
         continue;
       }
-      if (projectIssue.getCommits() == null || projectIssue.getCommits().isEmpty()) {
+      if (projectIssue.getFixingCommits() == null || projectIssue.getFixingCommits().isEmpty()) {
         if (foundCommitsInDb.stream().anyMatch(e -> !e.getFileChanges().isEmpty())) {
-          if (projectIssue.getCommits() != null) {
-            projectIssue.getCommits().addAll(foundCommitsInDb);
+          if (projectIssue.getFixingCommits() != null) {
+            projectIssue.getFixingCommits().addAll(foundCommitsInDb);
           }
         } else {
           LOGGER.warn(
@@ -191,7 +188,7 @@ public class BasicBugFinder implements ChangePatchProcessor {
         && !foundIssue.getBugIntroducingCommits().isEmpty()) {}
 
     List<Commit> candidateCommits = new ArrayList<>();
-    List<Commit> commits = foundIssue.getCommits();
+    List<Commit> commits = foundIssue.getFixingCommits();
 
     for (Commit commit : commits) {
       String currentCommitSha = commit.getSha();
@@ -252,11 +249,11 @@ public class BasicBugFinder implements ChangePatchProcessor {
         LOGGER.info("Issues still left in the queue: {}", Optional.of(projectIssues.size()));
 
         // Skip if no commits associated
-        if (issue.getCommits() == null || issue.getCommits().isEmpty()) continue;
+        if (issue.getFixingCommits() == null || issue.getFixingCommits().isEmpty()) continue;
 
         Set<String> visited = new HashSet<>();
 
-        for (Commit fixCommit : issue.getCommits()) {
+        for (Commit fixCommit : issue.getFixingCommits()) {
           RevCommit revFix;
           try {
             revFix = repository.parseCommit(ObjectId.fromString(fixCommit.getSha()));
@@ -453,13 +450,13 @@ public class BasicBugFinder implements ChangePatchProcessor {
 
   private void checkoutOrphanedCommit(Git git, Repository repository, String commitSha)
       throws GitAPIException, IOException {
-    git.fetch()
-        .setRemote("origin")
-        .setRefSpecs(
-            "+" + commitSha + ":refs/remotes/origin/temp_commit_" + new Random().nextInt(10))
-        .call();
 
     try {
+      git.fetch()
+          .setRemote("origin")
+          .setRefSpecs(
+              "+" + commitSha + ":refs/remotes/origin/temp_commit_" + new Random().nextInt(10))
+          .call();
       resolveLockIssue(git.getRepository().getDirectory().toPath().toString());
       git.clean().setCleanDirectories(true).setForce(true).call();
       git.stashCreate().setIncludeUntracked(true).call();

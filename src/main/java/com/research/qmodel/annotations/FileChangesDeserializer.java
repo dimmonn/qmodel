@@ -61,6 +61,7 @@ public class FileChangesDeserializer extends JsonDeserializer<List<FileChange>> 
                 }
                 result.add(new FileChange(null,status, sha, date, null, additions, deletions, changes, filename, patch, changedLineNumbers, rowData.toString()));
             }
+            LOGGER.info("File Change is discovered");
             return result;
         }
         return null;

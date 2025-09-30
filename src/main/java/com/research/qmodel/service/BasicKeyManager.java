@@ -14,10 +14,10 @@ public abstract class BasicKeyManager {
     if (!isExpired) {
       return apiKey[currentIndex];
     }
-    String key = apiKey[currentIndex];
     currentIndex =
         (currentIndex + 1)
             % apiKey.length;
+    String key = apiKey[currentIndex];
     return key;
   }
 }

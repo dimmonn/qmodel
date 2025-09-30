@@ -219,9 +219,9 @@ public class ProjectIssueDeserializer extends JsonDeserializer<ProjectIssue>
                                       m ->
                                           Long.valueOf(
                                               m.group(
-                                                  2))); // Java 9+ Matcher.results() for efficiency
+                                                  2)));
                             })
-                        .collect(Collectors.toSet()); // Use Set to avoid duplicate DB calls
+                        .collect(Collectors.toSet());
 
                 List<ProjectIssue> issues =
                     projectIssueRepository.findIssuesByIds(
