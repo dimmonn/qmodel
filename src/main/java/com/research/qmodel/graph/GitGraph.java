@@ -12,7 +12,7 @@ public class GitGraph {
 
     public static void main(String[] args) throws GitAPIException, IOException {
         Graph gitGraph = new Graph();
-        String path = "/Users/dpolishchuk/dimmonn_test";
+        String path = "/Users/dima/dimmonn_test";
         gitGraph.cloneRepo("dimmonn", "test", path);
 
         Graph graph = gitGraph.buildGraph(null, null, path);

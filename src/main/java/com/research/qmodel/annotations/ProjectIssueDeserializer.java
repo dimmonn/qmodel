@@ -43,6 +43,10 @@ public class ProjectIssueDeserializer extends JsonDeserializer<ProjectIssue>
   private final ProjectIssueRepository projectIssueRepository;
   private final ProjectRepository projectRepository;
 
+  // Default keywords to detect issue references in commit/PR messages when configuration is missing
+  private static final List<String> DEFAULT_ISSUE_REFERENCE_KEYWORDS =
+      Arrays.asList("close", "closes", "closed", "fix", "fixes", "fixed", "resolve", "resolves", "resolved");
+
   @Value("${issue.reference.keywords}")
   private final List<String> keywords;
 
@@ -197,42 +201,47 @@ public class ProjectIssueDeserializer extends JsonDeserializer<ProjectIssue>
     }
 
     if (projectIssue.getFixPR() == null && projectIssue.getProjectPull() != null) {
-      Pattern pattern =
-          Pattern.compile(
-              "\\b(" + String.join("|", keywords) + ")\\s+(?:issue\\s*)?#?(\\d+)\\b",
-              Pattern.CASE_INSENSITIVE);
+      List<String> effectiveKeywords =
+          (keywords == null || keywords.isEmpty()) ? DEFAULT_ISSUE_REFERENCE_KEYWORDS : keywords;
 
-      projectIssue.getProjectPull().stream()
-          .filter(Objects::nonNull)
-          .forEach(
-              p -> {
-                Set<Long> issueIds =
-                    p.getTimeLine().stream()
-                        .map(Timeline::getMessage)
-                        .filter(Objects::nonNull)
-                        .flatMap(
-                            msg -> {
-                              Matcher matcher = pattern.matcher(msg);
-                              return matcher
-                                  .results()
-                                  .map(
-                                      m ->
-                                          Long.valueOf(
-                                              m.group(
-                                                  2)));
-                            })
-                        .collect(Collectors.toSet());
+      if (effectiveKeywords == null || effectiveKeywords.isEmpty()) {
+        LOGGER.debug(
+            "No issue reference keywords configured; skipping PR timeline parsing for fixes.");
+      } else {
+        Pattern pattern =
+            Pattern.compile(
+                "\\b(" + String.join("|", effectiveKeywords) + ")\\s+(?:issue\\s*)?#?(\\d+)\\b",
+                Pattern.CASE_INSENSITIVE);
 
-                List<ProjectIssue> issues =
-                    projectIssueRepository.findIssuesByIds(
-                        p.getProjectName(), p.getProjectOwner(), issueIds);
+        projectIssue.getProjectPull().stream()
+            .filter(Objects::nonNull)
+            .forEach(
+                p -> {
+                  Set<Long> issueIds =
+                      p.getTimeLine().stream()
+                          .map(Timeline::getMessage)
+                          .filter(Objects::nonNull)
+                          .flatMap(
+                              msg -> {
+                                Matcher matcher = pattern.matcher(msg);
+                                return matcher
+                                    .results()
+                                    .map(
+                                        m -> Long.valueOf(m.group(2)));
+                              })
+                          .collect(Collectors.toSet());
 
-                issues.forEach(
-                    issue -> {
-                      issue.setFixPR(p);
-                      issue.setPrThatFixesIssue(p.getId());
-                    });
-              });
+                  List<ProjectIssue> issues =
+                      projectIssueRepository.findIssuesByIds(
+                          p.getProjectName(), p.getProjectOwner(), issueIds);
+
+                  issues.forEach(
+                      issue -> {
+                        issue.setFixPR(p);
+                        issue.setPrThatFixesIssue(p.getId());
+                      });
+                });
+      }
     }
 
     Optional<Project> foundProject = projectRepository.findById(new ProjectID(owner, projectName));

@@ -62,6 +62,7 @@ public class DataPersistance {
       }
       result.add(new ProjectAGraph(project, aGraph));
     }
+    LOGGER.info("Persisted Graph");
     return result;
   }
 
@@ -73,19 +74,16 @@ public class DataPersistance {
           projectRepository.findById(new ProjectID(repo.getProjectOwner(), repo.getProjectName()));
       List<ProjectPull> projectPull = ppmap.get(repo);
       Project project = null;
-      if (!foundProject.isPresent()) {
-        project = new Project(repo.getProjectOwner(), repo.getProjectName());
-      } else {
-        project = foundProject.get();
-      }
+        project = foundProject.orElseGet(() -> new Project(repo.getProjectOwner(), repo.getProjectName()));
       if (projectPull != null) {
-        for (int i = 0; i < projectPull.size(); i++) {
-          project.addProjectPull(projectPull.get(i));
-        }
+          for (ProjectPull pull : projectPull) {
+              project.addProjectPull(pull);
+          }
         projectRepository.save(project);
       }
       result.add(new ProjectToPull(project, projectPull));
     }
+    LOGGER.info("Persisted Pulls");
     return result;
   }
 
@@ -110,6 +108,7 @@ public class DataPersistance {
       }
       result.add(new ProjectToIssue(project, projectIssue));
     }
+    LOGGER.info("Persisted Issues");
     return result;
   }
 

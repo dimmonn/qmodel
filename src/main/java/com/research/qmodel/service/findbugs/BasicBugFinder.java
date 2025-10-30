@@ -192,7 +192,7 @@ public class BasicBugFinder implements ChangePatchProcessor {
 
     for (Commit commit : commits) {
       String currentCommitSha = commit.getSha();
-      String repoPath = "/Users/dpolishchuk/" + owner + "_" + repo;
+      String repoPath = "/Users/dima/" + owner + "_" + repo;
 
       for (FileChange fileChange : commit.getFileChanges()) {
         Set<Integer> modifiedLines = getChangedLineNumbers(fileChange.getPatch());
@@ -234,7 +234,7 @@ public class BasicBugFinder implements ChangePatchProcessor {
   }
 
   public void traceCommitsToOrigin(String owner, String repo, int depth) {
-    String repoPath = "/Users/dpolishchuk/" + owner + "_" + repo;
+    String repoPath = "/Users/dima/" + owner + "_" + repo;
     Queue<ProjectIssue> projectIssues =
         new LinkedList<>(projectIssueRepository.finAllFixedIssues(repo, owner));
 
@@ -246,10 +246,16 @@ public class BasicBugFinder implements ChangePatchProcessor {
 
       while (!projectIssues.isEmpty()) {
         ProjectIssue issue = projectIssues.poll();
+          if (!issue.getBugIntroducingCommits().isEmpty()) {
+              LOGGER.info("Issue {} has been processed already", issue.getId());
+              continue;
+          }
         LOGGER.info("Issues still left in the queue: {}", Optional.of(projectIssues.size()));
 
         // Skip if no commits associated
-        if (issue.getFixingCommits() == null || issue.getFixingCommits().isEmpty()) continue;
+        if (issue.getFixingCommits() == null || issue.getFixingCommits().isEmpty()) {
+            LOGGER.warn("No commits associated with issue {}", issue.getId());
+        }
 
         Set<String> visited = new HashSet<>();
 
@@ -299,6 +305,7 @@ public class BasicBugFinder implements ChangePatchProcessor {
 
         try {
           projectIssueRepository.save(issue);
+          LOGGER.info("Issue {} saved in the DB", issue.getId());
         } catch (Exception e) {
           LOGGER.error("Error saving issue {}: {}", issue.getId(), e.getMessage(), e);
         }
@@ -307,6 +314,8 @@ public class BasicBugFinder implements ChangePatchProcessor {
     } catch (Exception e) {
       LOGGER.error("Fatal error during SZZ tracing: {}", e.getMessage(), e);
     }
+
+    LOGGER.info("Trace to origin completed for repo {} and owner {}", repo, owner);
   }
 
   private void recursivelyTraceLine(
@@ -344,6 +353,16 @@ public class BasicBugFinder implements ChangePatchProcessor {
       issue.addBugIntroducing(blamedCommit);
       for (int i = 0; i < revCommit.getParentCount(); i++) {
         RevCommit parent = revCommit.getParent(i);
+
+        LOGGER.info(
+            "Tracing blamed commit {} -> parent {} for file '{}' line {} (depth remaining: {}) on issue id {}",
+            blamedSha,
+            parent.getName(),
+            file,
+            line,
+            depth - 1,
+            issue.getId());
+
         recursivelyTraceLine(
             git, repo, file, line, parent.getName(), depth - 1, visitedLineCommitPairs, issue);
       }

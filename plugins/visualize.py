@@ -4,7 +4,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 # Load the JSON file
-with open('/Users/dpolishchuk/IdeaProjects/qmodel/facebook_react.json', 'r') as file:
+with open('/Users/dima/IdeaProjects/qmodel/facebook_react.json', 'r') as file:
   graph_data = json.load(file)
 
 # Create a NetworkX graph

@@ -144,7 +144,6 @@ public class ProjectIssue implements BaseMetric {
     if (bugIntroducingCommits == null) {
       bugIntroducingCommits = new ArrayList<>();
     }
-
     if (!bugIntroducingCommits.contains(foundCommit)) {
 
       bugIntroducingCommits.add(foundCommit);

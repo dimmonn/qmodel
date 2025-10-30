@@ -1,12 +1,9 @@
 package com.research.qmodel.graph;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.research.qmodel.model.Commit;
-import com.research.qmodel.model.CommitID;
-import com.research.qmodel.repos.ActionsRepository;
 import com.research.qmodel.repos.CommitRepository;
-import java.io.IOException;
-import java.util.Map.Entry;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.ResetCommand.ResetType;
@@ -21,286 +18,255 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
+
 import static org.springframework.context.annotation.ScopedProxyMode.TARGET_CLASS;
 import static org.springframework.web.context.WebApplicationContext.SCOPE_REQUEST;
 
 @Component
 @Scope(value = SCOPE_REQUEST, proxyMode = TARGET_CLASS)
 public class Graph extends GitMaintainable {
-  Map<String, Integer> depthCacheMax = new HashMap<>();
-  Map<String, Integer> depthCacheMin = new HashMap<>();
-  @Autowired private CommitRepository commitRepository;
+    private final Logger LOGGER = LoggerFactory.getLogger(Graph.class);
 
-  private final Map<String, Vertex> vertices;
-  private final Logger LOGGER = LoggerFactory.getLogger(Graph.class);
-  @Autowired private ActionsRepository actionsRepository;
-  @Autowired private ObjectMapper objectMapper;
+    // Final per-node metrics live here during the build
+    private final Map<String, Vertex> vertices = new LinkedHashMap<>();
 
-  public Graph() {
-    this.vertices = new LinkedHashMap<>();
-  }
+    // Reverse adjacency: child -> parents, for fast depth computation
+    private final Map<String, Set<String>> parents = new HashMap<>();
 
-  public void addVertex(String sha) {
-    vertices.putIfAbsent(sha, new Vertex(sha));
-  }
+    // Caches for depth DP
+    private final Map<String, Integer> depthCacheMax = new HashMap<>();
+    private final Map<String, Integer> depthCacheMin = new HashMap<>();
 
-  public void addEdge(String parentSha, String childSha) {
-    Vertex parent = vertices.get(parentSha);
-    Vertex child = vertices.get(childSha);
+    // Keep a running edge count (so avg degree is O(1))
+    private long edgeCount = 0L;
 
-    if (parent != null && child != null) {
-      parent.addNeighbor(childSha);
-      parent.incrementOutDegree();
-      child.incrementInDegree();
+    @Autowired private CommitRepository commitRepository;
+    @Autowired private ObjectMapper objectMapper; // keep if used elsewhere
+
+    /** Ensure a vertex exists */
+    public void addVertex(String sha) {
+        vertices.putIfAbsent(sha, new Vertex(sha));
     }
-  }
 
-  public Set<String> getVertices() {
-    return vertices.keySet();
-  }
+    /** Add directed edge parent -> child, maintaining degrees, reverse map, and edge count */
+    public void addEdge(String parentSha, String childSha) {
+        addVertex(parentSha);
+        addVertex(childSha);
+        Vertex parent = vertices.get(parentSha);
+        Vertex child = vertices.get(childSha);
 
-  public Map<String, Vertex> getVerticesMap() {
-    return vertices;
-  }
-
-  public Vertex getVertex(String sha) {
-    return vertices.get(sha);
-  }
-
-  // Method to find all parents of a commit
-  public Set<String> findParents(String sha) {
-    Set<String> parents = new HashSet<>();
-    for (Entry<String, Vertex> entry : vertices.entrySet()) {
-      if (entry.getValue().neighbors.contains(sha)) {
-        parents.add(entry.getKey());
-      }
-    }
-    return parents;
-  }
-
-  public int getNumberOfVertices() {
-    return vertices.size();
-  }
-
-  public int getNumberOfEdges() {
-    int edgeCount = 0;
-    // TODO It's a defect, most likely we need particular neighbors
-    for (Vertex vertex : vertices.values()) {
-      edgeCount += vertex.neighbors.size();
-    }
-    return edgeCount;
-  }
-
-  public double getAverageDegree() {
-    int edgeCount = getNumberOfEdges();
-    int vertexCount = getNumberOfVertices();
-    return vertexCount == 0 ? 0 : (double) edgeCount / vertexCount;
-  }
-
-  public Graph buildGraph(String owner, String path, String repoPath) {
-    List<Commit> allGraphCommits = new ArrayList<>();
-    try (Git git = Git.open(new File(repoPath))) {
-
-      List<Ref> branches = git.branchList().setListMode(ListMode.ALL).call();
-      RevWalk revWalk = new RevWalk(git.getRepository());
-      Map<RevCommit, List<Ref>> commitMeta = new HashMap<>();
-      for (Ref branch : branches) {
-        try {
-          if (branch.getName().equals("HEAD") || branch.getName().contains("refs/heads/master")) {
-            continue;
-          }
-          git.reset().setMode(ResetType.HARD).call();
-          git.clean().setCleanDirectories(true).setForce(true).call();
-          git.checkout().setName(branch.getName()).call();
-          Iterable<RevCommit> commits = git.log().call();
-          for (RevCommit commit : commits) {
-            commitMeta.computeIfAbsent(commit, k -> new ArrayList<>()).add(branch);
-          }
-          revWalk.close();
-        } catch (CheckoutConflictException e) {
-          LOGGER.warn("Checkout conflict for branch {}: {}", branch.getName(), e.getMessage());
+        // Use the set to avoid double-counting the same edge
+        if (parent.getNeighbors().add(childSha)) {
+            parent.incrementOutDegree();
+            child.incrementInDegree();
+            parents.computeIfAbsent(childSha, k -> new HashSet<>()).add(parentSha);
+            edgeCount++;
         }
-      }
+    }
+    public Map<String, Vertex> getVerticesMap() {
+        return vertices;
+    }
 
-      List<RevCommit> allCommits = new ArrayList<>(commitMeta.keySet());
-      allCommits.sort(Comparator.comparingInt(RevCommit::getCommitTime));
-      int counter = 0;
-      Queue<RevCommit> revCommits = new LinkedList<>(allCommits);
-      while (!revCommits.isEmpty() ) {
-        RevCommit commit = revCommits.poll();
-        LOGGER.info("{} are left to process.", allCommits.size() - (++counter));
-        String sha = commit.getId().getName();
-        Commit foundCommit = commitRepository.findById(new CommitID(sha)).orElse(null);
-        if (foundCommit != null
-            && foundCommit.getMinDepthOfCommitHistory() != null
-            && foundCommit.getMinDepthOfCommitHistory() > 0) {
-          LOGGER.info(
-              "Commit {} is already processed, min depth is {}",
-              sha,
-              foundCommit.getMinDepthOfCommitHistory());
-          continue;
+    /** Number of vertices currently in memory */
+    public int getNumberOfVertices() {
+        return vertices.size();
+    }
+
+    /** Number of edges (maintained incrementally) */
+    public long getNumberOfEdges() {
+        return edgeCount;
+    }
+
+    /** Global average degree (edges / vertices) */
+    public double getAverageDegree() {
+        int v = getNumberOfVertices();
+        return v == 0 ? 0.0 : (double) edgeCount / v;
+    }
+
+    /** O(#parents) lookup thanks to reverse map */
+    public Set<String> findParents(String sha) {
+        return parents.getOrDefault(sha, Collections.emptySet());
+    }
+
+    /** Max depth to a root (memoized) */
+    public int getMaximumDepth(String sha) {
+        Integer cached = depthCacheMax.get(sha);
+        if (cached != null) return cached;
+
+        Set<String> ps = findParents(sha);
+        if (ps.isEmpty()) {
+            depthCacheMax.put(sha, 0);
+            return 0;
+        }
+        int max = Integer.MIN_VALUE;
+        for (String p : ps) {
+            max = Math.max(max, getMaximumDepth(p) + 1);
+        }
+        depthCacheMax.put(sha, max);
+        return max;
+    }
+
+    /** First-parent chain (your existing notion of "linear ancestors") */
+    public List<RevCommit> getLinearAncestors(Repository repo, RevCommit startCommit) throws IOException {
+        List<RevCommit> ancestors = new ArrayList<>();
+        try (RevWalk walk = new RevWalk(repo)) {
+            RevCommit current = startCommit;
+            while (current.getParentCount() > 0) {
+                RevCommit parent = walk.parseCommit(current.getParent(0)); // first parent only
+                ancestors.add(parent);
+                current = parent;
+            }
+        }
+        return ancestors;
+    }
+
+    /**
+     * Build graph in memory (no DB writes inside the loop), then push final metrics in batched UPDATEs.
+     */
+    @Transactional
+    public Graph buildGraph(String owner, String path, String repoPath) {
+        vertices.clear();
+        parents.clear();
+        depthCacheMin.clear();
+        depthCacheMax.clear();
+        edgeCount = 0L;
+
+        try (Git git = Git.open(new File(repoPath))) {
+
+            // 1) Collect commits reachable from all branches (current impl uses checkout; can replace with RevWalk later)
+            List<Ref> branches = git.branchList().setListMode(ListMode.ALL).call();
+            Map<RevCommit, List<Ref>> commitMeta = new HashMap<>();
+
+            for (Ref branch : branches) {
+                String name = branch.getName();
+                try {
+                    if ("HEAD".equals(name) || name.contains("refs/heads/master")) continue;
+                    git.reset().setMode(ResetType.HARD).call();
+                    git.clean().setCleanDirectories(true).setForce(true).call();
+                    git.checkout().setName(name).call();
+
+                    Iterable<RevCommit> commits = git.log().call();
+                    for (RevCommit rc : commits) {
+                        commitMeta.computeIfAbsent(rc, k -> new ArrayList<>()).add(branch);
+                    }
+                } catch (CheckoutConflictException e) {
+                    LOGGER.warn("Checkout conflict for branch {}: {}", name, e.getMessage());
+                }
+            }
+
+            // 2) Build the graph in chronological order (no DB interaction here)
+            List<RevCommit> allCommits = new ArrayList<>(commitMeta.keySet());
+            allCommits.sort(Comparator.comparingInt(RevCommit::getCommitTime));
+
+            int total = allCommits.size();
+            for (int idx = 0; idx < total; idx++) {
+                RevCommit commit = allCommits.get(idx);
+                if (idx % 5000 == 0) {
+                    LOGGER.info("Processed {}/{} commits...", idx, total);
+                }
+
+                String sha = commit.getId().getName();
+                addVertex(sha);
+                Vertex v = vertices.get(sha);
+
+                List<String> branchNames = Optional.ofNullable(commitMeta.get(commit))
+                        .orElseGet(List::of)
+                        .stream()
+                        .map(Ref::getName)
+                        .filter(n -> !n.contains("/remotes/origin/HEAD"))
+                        .collect(Collectors.toList());
+
+                // "Linear ancestors" as per your method; used for your current subgraph stats
+                List<RevCommit> linearAncestors = getLinearAncestors(git.getRepository(), commit);
+                int mergeCountAlongMainline = 0;
+                for (RevCommit anc : linearAncestors) {
+                    if (anc.getParentCount() > 1) mergeCountAlongMainline++;
+                }
+
+                // Connect edges parent -> sha
+                int parentCount = commit.getParentCount();
+                for (int i = 0; i < parentCount; i++) {
+                    String parentSha = commit.getParent(i).getId().getName();
+                    addEdge(parentSha, sha);
+                }
+
+                // Compute depths now that reverse map is updated
+                int minDepth = getMinimumDepth(sha);
+                int maxDepth = getMaximumDepth(sha);
+
+                // Snapshot per-node stats into Vertex (avoid huge subGraphNodes lists if not needed)
+                List<String> subGraphNodes = linearAncestors.stream().map(AnyObjectId::getName).toList();
+                LOGGER.info("Adding snapshot props for commit {}: subGraphNodes={}, branches={}, mergeCount={}, minDepth={}, maxDepth={}",
+                        sha, subGraphNodes.size(), branchNames.size(), mergeCountAlongMainline, minDepth, maxDepth);
+                v.addSnapshotProps(
+                        subGraphNodes,
+                        branchNames,
+                        subGraphNodes.size(),                // beware: nodes != edges; this mirrors your current field semantics
+                        mergeCountAlongMainline,
+                        branchNames.size(),
+                        subGraphNodes.size(),
+                        0.0,                                  // placeholder; we set global avg later
+                        maxDepth,
+                        minDepth,
+                        commit.getParentCount() > 1
+                );
+                v.setTimestamp(Date.from(Instant.ofEpochSecond(commit.getCommitTime())));
+            }
+
+        } catch (Exception e) {
+            LOGGER.error("Graph build failed: {}", e.getMessage(), e);
         }
 
-        boolean isMerge = commit.getParentCount() > 1;
-        if (!vertices.containsKey(sha)) {
-          addVertex(sha);
+        // 3) Compute global average degree once
+        final double avgDegGlobal = getAverageDegree();
+
+        // 4) Post-pass: push final metrics to DB in batches (no entities in memory)
+        final int BATCH = 1000;
+        int n = 0;
+        for (Map.Entry<String, Vertex> e : vertices.entrySet()) {
+            String sha = e.getKey();
+            Vertex v = e.getValue();
+            try {
+                commitRepository.updateGraphMetrics(
+                        sha,
+                        v.getInDegree(),
+                        v.getOutDegree(),
+                        v.getMergeCount(),
+                        v.getMinDepthOfCommitHistory(),
+                        v.getMaxDepthOfCommitHistory(),
+                        v.getNumberOfBranches(),
+                        avgDegGlobal
+                );
+            } catch (Exception ex) {
+                // If a sha is missing in DB, log at debug and continue
+                LOGGER.debug("updateGraphMetrics failed for {}: {}", sha, ex.getMessage());
+            }
         }
-        List<Ref> refs = commitMeta.get(commit);
-        List<String> branchNames =
-            refs.stream()
-                .map(Ref::getName)
-                .filter(name -> !name.contains("/remotes/origin/HEAD"))
-                .toList();
-        int mergeCount = 0;
+        return this;
+    }
+    /** Min depth to a root (memoized) */
+    public int getMinimumDepth(String sha) {
+        Integer cached = depthCacheMin.get(sha);
+        if (cached != null) return cached;
 
-        List<RevCommit> linearAncestors = getLinearAncestors(git.getRepository(), commit);
-        List<String> subGraphNodes = linearAncestors.stream().map(AnyObjectId::getName).toList();
-        for (RevCommit linearAncestor : linearAncestors) {
-          if (linearAncestor.getParentCount() > 1) {
-            mergeCount++;
-          }
+        Set<String> ps = findParents(sha);
+        if (ps.isEmpty()) {
+            depthCacheMin.put(sha, 0);
+            return 0;
         }
-
-        Vertex vertex = getVertex(sha);
-
-        int parentCount = commit.getParentCount();
-        for (int i = 0; i < parentCount; i++) {
-          String parentSha = commit.getParent(i).getId().getName();
-          addVertex(parentSha);
-          if (!getVertex(parentSha).neighbors.contains(sha)) {
-            addEdge(parentSha, sha);
-          }
+        int min = Integer.MAX_VALUE;
+        for (String p : ps) {
+            min = Math.min(min, getMinimumDepth(p) + 1);
         }
-        int numberOfVertices = linearAncestors.size();
-
-        int numberOfEdges = subGraphNodes.size();
-        int inDegree = vertex.getInDegree();
-        int outDegree = vertex.getOutDegree();
-        double averageDegree = getAverageDegree();
-        int minDepthOfCommitHistory = getMinimumDepth(sha);
-        int maxDepthOfCommitHistory = getMaximumDepth(sha);
-        if (foundCommit != null) {
-          try {
-            LOGGER.info(
-                "Saving commit graph properties commit id# {}, mergeCount# {}, numberOfVertices# {}, numberOfEdges# {},inDegree# {},outDegree# {},averageDegree# {}, minDepthOfCommitHistory# {}, maxDepthOfCommitHistory# {}, isMerge# {}",
-                foundCommit.getSha(),
-                mergeCount,
-                numberOfVertices,
-                numberOfEdges,
-                inDegree,
-                outDegree,
-                averageDegree,
-                minDepthOfCommitHistory,
-                maxDepthOfCommitHistory,
-                isMerge);
-
-            foundCommit.setMergeCount(mergeCount);
-            foundCommit.setNumberOfVertices(subGraphNodes.size());
-            foundCommit.setNumberOfEdges(numberOfEdges);
-            foundCommit.setInDegree(inDegree);
-            foundCommit.setOutDegree(outDegree);
-            foundCommit.setNumberOfBranches(branchNames.size());
-            foundCommit.setAverageDegree(averageDegree);
-            foundCommit.setMinDepthOfCommitHistory(minDepthOfCommitHistory);
-            foundCommit.setMaxDepthOfCommitHistory(maxDepthOfCommitHistory);
-            foundCommit.setIsMerge(isMerge);
-            foundCommit.setBranches(new HashSet<>(branchNames));
-            // foundCommit.setSubGraphNodes(new HashSet<>(subGraphNodes));
-            allGraphCommits.add(foundCommit);
-          } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-          }
-        }
-
-        vertex.addSnapshotProps(
-            subGraphNodes,
-            branchNames,
-            subGraphNodes.size(),
-            mergeCount,
-            branchNames.size(),
-            numberOfEdges,
-            averageDegree,
-            maxDepthOfCommitHistory,
-            minDepthOfCommitHistory,
-            isMerge);
-        int commitTime = commit.getCommitTime();
-
-        Instant instant = Instant.ofEpochSecond(commitTime);
-        vertex.setTimestamp(Date.from(instant));
-      }
-    } catch (Exception e) {
-      LOGGER.error(e.getMessage());
-    }
-    for (Commit commit : allGraphCommits) {
-      if (commit.getOutDegree().equals(0)) {
-        Vertex vertex = vertices.get(commit.getSha());
-        if (vertex != null) {
-          commit.setOutDegree(vertex.getOutDegree());
-          commit.setInDegree(vertex.getInDegree());
-        }
-      }
-    }
-    commitRepository.saveAll(allGraphCommits);
-    return this;
-  }
-
-  public int getMinimumDepth(String sha) {
-
-    if (depthCacheMin.containsKey(sha)) {
-      return depthCacheMin.get(sha);
-    }
-    Set<String> parents = findParents(sha);
-    if (parents.isEmpty()) {
-      depthCacheMin.put(sha, 0);
-      return 0;
-    }
-    int minDepth = Integer.MAX_VALUE;
-    for (String parentSha : parents) {
-      int parentDepth = getMinimumDepth(parentSha);
-      minDepth = Math.min(minDepth, parentDepth + 1);
-    }
-    depthCacheMin.put(sha, minDepth);
-    return minDepth;
-  }
-
-  public int getMaximumDepth(String sha) {
-    if (depthCacheMax.containsKey(sha)) {
-      return depthCacheMax.get(sha);
+        depthCacheMin.put(sha, min);
+        return min;
     }
 
-    Set<String> parents = findParents(sha);
-    if (parents.isEmpty()) {
-      depthCacheMax.put(sha, 0);
-      return 0;
-    }
-    int maxDepth = Integer.MIN_VALUE;
-    for (String parentSha : parents) {
-      int parentDepth = getMaximumDepth(parentSha);
-      maxDepth = Math.max(maxDepth, parentDepth + 1);
-    }
-
-    depthCacheMax.put(sha, maxDepth);
-    return maxDepth;
-  }
-
-  public List<RevCommit> getLinearAncestors(Repository repo, RevCommit startCommit)
-      throws IOException {
-    List<RevCommit> ancestors = new ArrayList<>();
-
-    try (RevWalk walk = new RevWalk(repo)) {
-      RevCommit current = startCommit;
-
-      while (current.getParentCount() > 0) {
-        RevCommit parent = walk.parseCommit(current.getParent(0)); // first parent only
-        ancestors.add(parent);
-        current = parent;
-      }
-    }
-
-    return ancestors;
-  }
 }

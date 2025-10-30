@@ -10,7 +10,7 @@ select
 from
     project_issue i
 join
-    project_issue_commits pic on i.id = pic.project_issue_id
+    project_issue_fixing_commits pic on i.id = pic.project_issue_id
 join
     commit c ON pic.commits_sha = c.sha
 WHERE

@@ -243,7 +243,7 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
           @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
           String repo)
       throws Exception {
-    String path = "/Users/dpolishchuk/" + owner + "_" + repo;
+    String path = "/Users/dima/" + owner + "_" + repo;
     cloneRepo(owner, repo, path);
     Set<String> forkedCommits = getForkedCommits(path);
     return null;

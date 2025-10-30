@@ -37,7 +37,7 @@ public class GraphController implements FileJsonReader {
   @GetMapping(value = "/graph/fields")
   @ResponseStatus(HttpStatus.OK)
   public String getFields() {
-    return readJsonFile("/Users/dpolishchuk/IdeaProjects/qmodel/graph_fields.json");
+    return readJsonFile("/Users/dima/IdeaProjects/qmodel/graph_fields.json");
   }
 
   @GetMapping(value = "/graph/data")
@@ -45,12 +45,12 @@ public class GraphController implements FileJsonReader {
   public String getData(
       @RequestParam(required = false) String owner, @RequestParam(required = false) String repo)
       throws GitAPIException, IOException {
-    String path = "/Users/dpolishchuk/" + owner + "_" + repo;
+    String path = "/Users/dima/" + owner + "_" + repo;
     gitGraph.cloneRepo(owner, repo, path);
     Graph graph = gitGraph.buildGraph(owner, repo, path);
-    String filePath = "/Users/dpolishchuk/IdeaProjects/qmodel/" + owner + "_" + repo + ".json";
+    String filePath = "/Users/dima/IdeaProjects/qmodel/" + owner + "_" + repo + ".json";
     gitGraph.exportGraph(filePath, graph.getVerticesMap());
     Graph b = new Graph();
-    return readJsonFile("/Users/dpolishchuk/IdeaProjects/qmodel/" + owner + "_" + repo + ".json");
+    return readJsonFile("/Users/dima/IdeaProjects/qmodel/" + owner + "_" + repo + ".json");
   }
 }

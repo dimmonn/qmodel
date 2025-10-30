@@ -55,11 +55,22 @@ public abstract class GitHubIssuesFetcher extends BasicKeyManager {
   private static String getNextUrl(HttpURLConnection connection) {
     // Look for the "Link" header in the response, which contains pagination information
     String linkHeader = connection.getHeaderField("Link");
-    if (linkHeader != null && linkHeader.contains("rel=\"next\"")) {
-      // Extract the 'next' URL from the Link header
-      int start = linkHeader.indexOf("<") + 1;
-      int end = linkHeader.indexOf(">", start);
-      return linkHeader.substring(start, end);
+    if (linkHeader == null) {
+      return null;
+    }
+
+    // The Link header can contain multiple comma-separated links, e.g.:
+    // <url1>; rel="prev", <url2>; rel="next"
+    String[] parts = linkHeader.split(",");
+    for (String part : parts) {
+      String trimmed = part.trim();
+      if (trimmed.endsWith("rel=\"next\"") || trimmed.contains("rel=\"next\"")) {
+        int start = trimmed.indexOf('<');
+        int end = trimmed.indexOf('>');
+        if (start >= 0 && end > start) {
+          return trimmed.substring(start + 1, end);
+        }
+      }
     }
     return null; // No more pages
   }

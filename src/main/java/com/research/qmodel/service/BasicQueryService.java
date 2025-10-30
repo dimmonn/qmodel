@@ -134,7 +134,7 @@ public class BasicQueryService extends GitHubIssuesFetcher {
   }
 
   private boolean isRun(int pageNumber) {
-    return !mode.equals("demo") || pageNumber < 4000;
+    return !mode.equals("demo") || pageNumber < 444444;
   }
 
   private JsonNode getRowData(
@@ -171,6 +171,17 @@ public class BasicQueryService extends GitHubIssuesFetcher {
         return response.getBody();
       } catch (Exception ex) {
         LOGGER.error(ex.getMessage(), ex);
+
+          currentKey = getNextKey(true);
+          headers.set("Authorization", currentKey);
+          try {
+              requestEntity = new RequestEntity<>(headers, HttpMethod.GET, new URI(apiUrl));
+              ResponseEntity<JsonNode> response = restTemplate.exchange(requestEntity, JsonNode.class);
+              return response.getBody();
+          } catch (Exception ex1) {
+              LOGGER.error(ex1.getMessage(), ex1);
+          }
+
       }
     }
     return null;
