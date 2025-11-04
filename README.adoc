@@ -25,7 +25,7 @@ To get **QModel** up and running with **Docker Compose**, follow these simple st
 
 ```bash
 echo "Downloading docker-compose.yml from GitHub..."
-curl -L https://raw.githubusercontent.com/dimmonn/qmodel/refs/heads/main/docker-compose.yml[https://github.com/yourusername/qmodel/raw/main/docker-compose.yml] -o docker-compose.yml
+curl -L https://raw.githubusercontent.com/dimmonn/qmodel/refs/heads/main/docker-compose.yml -o docker-compose.yml
 
 
 echo "Creating the qmodel-secret.properties file..."
