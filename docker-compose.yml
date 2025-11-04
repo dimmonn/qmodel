@@ -37,8 +37,6 @@ services:
       - SPRING_CONFIG_IMPORT=optional:file:/run/secrets/qmodel-secret.properties
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-dev}
       - JAVA_TOOL_OPTIONS=${JAVA_TOOL_OPTIONS:--Xms1g -Xmx1g}
-    volumes:
-      - /Users/dima/IdeaProjects/qmodel:/opt/qmodel    # Mount your code if needed
     networks: [elk]
 
   grafana:
