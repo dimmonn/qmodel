@@ -1,0 +1,109 @@
+# QModel: Docker Setup Guide
+
+## Table of Contents
+- [Installation](#installation)
+- [Introduction](#introduction)
+- [Features](#features)
+- [Requirements](#requirements)
+- [Quick Start (Docker Compose)](#quick-start-docker-compose)
+- [Configuration](#configuration)
+- [Running the Application](#running-the-application)
+- [Stopping Services](#stopping-services)
+- [Troubleshooting](#troubleshooting)
+- [API Reference](#api-reference)
+- [Example Requests](#example-requests)
+- [Data Model](#data-model)
+- [Dashboard SQL Examples](#dashboard-sql-examples)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
+## Installation
+
+To get **QModel** up and running with **Docker Compose**, follow these simple steps:
+
+1. **Clone the repository**:
+```bash
+git clone https://github.com/yourusername/qmodel.git
+cd qmodel
+```
+
+2. **Create the `.env` file**:
+- Copy the `.env.sample` to `.env` and modify it as needed:
+```bash
+cp .env.sample .env
+```
+- Set values in `.env`:
+```env
+MYSQL_ROOT_PASSWORD=admin
+MYSQL_DATABASE=qmodel_demo
+MYSQL_USER=admin
+MYSQL_PASSWORD=admin
+
+      SPRING_PROFILES_ACTIVE=dev
+      QMODEL_TAG=latest  # Can be set to a specific tag if needed
+      GRAFANA_TAG=latest # Can be set to a specific tag if needed
+
+      GRAFANA_USER=admin
+      GRAFANA_PASS=admin
+
+      JAVA_TOOL_OPTIONS=-Xms1g -Xmx1g
+      ```
+
+3. **Create the `qmodel-secret.properties` file**:
+- Add your GitHub API tokens:
+```bash
+touch qmodel-secret.properties
+```
+Add your **GitHub API token(s)**:
+```properties
+qmodel.api.key=Bearer ghp_xxx, Bearer ghp_yyy
+```
+
+4. **Start the services**:
+Run **Docker Compose** to build and start the services:
+```bash
+docker-compose up -d
+```
+
+---
+
+## Introduction
+
+**QModel** is a service and dashboard toolkit to collect and visualize software quality metrics for any public GitHub project. It fetches repository metadata (commits, issues, pull requests, Actions runs), stores it in MySQL, and exposes REST endpoints to power dashboards and analyses.
+
+> **Note**: This document was updated on **2025-11-03 19:15** local time.
+
+---
+
+## Features
+
+- Import GitHub repository data (commits, issues, pulls, Actions)
+- Persist data into MySQL via JPA/Hibernate
+- Expose `GET`/`POST` endpoints under `/api/v1/metrics`
+- Predefined SQL snippets for Grafana-style time series dashboards
+- Batch processing with configurable limits for demo vs. prod modes
+
+---
+
+## Requirements
+
+Before running **QModel** with Docker Compose, ensure you have:
+
+- **Docker** and **Docker Compose**: [Install Docker](https://docs.docker.com/get-docker/)
+- **GitHub API Token(s)**: Generate a personal access token (PAT) from GitHub to access repository data via the API.
+- **MySQL 8.0**: This will be containerized via Docker using `docker-compose.yml`.
+- **Grafana**: For visualizing the data collected by **QModel**.
+
+---
+
+## Quick Start (Docker Compose)
+
+### 1. Clone the repository
+
+If you haven't already, clone the repository:
+
+```bash
+git clone https://github.com/yourusername/qmodel.git
+cd qmodel
