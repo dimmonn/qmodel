@@ -33,10 +33,6 @@ services:
       - source: qmodel_api_key
         target: qmodel-secret.properties
         mode: 0440
-    environment:
-      - SPRING_CONFIG_IMPORT=optional:file:/run/secrets/qmodel-secret.properties
-      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-dev}
-      - JAVA_TOOL_OPTIONS=${JAVA_TOOL_OPTIONS:--Xms1g -Xmx1g}
     networks: [elk]
 
   grafana:
