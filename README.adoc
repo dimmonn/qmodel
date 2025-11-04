@@ -12,32 +12,62 @@ It ingests repository metadata (commits, issues, pull requests, Actions runs), c
 
 ---
 
+== Requirements
+
+Before installation, ensure you have the following components installed on your system:
+
+[cols="1,3",options="header"]
+|===
+| Requirement | Description
+
+| **Docker** | Required to run containerized services.
+Install from: https://docs.docker.com/get-docker/
+
+| **Docker Compose** | Used to orchestrate multiple containers (QModel, MySQL, Grafana).
+Install from: https://docs.docker.com/compose/install/
+
+| **GitHub Personal Access Token (PAT)** | Required to access GitHub’s REST API.
+Generate from: https://github.com/settings/tokens
+Select `repo` or `public_repo` scopes (depending on access).
+Use multiple tokens (comma-separated) for better rate-limit handling.
+
+| **Free disk space** | At least **5–10 GB** depending on repository size and history depth.
+
+| **Internet access** | QModel fetches live data from GitHub; ensure outbound HTTPS is allowed.
+
+| **Ports** |
+8082 → QModel API
+3001 → Grafana Dashboard
+3306 → MySQL database (container-internal by default)
+
+| **Memory** | Minimum **2 GB RAM** (4 GB recommended for large imports).
+Ensure Docker Desktop or daemon is configured with adequate memory.
+
+|===
+
+---
+
 == Installation
 
-To run with **Docker Compose**:
+To run QModel with **Docker Compose**, follow these steps:
 
 [source,bash]
 ----
+echo "QModel, Grafana, and MySQL are now running. Access them at:"
+echo "QModel API: http://localhost:8082"
+echo "Grafana:    http://localhost:3001  (admin/admin)"
 echo "Downloading docker-compose.yml from GitHub..."
 curl -L https://raw.githubusercontent.com/dimmonn/qmodel/refs/heads/main/docker-compose.yml -o docker-compose.yml
 
 echo "Creating the qmodel-secret.properties file..."
 if [ ! -f "qmodel-secret.properties" ]; then
   touch qmodel-secret.properties
-  # Comma-separated GitHub tokens; each token *must include* the 'Bearer ' prefix
-  echo "qmodel.api.key=Bearer ghp_xxx,Bearer ghp_yyy" > qmodel-secret.properties
-  echo "app.mode=prod" >> qmodel-secret.properties
-  echo "app.page_size=100" >> qmodel-secret.properties
+  # Modify to include your token `Bearer ghp_xxx` if you want to make 1K+ queries
+  echo "qmodel.api.key=" > qmodel-secret.properties
 fi
 
 echo "Starting services using Docker Compose..."
-docker-compose up -d
-
-docker-compose ps
-
-echo "QModel, Grafana, and MySQL are now running. Access them at:"
-echo "QModel API: http://localhost:8082"
-echo "Grafana:    http://localhost:3001  (admin/admin)"
+docker-compose up
 ----
 
 Navigate to the **QMODEL** data source in Grafana and execute an initial query so tables are created/populated (dashboards may be empty until data arrives).
@@ -52,44 +82,43 @@ image::image-2025-11-04-21-10-09-970.png[width=720,align=center]
 
 == Introduction
 
-QModel brings together:
+QModel integrates several modular services:
 
 * a **collector** that calls GitHub REST v3 endpoints with token rotation and paging,
-* a **persistence layer** (JPA/Hibernate to MySQL),
+* a **persistence layer** (Spring Boot JPA/Hibernate to MySQL),
 * a **graph engine** computing per-commit DAG metrics (branch reach, FP-segment distance, merges, etc.),
 * a **defect linker** (SZZ-style) connecting closed issues to bug-fixing and candidate bug-introducing commits,
 * a **REST API** to trigger and monitor imports,
-* and **Grafana dashboards** for interactive exploration.
+* and **Grafana dashboards** for visual and exploratory analysis.
 
-The goal is **reproducible, time-aware** metrics at scale: import a project once, persist to a normalized schema, then analyze from dashboards or notebooks.
+Its purpose is to provide **reproducible, time-aware software quality metrics**:
+collect once, persist in a relational schema, analyze anytime.
 
 ---
 
 == Features
 
-* **Ingest:** commits (with file changes), issues, pull requests, Actions runs.
-* **Persist:** normalized MySQL schema with explicit relations (commits ↔ files, PRs ↔ issues, etc.).
-* **Graph metrics:** per-commit in/out degree, min/max depth, time-aware branch reach, FP-segment distance, distinct upstream merges, days since last merge.
-* **Defect linking:** SZZ-style links bug-fixing commits and candidate bug-introducing commits to issues.
-* **API:** `/api/v1/metrics/...` endpoints stream imports and manage data; `/api/graph/data` computes DAG metrics.
-* **Dashboards:** Grafana panels using SQL over the QModel schema.
-* **Scaling:** streaming imports (batch flush) to prevent OOM; token rotation to mitigate rate limits; demo vs prod modes.
-
----
-
-== Requirements
-
-* **Docker & Docker Compose**
-* **GitHub token(s):** Personal access tokens for public repos. Provide *one or more* tokens in `qmodel-secret.properties` as comma-separated values **including the `Bearer ` prefix**.
-* **Ports:** 8082 (QModel API), 3001 (Grafana).
-* **Disk/Memory:** Sufficient for repository history (commits, PRs, issues, patches).
+* **Ingests** commits, file changes, issues, pull requests, and Actions runs.
+* **Persists** data into MySQL with well-defined entity relations.
+* **Computes** advanced graph metrics for each commit:
+- in/out degree
+- min/max depth
+- branch reachability
+- FP-segment start distance
+- merge frequency
+- upstream branch merges
+- time since last merge
+* **Links** defects using SZZ methodology (fixing ↔ introducing commits).
+* **Provides** RESTful endpoints for automation and dashboard integration.
+* **Supports** demo vs production modes for small or large-scale runs.
+* **Visualizes** results in Grafana dashboards via SQL queries.
 
 ---
 
 == Quick Start (Docker Compose)
 
-. Start the stack (see <<installation,Installation>>).
-. Ensure `qmodel-secret.properties` includes:
+. Start the stack using the previous installation steps.
+. Verify `qmodel-secret.properties` includes:
 +
 [source,properties]
 ----
@@ -97,15 +126,15 @@ qmodel.api.key=Bearer ghp_xxx,Bearer ghp_yyy
 app.mode=prod
 app.page_size=100
 ----
-. Visit **QModel API**: http://localhost:8082
-Visit **Grafana**: http://localhost:3001 (admin/admin).
-. Run one of the <<example-requests,Example Requests>> to ingest data, then explore dashboards.
+. Visit **QModel API** → http://localhost:8082
+. Visit **Grafana Dashboard** → http://localhost:3001 (admin/admin).
+. Run one of the example API calls below to begin ingestion.
 
 ---
 
 == Configuration
 
-QModel reads configuration from `qmodel-secret.properties` (mounted into the container) and/or environment variables.
+QModel reads its configuration from `qmodel-secret.properties` and/or environment variables.
 
 [cols="2,1,5",options="header"]
 |===
@@ -113,47 +142,49 @@ QModel reads configuration from `qmodel-secret.properties` (mounted into the con
 
 | `qmodel.api.key`
 | —
-| **Comma-separated** GitHub tokens. *Each value must include* the `Bearer ` prefix (e.g., `Bearer ghp_xxx`).
+| **Comma-separated** GitHub tokens. *Each token must include* the `Bearer ` prefix (e.g., `Bearer ghp_xxx`). QModel rotates tokens automatically on rate limit or error.
 
 | `app.mode`
 | `prod`
-| `prod` follows server paging fully (with a safety fuse). `demo` caps pages/rows for fast trials.
+| Defines operating mode. `prod` follows GitHub pagination fully; `demo` limits pages and rows for testing.
 
 | `app.page_size`
 | `100`
-| Page size for GitHub REST v3 (max 100).
+| Number of records requested per API page (max 100 allowed by GitHub REST v3).
 
 | `app.demo_max_pages`
 | `3`
-| In `demo`, stop after this many pages **even if more are available**.
+| Maximum pages to fetch in demo mode.
 
 | `app.demo_max_rows`
 | `1500`
-| In `demo`, stop after this many total rows ingested.
+| Maximum total rows in demo mode.
 
 | `app.hard_max_pages`
 | `100000`
-| Safety fuse in `prod` to avoid infinite loops on misbehaving endpoints.
+| Safety limit on pages fetched in prod mode to prevent infinite loops.
 
 | `app.base_url`
 | `https://api.github.com/`
-| GitHub REST API base URL.
+| Base API endpoint for GitHub REST v3.
 |===
 
 ---
 
 == Running the Application
 
-* **Import data** via REST (issues, pulls, commits, actions).
-* **Build graph** after commits are ingested (`/api/graph/data`).
-* **Open Grafana** to inspect panels or build SQL panels over the schema.
+* **Import data** by calling the API (see <<example-requests,Example Requests>>).
+* **Build the graph** after commit import: `/api/graph/data`.
+* **Explore data** via Grafana dashboards or SQL queries.
+
+---
 
 == Stopping Services
 
 [source,bash]
 ----
 docker-compose down
-# or to remove volumes as well
+
 docker-compose down -v
 ----
 
@@ -161,167 +192,119 @@ docker-compose down -v
 
 == Troubleshooting
 
-* **401/403 or rate-limit:** Verify tokens are valid, include `Bearer `, and consider multiple tokens for rotation.
-* **Long imports / memory:** Imports are streamed and flushed in batches; ensure MySQL resources are adequate.
-* **Empty dashboards:** Run at least one import so tables exist; refresh panels or import dashboard JSON.
-* **SZZ “orphaned” commits:** The tracer fetches missing objects and may create a temporary branch to enable blame.
+* **401/403 or rate limits:** Ensure tokens are correct, prefixed with `Bearer `, and multiple tokens are configured.
+* **Slow imports / OOM:** Use streaming mode; data flushes in batches automatically.
+* **Empty dashboards:** Run at least one data import; refresh Grafana after MySQL tables populate.
+* **SZZ orphan commits:** The tracer fetches missing commits and checks out temp branches automatically.
 
 ---
 
-[[api-reference]]
 == API Reference
 
 *Base path:* `/api/v1/metrics`
 *Graph endpoint:* `/api/graph/data`
 
-Many endpoints **persist** to the DB and return a small status (or count) rather than the full payload.
+Each API endpoint triggers collection or computation steps and persists to the database.
 
 === Repository Catalog
-
-* **GET** `/api/v1/metrics/repos`
-List projects known to the persistence layer.
+* **GET** `/api/v1/metrics/repos` — list imported projects.
 
 === Commits
-
-* **GET** `/api/v1/metrics/repos/{owner}/{repo}/commits`
-Streams and persists the full commit history (batch flush to avoid OOM).
-
-* **GET** `/api/v1/metrics/repos/{owner}/{repo}/commits/{sha}`
-Imports and persists a single commit by SHA (useful for backfills).
+* **GET** `/api/v1/metrics/repos/{owner}/{repo}/commits` — stream commit history into DB.
+* **GET** `/api/v1/metrics/repos/{owner}/{repo}/commits/{sha}` — import a single commit by SHA.
 
 === Pull Requests
-
-* **GET** `/api/v1/metrics/repos/{owner}/{repo}/pulls`
-Imports **closed** PRs and persists them (labels, reviewers, etc.).
+* **GET** `/api/v1/metrics/repos/{owner}/{repo}/pulls` — import all closed PRs and metadata.
 
 === Issues
-
-* **GET** `/api/v1/metrics/repos/{owner}/{repo}/issues`
-Retrieves **closed** issues; controller example returns a count (or can persist in batch).
-
-* **GET** `/api/v1/metrics/repos/fixtime` *(body: list of projects)*
-Persists issues for multiple repos (consider POST in clients that don’t support GET bodies).
-
-* **DELETE** `/api/v1/metrics/repos/{owner}/{repo}/issues`
-Deletes all persisted issues for a project.
+* **GET** `/api/v1/metrics/repos/{owner}/{repo}/issues` — fetch closed issues.
+* **DELETE** `/api/v1/metrics/repos/{owner}/{repo}/issues` — remove all issues for a project.
 
 === Actions
+* **GET** `/api/v1/metrics/repos/{owner}/{repo}/actions` — import GitHub Actions workflow runs.
 
-* **GET** `/api/v1/metrics/repos/{owner}/{repo}/actions`
-Imports GitHub Actions runs and persists them.
-
-=== Forks / Forked Data
-
-* **GET** `/api/v1/metrics/repos/{owner}/{repo}/forked`
-Resolves forks via API, merges their tip commits into a local snapshot; returns fork full names.
-
-* **GET** `/api/v1/metrics/repos/{owner}/{repo}/forks`
-(Experimental) Uses a local clone to compute forked commits; returns a set of SHAs.
+=== Forks
+* **GET** `/api/v1/metrics/repos/{owner}/{repo}/forked` — merge fork tip commits into project snapshot.
+* **GET** `/api/v1/metrics/repos/{owner}/{repo}/forks` — compute local fork differences.
 
 === Graph Metrics (DAG)
+* **GET** `/api/graph/data?owner={owner}&repo={repo}` — compute and persist commit graph metrics:
+- in/out degree
+- min/max depth
+- merge_count
+- number_of_branches
+- average_degree
+- distance_to_branch_start
+- upstream_heads_unique_on_segment
+- days_since_last_merge_on_segment
 
-* **GET** `/api/graph/data?owner={owner}&repo={repo}`
-Builds/updates the commit DAG and **persists per-commit metrics**:
-
-- `in_degree`, `out_degree`
-- `min_depth_of_commit_history`, `max_depth_of_commit_history`
-- `merge_count` (flag persisted as 0/1)
-- `number_of_branches` (time-aware branch count)
-- `average_degree` (global)
-- `distance_to_branch_start` (FP hops to segment start)
-- `upstream_heads_unique_on_segment` (distinct FP-segments merged into the current FP-segment **before** the commit)
-- `days_since_last_merge_on_segment` (days since last merge on the same FP-segment before the commit)
-
-=== Defect Linking (SZZ)
-
-* **GET** `/api/v1/metrics/repos/{owner}/{repo}/retrieveFixingCommits`
-For closed issues, identifies and persists **bug-fixing commits** (typically via the PR that closed the issue); returns SHAs.
-
-* **GET** `/api/v1/metrics/repos/{owner}/{repo}/{id}/retrieveBugIntroducingCommits`
-For a given issue, runs SZZ tracing from its fixing commits to identify **candidate bug-introducing commits**; returns a list of `Commit` objects.
-
-* **GET** `/api/v1/metrics/repos/{owner}/{repo}/retrieveBugIntroducingCommits?depth={d}`
-Runs SZZ tracing for **all** closed issues in the repo (optional depth).
-
-=== Maintenance
-
-* **GET** `/api/v1/metrics/repos/ag` *(body: list of projects)*
-Imports commits for multiple repos and persists them as a batch.
+=== SZZ Defect Linking
+* **GET** `/api/v1/metrics/repos/{owner}/{repo}/retrieveFixingCommits` — attach bug-fixing commits.
+* **GET** `/api/v1/metrics/repos/{owner}/{repo}/{id}/retrieveBugIntroducingCommits` — trace candidate introducers for a given issue.
+* **GET** `/api/v1/metrics/repos/{owner}/{repo}/retrieveBugIntroducingCommits?depth={d}` — full-repo SZZ scan (depth optional).
 
 ---
 
-[[example-requests]]
 == Example Requests
 
 [source,bash]
 ----
-# Issues (closed)
 curl --request GET \
   --url http://localhost:8082/api/v1/metrics/repos/ansible/ansible/issues
 
-# Pull Requests (closed)
 curl --request GET \
   --url http://localhost:8082/api/v1/metrics/repos/ansible/ansible/pulls
 
-# Commits (streaming, persists to DB)
 curl --request GET \
   --url http://localhost:8082/api/v1/metrics/repos/ansible/ansible/commits
 
-# Single commit by SHA
 curl --request GET \
   --url http://localhost:8082/api/v1/metrics/repos/google/guava/commits/1ec90b045a45b4603ea5bd1c296f284ec1c438db
 
-# Fork discovery & merge tips
 curl --request GET \
   --url http://localhost:8082/api/v1/metrics/repos/ansible/ansible/forked
 
-# Build DAG metrics for a repo (run after commits import)
 curl --request GET \
   --url 'http://localhost:8082/api/graph/data?owner=ansible&repo=ansible'
 
-# SZZ: bug-introducing for all issues
 curl --request GET \
   --url http://localhost:8082/api/v1/metrics/repos/ansible/ansible/retrieveBugIntroducingCommits
 
-# SZZ: bug-fixing commits
 curl --request GET \
   --url http://localhost:8082/api/v1/metrics/repos/ansible/ansible/retrieveFixingCommits
 ----
 
-*Auth:* Tokens are configured server-side via `qmodel.api.key`. The backend adds `Authorization: Bearer ...` to GitHub API requests.
-
 ---
 
-== Data Model
+== Data Model (Simplified)
 
 [cols="2,5",options="header"]
 |===
 | Table | Description
 
 | `project`
-| `(project_owner, project_name)` — logical project key.
+| Project definition (owner, name).
 
 | `agraph`
-| Snapshot container for commit graph data per project.
+| Commit graph snapshot per project.
 
 | `commit`
-| `sha`, author/email/message, `commit_date`, file-change counts, and graph metrics:
-`in_degree`, `out_degree`, `min_depth_of_commit_history`, `max_depth_of_commit_history`,
-`merge_count`, `number_of_branches`, `average_degree`,
-`distance_to_branch_start`, `upstream_heads_unique_on_segment`, `days_since_last_merge_on_segment`.
+| Stores commit metadata, author info, timestamps, and graph metrics.
 
-| `file_change` & `commit_file_changes`
-| File-level changes (status, patch, added/deleted/changed lines).
+| `file_change`, `commit_file_changes`
+| File-level change sets with patch diffs and line counts.
 
 | `project_pull`
-| PR metadata, labels, assignees, reviewers, commits-in-PR.
+| Pull request metadata (assignees, reviewers, linked commits).
 
 | `project_issue`
-| Issue metadata, labels, assignees, fixing PR link, SZZ links.
+| Issues, labels, and SZZ links to fixing/introducing commits.
 
-| SZZ outputs
-| `project_issue_fixing_commits(issue, sha)` — PR commits that closed the issue.
-`project_issue_bug_introducing_commits(issue, sha)` — candidate introducer commits (blame-based).
+| `project_issue_fixing_commits`
+| PR commits that closed the issue.
+
+| `project_issue_bug_introducing_commits`
+| Candidate commits that introduced the bug.
 |===
 
 ---
@@ -329,6 +312,7 @@ curl --request GET \
 == Dashboard SQL Examples
 
 **Commits per week**
+
 [source,sql]
 ----
 SELECT DATE_FORMAT(c.commit_date, '%Y-%u') AS week, COUNT(*) AS commits
@@ -339,6 +323,7 @@ ORDER BY week;
 ----
 
 **Average PR review time by month**
+
 [source,sql]
 ----
 SELECT DATE_FORMAT(p.created_at, '%Y-%m') AS ym,
@@ -351,6 +336,7 @@ ORDER BY ym;
 ----
 
 **Graph complexity vs PR review time**
+
 [source,sql]
 ----
 SELECT AVG(c.max_depth_of_commit_history) AS avg_max_depth,
@@ -365,7 +351,8 @@ WHERE p.project_owner='ansible' AND p.project_name='ansible'
   AND p.state='closed' AND p.merged_at IS NOT NULL;
 ----
 
-**SZZ: time to fix vs introducer metrics**
+**SZZ: Time to fix vs introducer metrics**
+
 [source,sql]
 ----
 SELECT AVG(TIMESTAMPDIFF(DAY, i.created_at, i.closed_at)) AS avg_days_to_close,
@@ -386,10 +373,12 @@ WHERE i.project_owner='ansible' AND i.project_name='ansible'
 
 == Contributing
 
-* **Issues & PRs:** open them on GitHub.
-* **Style:** standard Spring Boot/JPA; keep SQL MySQL-8 friendly.
-* **Dashboards:** contributions of Grafana panels and SQL snippets are welcome.
+* **Report issues and PRs:** via the official GitHub repository.
+* **Code style:** Standard Spring Boot + JPA guidelines; keep SQL compatible with MySQL 8.
+* **Dashboards:** Contributions of Grafana dashboards and example SQL are welcome.
+
+---
 
 == License
 
-This project is open source. See the repository for license details.
+This project is open source and available under the repository license.
