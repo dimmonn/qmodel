@@ -8,44 +8,39 @@ import lombok.Data;
 import lombok.ToString;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
 @Table(name = "graph")
 @JsonDeserialize(using = AGraphDeserializer.class)
-@ToString
+@ToString(onlyExplicitlyIncluded = true)
 public class AGraph implements BaseMetric {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ToString.Include
     private Long id;
     @Column(columnDefinition = "LONGTEXT")
     private String graph;
 
+    @ToString.Include
     @JsonIgnore
     @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
-    @JoinColumns({
-            @JoinColumn(name = "repo_owner", referencedColumnName = "owner"),
-            @JoinColumn(name = "repo_project_name", referencedColumnName = "project_name")
-    })
     private Project project;
 
     @JsonIgnore
     @OneToMany(mappedBy = "aGraph", cascade = CascadeType.ALL)
-    private List<Commit> commits;
+    private Set<Commit> commits;
 
-    public boolean addCoommit(Commit commit) {
+    public void addCommit(Commit commit) {
         if (commits == null) {
-            commits = new ArrayList<>();
+            commits = new HashSet<>();
         }
         if (!commits.contains(commit)) {
             commit.setAGraph(this);
             commits.add(commit);
-            return true;
         }
-        return false;
     }
 
 }

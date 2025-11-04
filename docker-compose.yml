@@ -1,44 +1,63 @@
-version: '3'
+version: '3.8'
+
 services:
-  mysql:
+  mysql-qmodel:
     image: mysql:8.0
     ports:
-      - 3307:3306
+      - "3307:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=admin
-      - MYSQL_DATABASE=qmodel
-      - MYSQL_USER=admin
-      - MYSQL_PASSWORD=admin
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-admin}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-qmodel_demo}
+      - MYSQL_USER=${MYSQL_USER:-admin}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-admin}
       - MYSQL_MAX_ALLOWED_PACKET=1G
     command: --max-allowed-packet=200M
-    volumes:
-      - /Users/dpolishchuk/Downloads/mysql/data:/var/lib/mysql
-    networks:
-      - elk
+    networks: [elk]
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u${MYSQL_USER:-admin} -p${MYSQL_PASSWORD:-admin} --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
 
   qmodel:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/dimmonn/qmodel:latest
     ports:
-      - 8082:8080
-      - 4123:4123
+      - "8082:8082"
+      - "4123:4123"
     depends_on:
-      - mysql
-    networks:
-      - elk
+      mysql-qmodel:
+        condition: service_healthy
+      grafana:
+        condition: service_started
+    secrets:
+      - source: qmodel_api_key
+        target: qmodel-secret.properties
+        mode: 0440
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:file:/run/secrets/qmodel-secret.properties
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-dev}
+      - JAVA_TOOL_OPTIONS=${JAVA_TOOL_OPTIONS:--Xms1g -Xmx1g}
+    volumes:
+      - /Users/dima/IdeaProjects/qmodel:/opt/qmodel    # Mount your code if needed
+    networks: [elk]
 
   grafana:
-    image: grafana/grafana:latest
+    image: ghcr.io/dimmonn/grafana:latest
     ports:
-      - 3001:3000
+      - "3001:3000"
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASS:-admin}
     depends_on:
-      - mysql
-    networks:
-      - elk
+      mysql-qmodel:
+        condition: service_healthy
+    networks: [elk]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+secrets:
+  qmodel_api_key:
+    file: ./qmodel-secret.properties
 
 networks:
   elk:

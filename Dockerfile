@@ -1,6 +1,4 @@
-FROM openjdk:17-jdk
+FROM maven:3.9-amazoncorretto-17
 WORKDIR /app
-COPY target/qmodel-0.0.1-SNAPSHOT.jar app.jar
-EXPOSE 8080
-EXPOSE 4123
-ENTRYPOINT ["java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:4123", "-jar", "app.jar"]
+COPY . .
+CMD ["mvn", "spring-boot:run"]
