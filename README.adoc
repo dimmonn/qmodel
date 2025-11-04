@@ -44,6 +44,10 @@ echo "QModel API: http://localhost:8082"
 echo "Grafana: http://localhost:3001 (admin/admin)"
 
 ```
+navigate to QMODEL at grafana
+image::image-2025-11-04-21-10-46-843.png[]
+ make sure you run the query like shown at the screenshot below (this is a defect, dashboards are not getting loaded automatically)
+image::image-2025-11-04-21-10-09-970.png[]
 
 ---
 
