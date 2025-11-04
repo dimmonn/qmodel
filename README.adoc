@@ -31,7 +31,7 @@ curl -L https://raw.githubusercontent.com/dimmonn/qmodel/refs/heads/main/docker-
 echo "Creating the qmodel-secret.properties file..."
 if [ ! -f "qmodel-secret.properties" ]; then
   touch qmodel-secret.properties
-  echo "qmodel.api.key=Bearer <your-github-api-token>" > qmodel-secret.properties
+  echo "qmodel.api.key=" > qmodel-secret.properties
 fi
 
 echo "Starting services using Docker Compose..."
