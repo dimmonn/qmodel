@@ -39,8 +39,7 @@ public class AGraphDeserializer extends JsonDeserializer<AGraph> {
 
   @SneakyThrows
   @Override
-  public AGraph deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-      throws IOException {
+  public AGraph deserialize(JsonParser jsonParser, DeserializationContext deserializationContext){
     JsonNode node = jsonParser.getCodec().readTree(jsonParser);
     if (node.isEmpty()) {
       LOGGER.warn("AGraph JSON is empty");

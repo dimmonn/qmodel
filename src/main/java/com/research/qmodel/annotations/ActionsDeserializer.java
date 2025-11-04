@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+import static com.research.qmodel.dto.PARSING_PROPERTIES.WORKFLOW_RUNS;
+
 @Component
 public class ActionsDeserializer extends JsonDeserializer<Actions> {
   @Override
@@ -14,7 +16,7 @@ public class ActionsDeserializer extends JsonDeserializer<Actions> {
       throws IOException {
     JsonNode node = jsonParser.getCodec().readTree(jsonParser);
     Actions actions = new Actions();
-    String workflowRuns = node.path("workflow_runs").toString();
+    String workflowRuns = node.path(WORKFLOW_RUNS.key()).toString();
     actions.setAllActions(workflowRuns);
     return actions;
   }

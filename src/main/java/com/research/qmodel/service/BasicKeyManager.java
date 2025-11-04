@@ -14,6 +14,9 @@ public abstract class BasicKeyManager {
     private final Logger LOGGER = LoggerFactory.getLogger(BasicKeyManager.class);
 
     public String getNextKey(boolean isExpired) {
+        if (apiKey.length <= currentIndex) {
+            return null;
+        }
         if (!isExpired) {
             return apiKey[currentIndex];
         }

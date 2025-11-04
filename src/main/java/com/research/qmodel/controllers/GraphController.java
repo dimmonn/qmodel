@@ -49,7 +49,7 @@ public class GraphController implements FileJsonReader {
     gitGraph.cloneRepo(owner, repo, path);
     Graph graph = gitGraph.buildGraph(owner, repo, path);
     String filePath = "/Users/dima/IdeaProjects/qmodel/" + owner + "_" + repo + ".json";
-    gitGraph.exportGraph(filePath, graph.getVerticesMap());
+    //gitGraph.exportGraph(filePath, graph.getVertices());
     Graph b = new Graph();
     return readJsonFile("/Users/dima/IdeaProjects/qmodel/" + owner + "_" + repo + ".json");
   }

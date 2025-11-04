@@ -90,7 +90,7 @@ public class BasicBugFinder implements ChangePatchProcessor {
       String pr = fixPR.getRawPull();
       JsonNode rawPr = objectMapper.readTree(pr);
       String commitsUrl = rawPr.path("commits_url").asText();
-      JsonNode rowData = basicQueryService.getRowData(commitsUrl);
+      JsonNode rowData = basicQueryService.getRowDataWithCursor(commitsUrl);
       if (rowData == null) {
         LOGGER.warn("commitsUrl is not available {}", commitsUrl);
         continue;

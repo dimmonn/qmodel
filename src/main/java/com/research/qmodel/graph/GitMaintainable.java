@@ -59,6 +59,7 @@ public abstract class GitMaintainable {
     }
   }
 
+
   public void exportGraph(String filePath, Map<String, Vertex> vertices) {
     // Create nodes and edges lists
     List<Map<String, Object>> nodes = new ArrayList<>();

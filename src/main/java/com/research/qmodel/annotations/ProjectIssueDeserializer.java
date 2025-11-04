@@ -85,7 +85,7 @@ public class ProjectIssueDeserializer extends JsonDeserializer<ProjectIssue>
     if (timelineUrl != null) {
       if (projectIssue.getProjectPull() == null) {
 
-        JsonNode timeLineRaw = basicQueryService.getRowData(timelineUrl.asText());
+        JsonNode timeLineRaw = basicQueryService.getRowDataWithCursor(timelineUrl.asText());
         timelines = objectMapper.convertValue(timeLineRaw, new TypeReference<>() {});
 
         if (timelines != null && !timelines.isEmpty()) {
@@ -96,7 +96,7 @@ public class ProjectIssueDeserializer extends JsonDeserializer<ProjectIssue>
               timeline.setProjectIssue(projectIssue);
               projectIssue.addTimeLine(timeline);
               if (timeline.getPullIds() != null
-                  && new ObjectMapper()
+                  && objectMapper
                       .readTree(timeline.getRawData())
                       .path("source")
                       .path("issue")
@@ -129,7 +129,7 @@ public class ProjectIssueDeserializer extends JsonDeserializer<ProjectIssue>
     }
     if (node.get("labels") != null) {
       Set<Map<String, String>> labels =
-          new ObjectMapper().convertValue(node.path("labels"), new TypeReference<>() {});
+          objectMapper.convertValue(node.path("labels"), new TypeReference<>() {});
       Set<String> rawLabels = labels.stream().map(e -> e.get("name")).collect(Collectors.toSet());
       projectIssue.setLabels(rawLabels);
     }
@@ -204,7 +204,7 @@ public class ProjectIssueDeserializer extends JsonDeserializer<ProjectIssue>
       List<String> effectiveKeywords =
           (keywords == null || keywords.isEmpty()) ? DEFAULT_ISSUE_REFERENCE_KEYWORDS : keywords;
 
-      if (effectiveKeywords == null || effectiveKeywords.isEmpty()) {
+      if (effectiveKeywords.isEmpty()) {
         LOGGER.debug(
             "No issue reference keywords configured; skipping PR timeline parsing for fixes.");
       } else {

@@ -55,7 +55,7 @@ public class ProjectPullDeserializer extends JsonDeserializer<ProjectPull>
         String url = node.path("url").asText();
         if (StringUtils.isNotEmpty(url)) {
             url = url + "/reviews";
-            JsonNode reviews = basicQueryService.getRowData(url);
+            JsonNode reviews = basicQueryService.getRowDataWithCursor(url);
             if (reviews != null) {
                 for (JsonNode review : reviews) {
                     JsonNode reviewer = review.path("user").path("login");
@@ -104,13 +104,13 @@ public class ProjectPullDeserializer extends JsonDeserializer<ProjectPull>
         projectPull.setRawPull(node.toString());
         projectPull.setState(node.path("state").asText());
 
-        JsonNode rowData = basicQueryService.getRowData(node.path("issue_url").asText());
+        JsonNode rowData = basicQueryService.getRowDataWithCursor(node.path("issue_url").asText());
         if (rowData == null) {
             return null;
         }
         if (rowData.get("labels") != null) {
             Set<Map<String, String>> labels =
-                    new ObjectMapper().convertValue(node.get("labels"), new TypeReference<>() {
+                    objectMapper.convertValue(node.get("labels"), new TypeReference<>() {
                     });
             Set<String> rawLabels = labels.stream().map(e -> e.get("name")).collect(Collectors.toSet());
             projectPull.setLabels(rawLabels);
@@ -123,7 +123,7 @@ public class ProjectPullDeserializer extends JsonDeserializer<ProjectPull>
         setupReaction(rowData, node, projectPull);
 
         List<Timeline> timelines;
-        JsonNode rowComments = basicQueryService.getRowData(rowData.path("timeline_url").asText());
+        JsonNode rowComments = basicQueryService.getRowDataWithCursor(rowData.path("timeline_url").asText());
         if (rowComments != null) {
 
             timelines = objectMapper.convertValue(rowComments, new TypeReference<>() {
