@@ -32,39 +32,25 @@ cd qmodel
 2. **Create the `.env` file**:
 - Copy the `.env.sample` to `.env` and modify it as needed:
 ```bash
-cp .env.sample .env
-```
-- Set values in `.env`:
-```env
-MYSQL_ROOT_PASSWORD=admin
-MYSQL_DATABASE=qmodel_demo
-MYSQL_USER=admin
-MYSQL_PASSWORD=admin
+echo "Downloading docker-compose.yml from GitHub..."
+curl -L https://github.com/yourusername/qmodel/raw/main/docker-compose.yml -o docker-compose.yml
 
-      SPRING_PROFILES_ACTIVE=dev
-      QMODEL_TAG=latest  # Can be set to a specific tag if needed
-      GRAFANA_TAG=latest # Can be set to a specific tag if needed
 
-      GRAFANA_USER=admin
-      GRAFANA_PASS=admin
+echo "Creating the qmodel-secret.properties file..."
+if [ ! -f "qmodel-secret.properties" ]; then
+  touch qmodel-secret.properties
+  echo "qmodel.api.key=Bearer <your-github-api-token>" > qmodel-secret.properties
+fi
 
-      JAVA_TOOL_OPTIONS=-Xms1g -Xmx1g
-      ```
-
-3. **Create the `qmodel-secret.properties` file**:
-- Add your GitHub API tokens:
-```bash
-touch qmodel-secret.properties
-```
-Add your **GitHub API token(s)**:
-```properties
-qmodel.api.key=Bearer ghp_xxx, Bearer ghp_yyy
-```
-
-4. **Start the services**:
-Run **Docker Compose** to build and start the services:
-```bash
+echo "Starting services using Docker Compose..."
 docker-compose up -d
+
+docker-compose ps
+
+echo "QModel, Grafana, and MySQL are now running. Access them at:"
+echo "QModel API: http://localhost:8082"
+echo "Grafana: http://localhost:3001 (admin/admin)"
+
 ```
 
 ---
