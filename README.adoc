@@ -128,8 +128,7 @@ qmodel.api.key=Bearer ghp_xxx,Bearer ghp_yyy
 app.mode=prod
 app.page_size=100
 ----
-. Visit **QModel API** → http://localhost:8082
-. Visit **Grafana Dashboard** → http://localhost:3001 (admin/admin).
+. Visit **Grafana Dashboard** → http://localhost:3001/d/adj5g9c/qmodel?orgId=1&from=2009-07-27T16:07:42.199Z&to=2026-04-24T07:03:58.581Z&timezone=browser (admin/admin).
 . Run one of the example API calls below to begin ingestion.
 
 ---
@@ -380,7 +379,3 @@ WHERE i.project_owner='ansible' AND i.project_name='ansible'
 * **Dashboards:** Contributions of Grafana dashboards and example SQL are welcome.
 
 ---
-
-== License
-
-This project is open source and available under the repository license.
