@@ -23,14 +23,6 @@
 
 To get **QModel** up and running with **Docker Compose**, follow these simple steps:
 
-1. **Clone the repository**:
-```bash
-git clone https://github.com/yourusername/qmodel.git
-cd qmodel
-```
-
-2. **Create the `.env` file**:
-- Copy the `.env.sample` to `.env` and modify it as needed:
 ```bash
 echo "Downloading docker-compose.yml from GitHub..."
 curl -L https://github.com/yourusername/qmodel/raw/main/docker-compose.yml -o docker-compose.yml
