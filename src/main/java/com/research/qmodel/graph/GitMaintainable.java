@@ -61,15 +61,13 @@ public abstract class GitMaintainable {
 
 
   public void exportGraph(String filePath, Map<String, Vertex> vertices) {
-    // Create nodes and edges lists
     List<Map<String, Object>> nodes = new ArrayList<>();
     List<Map<String, Object>> edges = new ArrayList<>();
 
-    int edgeId = 1; // Unique ID for each edge
+    int edgeId = 1;
     for (Map.Entry<String, Vertex> entry : vertices.entrySet()) {
       Vertex vertex = entry.getValue();
 
-      // Create node
       Map<String, Object> node = new HashMap<>();
       node.put("id", vertex.sha);
       node.put("title", "Commit " + vertex.sha);
@@ -99,17 +97,15 @@ public abstract class GitMaintainable {
         edge.put("id", String.valueOf(edgeId++));
         edge.put("source", vertex.sha);
         edge.put("target", neighbor);
-        edge.put("mainStat", "53/s"); // Replace with actual logic
+        edge.put("mainStat", "53/s");
         edges.add(edge);
       }
     }
 
-    // Create the final graph structure
     Map<String, Object> graph = new HashMap<>();
     graph.put("nodes", nodes);
     graph.put("edges", edges);
 
-    // Serialize to JSON and write to file
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     try (FileWriter writer = new FileWriter(filePath)) {
       gson.toJson(graph, writer);
@@ -121,14 +117,11 @@ public abstract class GitMaintainable {
   public Set<String> getAllCommits(String repoPath) throws Exception {
     Set<String> commitHashes = new HashSet<>();
 
-    // Open the Git repository
     try (Git git = Git.open(new File(repoPath))) {
       Repository repository = git.getRepository();
 
-      // Get all references (branches, tags, remotes, etc.)
       List<Ref> allRefs = git.getRepository().getRefDatabase().getRefs();
 
-      // Use RevWalk to traverse the commit history
       try (RevWalk revWalk = new RevWalk(repository)) {
         for (Ref ref : allRefs) {
           ObjectId refObjectId = ref.getObjectId();
@@ -137,7 +130,6 @@ public abstract class GitMaintainable {
           }
         }
 
-        // Traverse all commits
         for (RevCommit commit : revWalk) {
           commitHashes.add(commit.getName());
         }
@@ -203,7 +195,6 @@ public abstract class GitMaintainable {
         try (RevWalk walk = new RevWalk(repository)) {
           branchTip = walk.parseCommit(branch.getObjectId());
 
-          // Walk first-parent only
           RevCommit current = branchTip;
           int depth = 0;
           while (current != null) {
@@ -215,7 +206,7 @@ public abstract class GitMaintainable {
               break;
             }
             if (current.getParentCount() > 0) {
-              current = walk.parseCommit(current.getParent(0)); // First-parent
+              current = walk.parseCommit(current.getParent(0));
               depth++;
             } else {
               break;

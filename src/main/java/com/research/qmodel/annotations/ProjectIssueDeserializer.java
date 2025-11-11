@@ -43,7 +43,6 @@ public class ProjectIssueDeserializer extends JsonDeserializer<ProjectIssue>
   private final ProjectIssueRepository projectIssueRepository;
   private final ProjectRepository projectRepository;
 
-  // Default keywords to detect issue references in commit/PR messages when configuration is missing
   private static final List<String> DEFAULT_ISSUE_REFERENCE_KEYWORDS =
       Arrays.asList("close", "closes", "closed", "fix", "fixes", "fixed", "resolve", "resolves", "resolved");
 

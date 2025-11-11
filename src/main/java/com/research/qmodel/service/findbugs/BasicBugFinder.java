@@ -211,7 +211,6 @@ public class BasicBugFinder implements ChangePatchProcessor {
     return candidateCommits;
   }
 
-  // Fetch commits from the PR
   private List<String> getCommitsFromPR(String repoPath, String prNumber) throws IOException {
     String command =
         String.format(
@@ -219,17 +218,14 @@ public class BasicBugFinder implements ChangePatchProcessor {
     return runGitCommand(repoPath, command);
   }
 
-  // Get the list of files modified in a commit
   private List<String> getModifiedFiles(String repoPath, String commitId) throws IOException {
     String command = String.format("git diff-tree --no-commit-id --name-only -r %s", commitId);
     return runGitCommand(repoPath, command);
   }
 
-  // Get the modified lines in a file within a commit
   private List<String> getModifiedLines(String repoPath, String commitId, String file)
       throws IOException {
     String command = String.format("git diff %s~1 %s", commitId, file);
-    // Parsing diff output to extract modified lines
     return parseDiffForModifiedLines(runGitCommand(repoPath, command));
   }
 
@@ -252,7 +248,6 @@ public class BasicBugFinder implements ChangePatchProcessor {
           }
         LOGGER.info("Issues still left in the queue: {}", Optional.of(projectIssues.size()));
 
-        // Skip if no commits associated
         if (issue.getFixingCommits() == null || issue.getFixingCommits().isEmpty()) {
             LOGGER.warn("No commits associated with issue {}", issue.getId());
         }
@@ -286,7 +281,7 @@ public class BasicBugFinder implements ChangePatchProcessor {
                       repository,
                       file.getFileName(),
                       line,
-                      parent.getName(), // Start tracing from parent of the fix
+                      parent.getName(),
                       depth,
                       visited,
                       issue);
@@ -393,7 +388,6 @@ public class BasicBugFinder implements ChangePatchProcessor {
             break;
           }
 
-          // Retrieve the commit details and add to results
           RevCommit blamedCommit = repository.parseCommit(ObjectId.fromString(blamedCommitSha));
           if (blamedCommit != null) {
             Optional<Commit> foundCommit = commitRepository.findById(new CommitID(blamedCommitSha));
@@ -422,10 +416,9 @@ public class BasicBugFinder implements ChangePatchProcessor {
       try {
         git.fetch()
             .setRemote("origin")
-            .setRefSpecs("+refs/*:refs/remotes/origin/*") // Fetch all refs to find the commit
+            .setRefSpecs("+refs/*:refs/remotes/origin/*")
             .call();
 
-        // Re-resolve the commit after fetching
         commitId = repository.resolve(startingCommit);
 
         if (commitId == null) {
@@ -512,7 +505,6 @@ public class BasicBugFinder implements ChangePatchProcessor {
     return git.blame().setFilePath(file).setStartCommit(commitId).setFollowFileRenames(true).call();
   }
 
-  // Run a git command and return the output lines
   private List<String> runGitCommand(String repoPath, String command) throws IOException {
     ProcessBuilder pb = new ProcessBuilder("bash", "-c", command);
     pb.directory(new File(repoPath));
@@ -528,19 +520,16 @@ public class BasicBugFinder implements ChangePatchProcessor {
     return output;
   }
 
-  // Parse the output of git blame to extract the commit
   private String runGitCommandAndExtractCommit(String repoPath, String command) throws IOException {
     List<String> output = runGitCommand(repoPath, command);
-    // Example parsing logic for commit extraction from blame output
     if (!output.isEmpty()) {
       String commitLine = output.get(0);
-      return commitLine.split(" ")[0]; // Assuming the commit hash is the first word
+      return commitLine.split(" ")[0];
     }
     return null;
   }
 
   private List<String> parseDiffForModifiedLines(List<String> diffOutput) {
-    // Implement parsing logic to extract line numbers of modified lines from git diff output
-    return Arrays.asList("1", "2", "3"); // Placeholder example
+    return Arrays.asList("1", "2", "3");
   }
 }

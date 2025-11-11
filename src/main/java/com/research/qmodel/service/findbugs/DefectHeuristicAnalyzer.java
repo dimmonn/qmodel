@@ -10,23 +10,20 @@ public class DefectHeuristicAnalyzer {
     for (String line : lines) {
       line = line.trim();
 
-      // Skip hunk headers and unchanged lines
       if (line.startsWith("@@") || line.startsWith(" ")) continue;
 
-      // Analyze REMOVED lines for suspicious deletions
       if (line.startsWith("-")) {
         String removed = line.substring(1).trim().toLowerCase();
         if (StringUtils.containsIgnoreCase(removed,"null")
             || StringUtils.containsIgnoreCase(removed,"assert")
             || StringUtils.containsIgnoreCase(removed,"validate")) {
-          return true; // Possibly removed validation/check
+          return true;
         }
         if (StringUtils.containsIgnoreCase(removed,"if") && StringUtils.containsIgnoreCase(removed,"(") && StringUtils.containsIgnoreCase(removed,")")) {
-          return true; // Removed a conditional block
+          return true;
         }
       }
 
-      // Analyze ADDED lines for suspicious additions
       if (line.startsWith("+")) {
         String added = line.substring(1).trim().toLowerCase();
         if (StringUtils.containsIgnoreCase(added, "todo")
@@ -37,12 +34,12 @@ public class DefectHeuristicAnalyzer {
           return true;
         }
         if (added.matches(".*catch\\s*\\(.*\\)\\s*\\{\\s*\\}")) {
-          return true; // empty catch block
+          return true;
         }
       }
     }
 
-    return false; // No signals detected
+    return false;
   }
 
   public static void main(String[] args) {

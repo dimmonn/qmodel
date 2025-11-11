@@ -186,7 +186,7 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
             String repo) {
         projectNameCache.setProjectOwner(owner);
         projectNameCache.setProjectName(repo);
-        final int FLUSH_EVERY = PAGE_SIZE / 30;
+        final int FLUSH_EVERY = PAGE_SIZE / 300;
         basicQueryService.retrieveMetricsWithStreaming(
                 "%s" + String.format("repos/%s/%s/commits", owner, repo) + "%s",
                 new com.fasterxml.jackson.core.type.TypeReference<>() {

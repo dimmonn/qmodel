@@ -15,7 +15,7 @@ public class GitGraph {
         String path = "/Users/dima/dimmonn_test";
         gitGraph.cloneRepo("dimmonn", "test", path);
 
-        Graph graph = gitGraph.buildGraph(null, null, path);
+        Graph graph = gitGraph.buildGraph(path);
 //        graph.exportGraph("graph_data.json");
 //
 //        System.out.println("Number of vertices (commits): " + graph.getNumberOfVertices());

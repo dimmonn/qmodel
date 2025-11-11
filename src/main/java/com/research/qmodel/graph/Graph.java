@@ -1,6 +1,10 @@
 package com.research.qmodel.graph;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.research.qmodel.repos.CommitRepository;
+import lombok.Getter;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
@@ -21,51 +25,43 @@ import java.util.*;
 import static org.springframework.context.annotation.ScopedProxyMode.TARGET_CLASS;
 import static org.springframework.web.context.WebApplicationContext.SCOPE_REQUEST;
 
-/**
- * Computes per-commit graph metrics and persists them.
- *
- * Metrics:
- *  - in/out degree
- *  - min/max depth (to any root)
- *  - distToBranchStart: FP hops to start of current FP segment
- *  - numBranches (time-aware): number of current heads (local + remote + HEAD) whose tips reach
- *      the commit AND whose FP-segment start time <= commit time
- *  - upstreamHeadsUnique: number of distinct source FP-segments merged into the current FP-segment
- *      strictly BEFORE the commit
- *  - daysSinceLastMerge: days since the last merge on the same FP-segment strictly BEFORE the commit
- */
 @Component
 @Scope(value = SCOPE_REQUEST, proxyMode = TARGET_CLASS)
 public class Graph extends GitMaintainable {
-    // NEW: for debugging/inspection — path from FP-segment start to this commit (inclusive)
+
     private final Map<String, List<String>> fpPath = new HashMap<>();
 
-    // (optional) segment start for each sha — handy to group commits by segment
     private final Map<String, String> fpSegmentStartOf = new HashMap<>();
+
     private static final Logger LOG = LoggerFactory.getLogger(Graph.class);
+
     private static final int SECS_PER_DAY = 24 * 60 * 60;
 
-    // Core per-node and adjacency
-    private final Map<String, Vertex> vertices          = new LinkedHashMap<>();
-    private final Map<String, Set<String>> parents      = new HashMap<>(); // child -> parents
-    private final Map<String, Set<String>> children     = new HashMap<>(); // parent -> children
-    private final Map<String, String> firstParent       = new HashMap<>(); // child -> parent(0)
-    private final Map<String, Integer> commitTimeSec    = new HashMap<>(); // sha -> epoch sec
-    private final Map<String, String> fpSegStartMemo    = new HashMap<>(); // sha -> FP segment start sha
+    @JsonProperty("vertices")
+    private final Map<String, Vertex> vertices = new LinkedHashMap<>();
+
+    private final Map<String, Set<String>> parents = new HashMap<>();
+
+    private final Map<String, Set<String>> children = new HashMap<>();
+
+    private final Map<String, String> firstParent = new HashMap<>();
+
+    private final Map<String, Integer> commitTimeSec = new HashMap<>();
+
+    private final Map<String, String> fpSegStartMemo = new HashMap<>();
+
 
     private long edgeCount = 0L;
 
     @Autowired
-    private CommitRepository commitRepository;
 
-    /* ============================ Build helpers ============================ */
+    private CommitRepository commitRepository;
 
     private void addVertex(String sha) {
         vertices.putIfAbsent(sha, new Vertex(sha));
     }
 
-    /** Add directed edge parent -> child (idempotent) and maintain degrees/adjacency/FP pointer. */
-    private void addEdge(RevCommit parent, RevCommit child, int parentIndex) {
+    private void addEdge(RevCommit parent, RevCommit child) {
         String p = parent.getId().getName();
         String c = child.getId().getName();
 
@@ -81,59 +77,87 @@ public class Graph extends GitMaintainable {
             children.computeIfAbsent(p, k -> new HashSet<>()).add(c);
             edgeCount++;
         }
-        if (parentIndex == 0) {
-            firstParent.put(c, p);
-        }
     }
-    /** Compute distToBranchStart AND choose firstParent to maximize continuity. */
-    private Map<String, Integer> computeDistToBranchStartDynamic(List<String> topo) {
+
+    private String chooseFirstParentByContinuity(String sha, Map<String, Integer> distSoFar) {
+        Set<String> ps = parents.getOrDefault(sha, Collections.emptySet());
+        if (ps.isEmpty()) return null;
+        if (ps.size() == 1) return ps.iterator().next();
+
+        String best = null;
+        int bestCand = Integer.MIN_VALUE;
+
+        for (String p : ps) {
+            int parentOut = children.getOrDefault(p, Collections.emptySet()).size();
+            int cand = (parentOut > 1) ? 0 : (distSoFar.getOrDefault(p, 0) + 1);
+            if (cand > bestCand) {
+                bestCand = cand;
+                best = p;
+            } else if (cand == bestCand && best != null) {
+                int tp = commitTimeSec.getOrDefault(p, Integer.MAX_VALUE);
+                int tb = commitTimeSec.getOrDefault(best, Integer.MAX_VALUE);
+                if (tp < tb || (tp == tb && p.compareTo(best) < 0)) {
+                    best = p;
+                }
+            }
+        }
+        return best;
+    }
+
+    private Map<String, Integer> computeFpContinuityAndPaths(List<String> topo) {
         Map<String, Integer> dist = new HashMap<>(vertices.size() * 2);
+
+        firstParent.clear();
+        fpPath.clear();
+        fpSegmentStartOf.clear();
+        fpSegStartMemo.clear();
 
         for (String sha : topo) {
             Set<String> ps = parents.getOrDefault(sha, Collections.emptySet());
             if (ps.isEmpty()) {
-                // root-like node
-                dist.put(sha, 0);
                 firstParent.put(sha, null);
+                dist.put(sha, 0);
+                fpPath.put(sha, new ArrayList<>(List.of(sha)));
+                fpSegmentStartOf.put(sha, sha);
                 continue;
             }
+            String fp = chooseFirstParentByContinuity(sha, dist);
+            firstParent.put(sha, fp);
 
-            String bestP = null;
-            int bestDist = -1;
-
-            for (String p : ps) {
-                // Split ABOVE if p has more than one child
-                int parentOut = children.getOrDefault(p, Collections.emptySet()).size();
-                int cand = (parentOut > 1) ? 0 : (dist.getOrDefault(p, 0) + 1);
-
-                if (cand > bestDist) {
-                    bestDist = cand;
-                    bestP = p;
-                } else if (cand == bestDist && bestP != null) {
-                    // Tie-breaker: earlier parent commit time wins (older = more "mainline-ish")
-                    int tp = commitTimeSec.getOrDefault(p, Integer.MAX_VALUE);
-                    int tb = commitTimeSec.getOrDefault(bestP, Integer.MAX_VALUE);
-                    if (tp < tb) bestP = p;
-                    // (optional second tie-breaker: lexicographic SHA)
-                    // else if (tp == tb && p.compareTo(bestP) < 0) bestP = p;
-                }
+            if (fp == null) {
+                dist.put(sha, 0);
+                fpPath.put(sha, new ArrayList<>(List.of(sha)));
+                fpSegmentStartOf.put(sha, sha);
+                continue;
             }
+            int parentOut = children.getOrDefault(fp, Collections.emptySet()).size();
+            if (parentOut > 1) {
+                dist.put(sha, 0);
+                fpPath.put(sha, new ArrayList<>(List.of(sha)));
+                fpSegmentStartOf.put(sha, sha);
+            } else {
+                int dParent = dist.getOrDefault(fp, 0);
+                dist.put(sha, dParent + 1);
 
-            // Record chosen FP and distance
-            firstParent.put(sha, bestP);
-            dist.put(sha, Math.max(0, bestDist));
+                List<String> parentPath = fpPath.get(fp);
+                if (parentPath == null) parentPath = new ArrayList<>(List.of(fp));
+                List<String> path = new ArrayList<>(parentPath.size() + 1);
+                path.addAll(parentPath);
+                path.add(sha);
+                fpPath.put(sha, path);
+
+                fpSegmentStartOf.put(sha, fpSegmentStartOf.getOrDefault(fp, fp));
+            }
         }
         return dist;
     }
+
 
     private double averageDegree() {
         int v = vertices.size();
         return v == 0 ? 0.0 : (double) edgeCount / (double) v;
     }
 
-    /* ============================ FP segment ============================ */
-
-    /** First-parent segment start: walk FP back until hitting a split (parent's out-degree>1) or root. */
     private String fpSegmentStart(String sha) {
         String cached = fpSegStartMemo.get(sha);
         if (cached != null) return cached;
@@ -143,16 +167,13 @@ public class Graph extends GitMaintainable {
             String p = firstParent.get(cur);
             if (p == null) break;
             int parentOut = children.getOrDefault(p, Collections.emptySet()).size();
-            if (parentOut > 1) break; // split above; current is segment start
+            if (parentOut > 1) break;
             cur = p;
         }
         fpSegStartMemo.put(sha, cur);
         return cur;
     }
 
-    /* ============================ DP metrics ============================ */
-
-    /** min/max depth to any root via O(V+E) DP over topo (parents before children). */
     private void computeDepthsDP(List<String> topo) {
         Map<String, Integer> minDepth = new HashMap<>(vertices.size() * 2);
         Map<String, Integer> maxDepth = new HashMap<>(vertices.size() * 2);
@@ -161,7 +182,8 @@ public class Graph extends GitMaintainable {
             Set<String> ps = parents.getOrDefault(sha, Collections.emptySet());
             int mn, mx;
             if (ps.isEmpty()) {
-                mn = 0; mx = 0;
+                mn = 0;
+                mx = 0;
             } else {
                 mn = Integer.MAX_VALUE;
                 mx = Integer.MIN_VALUE;
@@ -180,7 +202,6 @@ public class Graph extends GitMaintainable {
         }
     }
 
-    /** distToBranchStart for every commit: FP hops to segment start. */
     private Map<String, Integer> computeDistToBranchStart(List<String> topo) {
         Map<String, Integer> dist = new HashMap<>(vertices.size() * 2);
         for (String sha : topo) {
@@ -191,8 +212,7 @@ public class Graph extends GitMaintainable {
                 int parentOut = children.getOrDefault(p, Collections.emptySet()).size();
                 if (parentOut > 1) {
                     dist.put(sha, 0);
-                }
-                else {
+                } else {
                     dist.put(sha, dist.getOrDefault(p, 0) + 1);
                 }
             }
@@ -200,40 +220,6 @@ public class Graph extends GitMaintainable {
         return dist;
     }
 
-    /**
-     * upstreamHeadsUnique (distinct merges before the commit):
-     * Along the FP chain, accumulate unique source FP-segment-start shas from non-FP parents.
-     * For node sha, count BEFORE sha (so merges at sha are NOT counted).
-     */
-    private Map<String, Integer> computeDistinctMergesBefore(List<String> topo) {
-        Map<String, Set<String>> inclAt = new HashMap<>(vertices.size() * 2);
-        Map<String, Integer> before    = new HashMap<>(vertices.size() * 2);
-
-        for (String sha : topo) {
-            String fp = firstParent.get(sha);
-            Set<String> base = (fp == null) ? Collections.emptySet()
-                    : inclAt.getOrDefault(fp, Collections.emptySet());
-            // Count before current
-            before.put(sha, base.size());
-
-            // Build "including" set for children by adding merges at sha
-            Set<String> here = new HashSet<>(base);
-            Set<String> ps = parents.getOrDefault(sha, Collections.emptySet());
-            if (ps.size() > 1) {
-                for (String p : ps) {
-                    if (fp != null && fp.equals(p)) continue;
-                    here.add(fpSegmentStart(p));
-                }
-            }
-            inclAt.put(sha, here);
-        }
-        return before;
-    }
-
-    /**
-     * daysSinceLastMerge on the same FP segment (strictly before sha).
-     * We scan topo (parents before children) and track last merge time per FP segment.
-     */
     private Map<String, Integer> computeDaysSinceLastMerge(List<String> topo) {
         Map<String, Integer> outDays = new HashMap<>(vertices.size() * 2);
         Map<String, Integer> lastMergeTimeBySeg = new HashMap<>();
@@ -249,7 +235,6 @@ public class Graph extends GitMaintainable {
                 outDays.put(sha, deltaSec / SECS_PER_DAY);
             }
 
-            // Update last merge time if current is a merge (not counted "before" current)
             if (parents.getOrDefault(sha, Collections.emptySet()).size() > 1) {
                 lastMergeTimeBySeg.put(seg, t);
             }
@@ -257,55 +242,54 @@ public class Graph extends GitMaintainable {
         return outDays;
     }
 
-    /* ============================ Time-aware branches ============================ */
-
     private static final class HeadInfo {
         final RevCommit tip;
         final String tipSha;
         final String segStartSha;
-        final int    segStartTime;
+        final int segStartTime;
+
         HeadInfo(RevCommit tip, String tipSha, String segStartSha, int segStartTime) {
-            this.tip = tip; this.tipSha = tipSha; this.segStartSha = segStartSha; this.segStartTime = segStartTime;
+            this.tip = tip;
+            this.tipSha = tipSha;
+            this.segStartSha = segStartSha;
+            this.segStartTime = segStartTime;
         }
     }
 
-    /** Collect local+remote+HEAD tips; dedupe by tip commit id; compute seg start and its time. */
     private List<HeadInfo> collectHeadsInfo(Repository repo) throws Exception {
         Map<String, HeadInfo> byTip = new LinkedHashMap<>();
         try (RevWalk w = new RevWalk(repo)) {
-            // locals
             for (Ref r : repo.getRefDatabase().getRefsByPrefix("refs/heads/")) {
-                ObjectId id = r.getObjectId(); if (id == null) continue;
+                ObjectId id = r.getObjectId();
+                if (id == null) continue;
                 RevCommit tip = w.parseCommit(id);
                 String tipSha = tip.getId().getName();
-                String base   = fpSegmentStart(tipSha);
-                int baseTime  = commitTimeSec.getOrDefault(base, Integer.MIN_VALUE);
+                String base = fpSegmentStart(tipSha);
+                int baseTime = commitTimeSec.getOrDefault(base, Integer.MIN_VALUE);
                 byTip.putIfAbsent(tipSha, new HeadInfo(tip, tipSha, base, baseTime));
             }
-            // remotes (ignore origin/HEAD alias)
             for (Ref r : repo.getRefDatabase().getRefsByPrefix("refs/remotes/")) {
                 if ("refs/remotes/origin/HEAD".equals(r.getName())) continue;
-                ObjectId id = r.getObjectId(); if (id == null) continue;
+                ObjectId id = r.getObjectId();
+                if (id == null) continue;
                 RevCommit tip = w.parseCommit(id);
                 String tipSha = tip.getId().getName();
-                String base   = fpSegmentStart(tipSha);
-                int baseTime  = commitTimeSec.getOrDefault(base, Integer.MIN_VALUE);
+                String base = fpSegmentStart(tipSha);
+                int baseTime = commitTimeSec.getOrDefault(base, Integer.MIN_VALUE);
                 byTip.putIfAbsent(tipSha, new HeadInfo(tip, tipSha, base, baseTime));
             }
-            // HEAD
             ObjectId headId = repo.resolve("HEAD");
             if (headId != null) {
                 RevCommit tip = w.parseCommit(headId);
                 String tipSha = tip.getId().getName();
-                String base   = fpSegmentStart(tipSha);
-                int baseTime  = commitTimeSec.getOrDefault(base, Integer.MIN_VALUE);
+                String base = fpSegmentStart(tipSha);
+                int baseTime = commitTimeSec.getOrDefault(base, Integer.MIN_VALUE);
                 byTip.putIfAbsent(tipSha, new HeadInfo(tip, tipSha, base, baseTime));
             }
         }
         return new ArrayList<>(byTip.values());
     }
 
-    /** Precompute reachable sets per head tip for deterministic branch counting. */
     private List<Set<String>> computeReachableSetsPerHead(Repository repo, List<HeadInfo> heads) throws Exception {
         List<Set<String>> reachSets = new ArrayList<>(heads.size());
         for (HeadInfo hi : heads) {
@@ -321,10 +305,6 @@ public class Graph extends GitMaintainable {
         return reachSets;
     }
 
-    /**
-     * numBranches (time-aware):
-     * Count heads whose reachable set contains sha AND whose FP-segment start time <= t(sha).
-     */
     private Map<String, Integer> computeBranchCountsTA(Repository repo, List<String> topo) throws Exception {
         List<HeadInfo> heads = collectHeadsInfo(repo);
         List<Set<String>> reach = computeReachableSetsPerHead(repo, heads);
@@ -342,7 +322,33 @@ public class Graph extends GitMaintainable {
         return out;
     }
 
-    /* ============================ Build + persist ============================ */
+
+    private final Map<String, Set<String>> distinctSourcesBeforeSet = new HashMap<>();
+
+    private Map<String, Integer> computeDistinctMergesBefore(List<String> topo) {
+        Map<String, Set<String>> inclAt = new HashMap<>(vertices.size() * 2);
+        Map<String, Integer> before = new HashMap<>(vertices.size() * 2);
+
+        for (String sha : topo) {
+            String fp = firstParent.get(sha);
+            Set<String> base = (fp == null) ? Collections.emptySet()
+                    : inclAt.getOrDefault(fp, Collections.emptySet());
+
+            before.put(sha, base.size());
+            distinctSourcesBeforeSet.put(sha, new HashSet<>(base));
+
+            Set<String> here = new HashSet<>(base);
+            Set<String> ps = parents.getOrDefault(sha, Collections.emptySet());
+            if (ps.size() > 1) {
+                for (String p : ps) {
+                    if (fp != null && fp.equals(p)) continue;
+                    here.add(fpSegmentStart(p));
+                }
+            }
+            inclAt.put(sha, here);
+        }
+        return before;
+    }
 
     @Transactional
     public Graph buildGraph(String repoPath) {
@@ -357,20 +363,19 @@ public class Graph extends GitMaintainable {
         try (Git git = Git.open(new File(repoPath));
              Repository repo = git.getRepository();
              RevWalk walk = new RevWalk(repo)) {
-
-            // Cover full reachable graph: mark local + remote heads
             for (Ref r : repo.getRefDatabase().getRefsByPrefix("refs/heads/")) {
-                ObjectId id = r.getObjectId(); if (id != null) walk.markStart(walk.parseCommit(id));
+                ObjectId id = r.getObjectId();
+                if (id != null) walk.markStart(walk.parseCommit(id));
             }
             for (Ref r : repo.getRefDatabase().getRefsByPrefix("refs/remotes/")) {
-                ObjectId id = r.getObjectId(); if (id != null) walk.markStart(walk.parseCommit(id));
+                ObjectId id = r.getObjectId();
+                if (id != null) walk.markStart(walk.parseCommit(id));
             }
             walk.sort(RevSort.TOPO);
             walk.sort(RevSort.REVERSE);
 
             List<String> topo = new ArrayList<>(128_000);
 
-            // Build DAG
             for (RevCommit c : walk) {
                 String sha = c.getId().getName();
                 topo.add(sha);
@@ -379,7 +384,7 @@ public class Graph extends GitMaintainable {
 
                 int pc = c.getParentCount();
                 for (int i = 0; i < pc; i++) {
-                    addEdge(c.getParent(i), c, i);
+                    addEdge(c.getParent(i), c);
                 }
                 Vertex v = vertices.get(sha);
                 v.setMerge(pc > 1);
@@ -387,27 +392,24 @@ public class Graph extends GitMaintainable {
             }
             LOG.info("DAG built: nodes={}, edges={}", vertices.size(), edgeCount);
 
-            // Metrics
             computeDepthsDP(topo);
-            Map<String, Integer> distToStart     = computeDistToBranchStartWithPath(topo);
-            Map<String, Integer> upstreamUnique  = computeDistinctMergesBefore(topo);
-            Map<String, Integer> daysSinceLast   = computeDaysSinceLastMerge(topo);
-            Map<String, Integer> branchCountTA   = computeBranchCountsTA(repo, topo);
+            Map<String, Integer> distToStart = computeFpContinuityAndPaths(topo);
+            Map<String, Integer> upstreamUnique = computeDistinctMergesBefore(topo);
+            Map<String, Integer> daysSinceLast = computeDaysSinceLastMerge(topo);
+            Map<String, Integer> branchCountTA = computeBranchCountsTA(repo, topo);
             final double avgDeg = averageDegree();
-
-            // Persist
             int updated = 0;
             for (String sha : topo) {
                 Vertex v = vertices.get(sha);
-                int inDeg    = v.getInDegree();
-                int outDeg   = v.getOutDegree();
+                int inDeg = v.getInDegree();
+                int outDeg = v.getOutDegree();
                 int mergeCnt = v.isMerge() ? 1 : 0;
                 int minDepth = v.getMinDepthOfCommitHistory();
                 int maxDepth = v.getMaxDepthOfCommitHistory();
                 int branches = branchCountTA.getOrDefault(sha, 0);
-                int dist     = distToStart.getOrDefault(sha, 0);
+                int dist = distToStart.getOrDefault(sha, 0);
                 int upstream = upstreamUnique.getOrDefault(sha, 0);
-                int days     = daysSinceLast.getOrDefault(sha, 0);
+                int days = daysSinceLast.getOrDefault(sha, 0);
 
                 if ((updated % 2000) == 0) {
                     LOG.info("sha={} branchesTA={} dist={} upstream={} daysSinceLast={}",
@@ -441,90 +443,7 @@ public class Graph extends GitMaintainable {
         return this;
     }
 
-
-
-    /**
-     * Computes distToBranchStart for every commit AND stores the FP-segment path for each sha.
-     * Semantics:
-     *  - distance resets at the first child after a split (parent's out-degree > 1)
-     *  - path is the list from the FP-segment start to sha (inclusive)
-     */
-    private Map<String, Integer> computeDistToBranchStartWithPath(List<String> topo) {
-        Map<String, Integer> dist = new HashMap<>(vertices.size() * 2);
-        fpPath.clear();
-        fpSegmentStartOf.clear();
-
-        for (String sha : topo) {
-            String p = firstParent.get(sha);
-
-            // ROOT or no FP parent: start a new segment
-            if (p == null) {
-                dist.put(sha, 0);
-                List<String> path = new ArrayList<>(1);
-                path.add(sha);
-                fpPath.put(sha, path);
-                fpSegmentStartOf.put(sha, sha);
-                continue;
-            }
-
-            // Is there a split directly above (parent has multiple children)?
-            int parentOut = children.getOrDefault(p, Collections.emptySet()).size();
-            boolean splitAbove = parentOut > 1;
-
-            if (splitAbove) {
-                // reset: sha is the first node in a new FP segment
-                dist.put(sha, 0);
-                List<String> path = new ArrayList<>(1);
-                path.add(sha);
-                fpPath.put(sha, path);
-                // the segment start is sha itself
-                fpSegmentStartOf.put(sha, sha);
-            } else {
-                // continue the parent's FP path
-                int dParent = dist.getOrDefault(p, 0);
-                dist.put(sha, dParent + 1);
-
-                List<String> parentPath = fpPath.get(p);
-                if (parentPath == null) {
-                    // Shouldn't happen if topo order is consistent, but guard anyway:
-                    parentPath = new ArrayList<>();
-                    parentPath.add(p);
-                }
-                List<String> path = new ArrayList<>(parentPath.size() + 1);
-                path.addAll(parentPath);
-                path.add(sha);
-                fpPath.put(sha, path);
-
-                // segment start follows parent's
-                fpSegmentStartOf.put(sha, fpSegmentStartOf.getOrDefault(p, p));
-            }
-        }
-        return dist;
+    public Map<String, Vertex> getVertices() {
+        return Map.copyOf(vertices);
     }
-
-    /* Optional debug helper */
-    public List<RevCommit> getLinearAncestors(Repository repo, RevCommit startCommit) throws Exception {
-        List<RevCommit> ancestors = new ArrayList<>();
-        try (RevWalk walk = new RevWalk(repo)) {
-            RevCommit cur = startCommit;
-            while (cur.getParentCount() > 0) {
-                RevCommit p = walk.parseCommit(cur.getParent(0));
-                ancestors.add(p);
-                cur = p;
-            }
-        }
-        return ancestors;
-    }
-    /** Returns an unmodifiable view of the FP path (from segment start to sha). */
-    public List<String> getFpPath(String sha) {
-        List<String> path = fpPath.get(sha);
-        return (path == null) ? Collections.emptyList() : Collections.unmodifiableList(path);
-    }
-
-    /** Returns the segment start sha of this commit (equals sha if distance==0). */
-    public String getFpSegmentStart(String sha) {
-        return fpSegmentStartOf.getOrDefault(sha, sha);
-    }
-
-    public Map<String, Vertex> getVertices() { return vertices; }
 }
