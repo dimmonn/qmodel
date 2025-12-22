@@ -384,3 +384,12 @@ WHERE i.project_owner='ansible' AND i.project_name='ansible'
 
 This project is licensed under the Apache License, Version 2.0.
 See the LICENSE file for details.
+
+## Third-Party Licenses
+
+This project depends on third-party libraries.
+A list of third-party components and their licenses is available in:
+
+licenses/THIRD-PARTY.txt
+
+The file is generated using the Maven license-maven-plugin.
