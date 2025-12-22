@@ -1,0 +1,10 @@
+experiment:
+name: graph_degree_vs_fix_time
+features: [average_degree, merge_count, out_degree]
+targets: [fix_time_minutes]
+analysis: pearson_spearman
+filters:
+  - project_owner = 'apache'
+transformations:
+  - log_transform: fix_time_minutes
+  - standardize: all

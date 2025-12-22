@@ -1,0 +1,158 @@
+package com.research.qmodel.service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.research.qmodel.annotations.ActionsDeserializer;
+import com.research.qmodel.annotations.FileChangesDeserializer;
+import com.research.qmodel.dto.ProjectAGraph;
+import com.research.qmodel.dto.ProjectToIssue;
+import com.research.qmodel.dto.ProjectToPull;
+import com.research.qmodel.model.*;
+import com.research.qmodel.repos.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
+
+@Service
+public class DataPersistance {
+    private final AGraphRepository aGraphRepository;
+    private final ProjectIssueRepository projectIssueRepository;
+    private final ProjectPullRepository projectPullRepository;
+    private final ProjectRepository projectRepository;
+    private final Logger LOGGER = LoggerFactory.getLogger(DataPersistance.class);
+    private final ActionsRepository actionsRepository;
+    private final CommitRepository commitRepository;
+
+    public DataPersistance(
+            AGraphRepository aGraphRepository,
+            ProjectIssueRepository projectIssueRepository,
+            ProjectPullRepository projectPullRepository,
+            ProjectRepository projectRepository,
+            ActionsRepository actionsRepository,
+            CommitRepository commitRepository) {
+        this.aGraphRepository = aGraphRepository;
+        this.projectIssueRepository = projectIssueRepository;
+        this.projectPullRepository = projectPullRepository;
+        this.projectRepository = projectRepository;
+        this.actionsRepository = actionsRepository;
+        this.commitRepository = commitRepository;
+    }
+
+    public List<ProjectAGraph> persistGraph(List<Project> repos, Map<Project, AGraph> ags) {
+        List<ProjectAGraph> result = new ArrayList<>();
+        for (Project repo : repos) {
+            Optional<Project> foundProject =
+                    projectRepository.findById(new ProjectID(repo.getProjectOwner(), repo.getProjectName()));
+            AGraph aGraph = ags.get(repo);
+            Project project = null;
+            project =
+                    foundProject.orElseGet(() -> new Project(repo.getProjectOwner(), repo.getProjectName()));
+            if (aGraph != null && aGraph.getGraph() != null && !aGraph.getGraph().equals("[]")) {
+                project.setAGraph(aGraph);
+                aGraph.setProject(project);
+                try {
+                    aGraphRepository.save(aGraph);
+                } catch (Exception e) {
+                    LOGGER.error(e.getMessage(), e);
+                }
+                // projectRepository.save(project);
+            }
+            result.add(new ProjectAGraph(project, aGraph));
+        }
+        LOGGER.info("Persisted Graph");
+        return result;
+    }
+
+    public List<ProjectToPull> persistPulls(
+            List<Project> repos, Map<Project, List<ProjectPull>> ppmap) {
+        List<ProjectToPull> result = new ArrayList<>();
+        for (Project repo : repos) {
+            Optional<Project> foundProject =
+                    projectRepository.findById(new ProjectID(repo.getProjectOwner(), repo.getProjectName()));
+            List<ProjectPull> projectPull = ppmap.get(repo);
+            Project project = null;
+            project = foundProject.orElseGet(() -> new Project(repo.getProjectOwner(), repo.getProjectName()));
+            if (projectPull != null) {
+                for (ProjectPull pull : projectPull) {
+                    project.addProjectPull(pull);
+                }
+                projectRepository.save(project);
+            }
+            result.add(new ProjectToPull(project, projectPull));
+        }
+        LOGGER.info("Persisted Pulls");
+        return result;
+    }
+
+    public List<ProjectToIssue> persistIssues(
+            List<Project> repos, Map<Project, List<ProjectIssue>> pimap) {
+        List<ProjectToIssue> result = new ArrayList<>();
+        for (Project repo : repos) {
+            Optional<Project> foundProject =
+                    projectRepository.findById(new ProjectID(repo.getProjectOwner(), repo.getProjectName()));
+
+            List<ProjectIssue> projectIssue = pimap.get(repo);
+            Project project;
+            project =
+                    foundProject.orElseGet(() -> new Project(repo.getProjectOwner(), repo.getProjectName()));
+            if (projectIssue != null) {
+                for (ProjectIssue issue : projectIssue) {
+                    if (issue != null) {
+                        project.addProjectIssue(issue);
+                    }
+                }
+                projectRepository.save(project);
+            }
+            result.add(new ProjectToIssue(project, projectIssue));
+        }
+        LOGGER.info("Persisted Issues");
+        return result;
+    }
+
+    public Object persistActions(List<Project> projects, Map<Project, Action> projectActionsMap) {
+        Optional<Project> foundProject =
+                projectRepository.findById(
+                        new ProjectID(projects.get(0).getProjectOwner(), projects.get(0).getProjectName()));
+        Action action = projectActionsMap.get(projects.get(0));
+
+        actionsRepository.save(action);
+        return action;
+    }
+
+    public void persistCommits(List<Commit> commits) {
+        commitRepository.saveAll(commits);
+    }
+
+    @Transactional
+    public void persistCommitActions(List<Map<String, Object>> batch, String sha) throws JsonProcessingException {
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(List.class, new ActionsDeserializer());
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(module);
+        List<Action> actions = objectMapper.convertValue(batch, new TypeReference<>() {
+        });
+        if (actions == null) {
+            return;
+        }
+        Optional<Commit> commit = commitRepository.findById(new CommitID(sha));
+        if (commit.isPresent()) {
+            for (Action action : actions) {
+                action.setCommit(commit.get());
+            }
+            commit.ifPresent(realCommit -> {
+                realCommit.setActions(actions);
+                commitRepository.save(realCommit);
+            });
+        }
+
+    }
+
+    public List<Project> retrieveProjects() {
+        return projectRepository.findAll();
+    }
+}
