@@ -48,6 +48,9 @@ public class BasicBugFinder implements ChangePatchProcessor {
   @Value("${qmodel.defect.labels:bug}")
   private List<String> LABELS;
 
+  @Value("${qmodel.repo.basePath:/tmp}")
+  private String repoBasePath;
+
   @Autowired private DataPersistance dataPersistance;
 
   public List<String> findAllBugsFixingCommits(String repoName, String repoOwner, int depth)
@@ -185,15 +188,20 @@ public class BasicBugFinder implements ChangePatchProcessor {
       throw new IssueNotFoundException("Issue with id " + issueId + " is not found.");
     }
     if (foundIssue.getBugIntroducingCommits() != null
-        && !foundIssue.getBugIntroducingCommits().isEmpty()) {}
+        && !foundIssue.getBugIntroducingCommits().isEmpty()) {
+      LOGGER.info("Bug-introducing commits already found for issue {}, returning cached results", issueId);
+      return foundIssue.getBugIntroducingCommits();
+    }
 
     List<Commit> candidateCommits = new ArrayList<>();
     List<Commit> commits = foundIssue.getFixingCommits();
 
     for (Commit commit : commits) {
       String currentCommitSha = commit.getSha();
-      String repoPath = "/Users/dima/" + owner + "_" + repo;
-
+      String repoPath = getRepositoryPath(owner, repo);
+        if (commit.getFileChanges()==null) {
+            continue;
+        }
       for (FileChange fileChange : commit.getFileChanges()) {
         Set<Integer> modifiedLines = getChangedLineNumbers(fileChange.getPatch());
 
@@ -230,7 +238,7 @@ public class BasicBugFinder implements ChangePatchProcessor {
   }
 
   public void traceCommitsToOrigin(String owner, String repo, int depth) {
-    String repoPath = "/Users/dima/" + owner + "_" + repo;
+    String repoPath = repoBasePath + File.separator + owner + "_" + repo;
     Queue<ProjectIssue> projectIssues =
         new LinkedList<>(projectIssueRepository.finAllFixedIssues(repo, owner));
 
@@ -274,6 +282,10 @@ public class BasicBugFinder implements ChangePatchProcessor {
 
           for (RevCommit parent : revFix.getParents()) {
             for (FileChange file : fixCommit.getFileChanges()) {
+              if (file == null || file.getChangedLines() == null) {
+                LOGGER.warn("File or changed lines are null for commit {}", fixCommit.getSha());
+                continue;
+              }
               for (Integer line : file.getChangedLines()) {
                 try {
                   recursivelyTraceLine(
@@ -464,16 +476,17 @@ public class BasicBugFinder implements ChangePatchProcessor {
       throws GitAPIException, IOException {
 
     try {
+      String uniqueSuffix = System.currentTimeMillis() + "_" + UUID.randomUUID().toString().substring(0, 8);
       git.fetch()
           .setRemote("origin")
           .setRefSpecs(
-              "+" + commitSha + ":refs/remotes/origin/temp_commit_" + new Random().nextInt(10))
+              "+" + commitSha + ":refs/remotes/origin/temp_commit_" + uniqueSuffix)
           .call();
       resolveLockIssue(git.getRepository().getDirectory().toPath().toString());
       git.clean().setCleanDirectories(true).setForce(true).call();
       git.stashCreate().setIncludeUntracked(true).call();
       git.reset().setMode(ResetCommand.ResetType.HARD).setRef(commitSha).call();
-      String tempBranch = "temp_commit_" + commitSha.substring(0, 7);
+      String tempBranch = "temp_commit_" + commitSha.substring(0, 7) + "_" + uniqueSuffix;
       git.branchCreate()
           .setName(tempBranch)
           .setStartPoint(commitSha)
@@ -510,11 +523,20 @@ public class BasicBugFinder implements ChangePatchProcessor {
     pb.directory(new File(repoPath));
     Process process = pb.start();
 
-    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-    String line;
     List<String> output = new ArrayList<>();
-    while ((line = reader.readLine()) != null) {
-      output.add(line);
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+      String line;
+      while ((line = reader.readLine()) != null) {
+        output.add(line);
+      }
+    } finally {
+      try {
+        process.waitFor();
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+        LOGGER.warn("Git command interrupted: {}", command);
+      }
+      process.destroy();
     }
 
     return output;
@@ -531,5 +553,60 @@ public class BasicBugFinder implements ChangePatchProcessor {
 
   private List<String> parseDiffForModifiedLines(List<String> diffOutput) {
     return Arrays.asList("1", "2", "3");
+  }
+
+  /**
+   * Constructs the repository path from owner and repo name
+   * @param owner Repository owner
+   * @param repo Repository name
+   * @return Full path to repository
+   */
+  private String getRepositoryPath(String owner, String repo) {
+    return repoBasePath + File.separator + owner + "_" + repo;
+  }
+
+  /**
+   * Extracts the set of line numbers that were added or modified in a patch.
+   * Properly parses unified diff format to account for line number shifts.
+   * @param patch The unified diff patch
+   * @return Set of 1-based line numbers that were added/modified
+   */
+  @Override
+  public Set<Integer> getChangedLineNumbers(String patch) {
+    Set<Integer> changedLines = new HashSet<>();
+    if (patch == null || patch.isEmpty()) {
+      return changedLines;
+    }
+
+    String[] lines = patch.split("\n");
+    int currentLineNumber = 0;
+    
+    for (String line : lines) {
+      // Parse hunk headers like @@ -5,10 +7,12 @@
+      if (line.startsWith("@@")) {
+        // Extract the new file line number from header
+        String[] parts = line.split(" ");
+        if (parts.length >= 3) {
+          String newFileInfo = parts[2]; // e.g., "+7,12"
+          String[] newFileParts = newFileInfo.substring(1).split(",");
+          try {
+            currentLineNumber = Integer.parseInt(newFileParts[0]);
+          } catch (NumberFormatException e) {
+            LOGGER.warn("Failed to parse hunk header: {}", line);
+          }
+        }
+      } else if (line.startsWith("+") && !line.startsWith("+++")) {
+        // Added line - count it
+        changedLines.add(currentLineNumber);
+        currentLineNumber++;
+      } else if (line.startsWith("-") && !line.startsWith("---")) {
+        // Deleted line - don't increment current line number
+      } else if (!line.startsWith("\\")) {
+        // Context line - increment line number
+        currentLineNumber++;
+      }
+    }
+
+    return changedLines;
   }
 }

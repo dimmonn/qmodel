@@ -174,7 +174,7 @@ QModel reads its configuration from `qmodel-secret.properties` and/or environmen
 
 == Running the Application
 
-* **Import data** by calling the API (see <<example-requests,Example Requests>>).
+* **Import data** by calling the API. See the API Reference section below for endpoint details.
 * **Build the graph** after commit import: `/api/graph/data`.
 * **Explore data** via Grafana dashboards or SQL queries.
 
@@ -202,47 +202,9 @@ docker-compose down -v
 
 == API Reference
 
-*Base path:* `/api/v1/metrics`
-*Graph endpoint:* `/api/graph/data`
+The authoritative endpoint list is documented in `docs/API_REFERENCE.adoc` and is derived directly from `BaseGitQueryController`.
 
-Each API endpoint triggers collection or computation steps and persists to the database.
-
-=== Repository Catalog
-* **GET** `/api/v1/metrics/repos` — list imported projects.
-
-=== Commits
-* **GET** `/api/v1/metrics/repos/{owner}/{repo}/commits` — stream commit history into DB.
-* **GET** `/api/v1/metrics/repos/{owner}/{repo}/commits/{sha}` — import a single commit by SHA.
-
-=== Pull Requests
-* **GET** `/api/v1/metrics/repos/{owner}/{repo}/pulls` — import all closed PRs and metadata.
-
-=== Issues
-* **GET** `/api/v1/metrics/repos/{owner}/{repo}/issues` — fetch closed issues.
-* **DELETE** `/api/v1/metrics/repos/{owner}/{repo}/issues` — remove all issues for a project.
-
-=== Actions
-* **GET** `/api/v1/metrics/repos/{owner}/{repo}/action` — import GitHub Actions workflow runs.
-
-=== Forks
-* **GET** `/api/v1/metrics/repos/{owner}/{repo}/forked` — merge fork tip commits into project snapshot.
-* **GET** `/api/v1/metrics/repos/{owner}/{repo}/forks` — compute local fork differences.
-
-=== Graph Metrics (DAG)
-* **GET** `/api/graph/data?owner={owner}&repo={repo}` — compute and persist commit graph metrics:
-- in/out degree
-- min/max depth
-- merge_count
-- number_of_branches
-- average_degree
-- distance_to_branch_start
-- upstream_heads_unique_on_segment
-- days_since_last_merge_on_segment
-
-=== SZZ Defect Linking
-* **GET** `/api/v1/metrics/repos/{owner}/{repo}/retrieveFixingCommits` — attach bug-fixing commits.
-* **GET** `/api/v1/metrics/repos/{owner}/{repo}/{id}/retrieveBugIntroducingCommits` — trace candidate introducers for a given issue.
-* **GET** `/api/v1/metrics/repos/{owner}/{repo}/retrieveBugIntroducingCommits?depth={d}` — full-repo SZZ scan (depth optional).
+It covers the `/api/v1/metrics` base path, batch import endpoints, SZZ tracing routes, fork discovery, and commit/issue/pull ingestion flows.
 
 ---
 
