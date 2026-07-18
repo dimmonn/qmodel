@@ -41,7 +41,7 @@ class GraphTest {
         Map<String, Vertex> testGraph = mapper.readValue(testGraphRaw, new TypeReference<>() {
         });
 
-        ResultActions resultActions = this.mockMvc.perform(get("/api/graph/data").param("owner", "dimmonn").param("repo", "test")).andDo(print()).andExpect(status().isOk());
+        ResultActions resultActions = this.mockMvc.perform(get("/api/graph/data").param("repo", "test")).andDo(print()).andExpect(status().isOk());
         String realGraphRaw = resultActions.andReturn().getResponse().getContentAsString();
         Map<String, Vertex> realGraph = mapper.readValue(realGraphRaw, new TypeReference<>() {
         });

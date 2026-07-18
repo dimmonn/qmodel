@@ -15,6 +15,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -222,16 +224,16 @@ public class BaseGitQueryController extends GitMaintainable implements FileJsonR
     @GetMapping(value = "/repos/{owner}/{repo}/forks")
     @ResponseStatus(HttpStatus.OK)
     public Set<String> baseQueryForks(
-            @PathVariable(value = "owner")
-            @Parameter(name = "owner", in = ParameterIn.PATH, description = "Owner of the project")
+            @PathVariable @Parameter(name = "owner", in = ParameterIn.PATH, description = "Owner of the project")
             String owner,
-            @PathVariable(value = "repo")
-            @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
+            @PathVariable @Parameter(name = "repo", in = ParameterIn.PATH, description = "Repo name")
             String repo)
             throws Exception {
-        String path = "/Users/dima/" + owner + "_" + repo;
-        cloneRepo(owner, repo, path);
-        return getForkedCommits(path);
+        Path path = Paths.get(
+                System.getenv().getOrDefault("QMODEL_WORKDIR", "data/repos")
+        );
+        cloneRepo(owner, repo, path.toAbsolutePath().toString());
+        return getForkedCommits(path.toAbsolutePath().toString());
     }
 
     @GetMapping(value = "/repos/ag")

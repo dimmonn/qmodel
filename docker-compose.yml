@@ -22,7 +22,9 @@ services:
       retries: 20
 
   qmodel:
-    image: ghcr.io/dimmonn/qmodel:latest
+    # Use a local-built image for qmodel (no personal registry references)
+    # To run locally: build the image with `docker build -t qmodel:latest .` and then `docker-compose up`
+    image: qmodel:latest
     ports:
       - "8082:8082"
       - "4123:4123"
@@ -42,7 +44,8 @@ services:
     networks: [elk]
 
   grafana:
-    image: ghcr.io/dimmonn/grafana:latest
+    # Use the official Grafana image from Docker Hub (no personal registry references)
+    image: grafana/grafana:latest
     ports:
       - "3001:3000"
     environment:

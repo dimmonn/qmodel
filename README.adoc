@@ -56,8 +56,9 @@ To run QModel with **Docker Compose**, follow these steps:
 echo "QModel, Grafana, and MySQL are now running. Access them at:"
 echo "QModel API: http://localhost:8082"
 echo "Grafana:    http://localhost:3001  (admin/admin)"
-echo "Downloading docker-compose.yml from GitHub..."
-curl -L https://raw.githubusercontent.com/dimmonn/qmodel/refs/heads/main/docker-compose.yml -o docker-compose.yml
+echo "Obtaining docker-compose.yml from GitHub (without curl)..."
+# clone shallowly, copy the compose file, then remove the temp clone
+git clone --depth 1 https://github.com/<owner>/qmodel.git tmp-qmodel && cp tmp-qmodel/docker-compose.yml . && rm -rf tmp-qmodel
 
 echo "Creating the qmodel-secret.properties file..."
 if [ ! -f "qmodel-secret.properties" ]; then
