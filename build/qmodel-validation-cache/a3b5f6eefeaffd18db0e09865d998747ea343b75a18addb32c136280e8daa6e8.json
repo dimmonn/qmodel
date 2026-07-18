@@ -1,0 +1,89 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-03-13T21:07:45Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 353,
+      "url" : "https://github.com/reagent-project/reagent/pull/353",
+      "repository" : {
+        "nameWithOwner" : "reagent-project/reagent"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 12368,
+      "url" : "https://github.com/react/react/issues/12368",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-03-13T22:39:21Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 12370,
+      "url" : "https://github.com/react/react/pull/12370",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 12368,
+      "url" : "https://github.com/react/react/issues/12368",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-04-03T20:30:04Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 12530,
+      "url" : "https://github.com/react/react/pull/12530",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 12368,
+      "url" : "https://github.com/react/react/issues/12368",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2018-04-04T15:58:33Z",
+    "closer" : null
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-04-04T16:01:27Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 11995,
+      "url" : "https://github.com/react/react/pull/11995",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 12368,
+      "url" : "https://github.com/react/react/issues/12368",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

@@ -1,0 +1,49 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2017-09-18T08:58:09Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 30502,
+      "url" : "https://github.com/ansible/ansible/pull/30502",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 30500,
+      "url" : "https://github.com/ansible/ansible/issues/30500",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2017-09-26T15:46:37Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 30936,
+      "url" : "https://github.com/ansible/ansible/pull/30936",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 30500,
+      "url" : "https://github.com/ansible/ansible/issues/30500",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2020-08-16T23:06:33Z",
+    "closer" : null
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

@@ -1,0 +1,56 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2020-08-07T22:11:08Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 22105,
+      "url" : "https://github.com/mui/material-ui/pull/22105",
+      "repository" : {
+        "nameWithOwner" : "mui/material-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 19558,
+      "url" : "https://github.com/react/react/issues/19558",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2020-08-08T13:38:04Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 15894,
+      "url" : "https://github.com/react/react/pull/15894",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 19558,
+      "url" : "https://github.com/react/react/issues/19558",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2020-08-17T14:47:50Z",
+    "closer" : {
+      "__typename" : "PullRequest",
+      "number" : 15894,
+      "url" : "https://github.com/react/react/pull/15894",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

@@ -1,0 +1,73 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2014-06-11T08:36:39Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 1674,
+      "url" : "https://github.com/react/react/pull/1674",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1673,
+      "url" : "https://github.com/react/react/issues/1673",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2015-01-21T22:33:35Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 2855,
+      "url" : "https://github.com/react/react/issues/2855",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1673,
+      "url" : "https://github.com/react/react/issues/1673",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2015-02-12T04:28:03Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 3129,
+      "url" : "https://github.com/react/react/pull/3129",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1673,
+      "url" : "https://github.com/react/react/issues/1673",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2015-03-20T17:32:43Z",
+    "closer" : {
+      "__typename" : "Commit",
+      "oid" : "ef796790ec80c200bfc99df69e23db2522479272",
+      "url" : "https://github.com/react/react/commit/ef796790ec80c200bfc99df69e23db2522479272"
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

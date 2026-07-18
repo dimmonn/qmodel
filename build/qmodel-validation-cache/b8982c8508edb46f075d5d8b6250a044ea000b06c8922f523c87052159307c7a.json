@@ -1,0 +1,29 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-01-09T23:26:09Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 12000,
+      "url" : "https://github.com/react/react/pull/12000",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 11998,
+      "url" : "https://github.com/react/react/issues/11998",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2018-01-10T23:17:41Z",
+    "closer" : null
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

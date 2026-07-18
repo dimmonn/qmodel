@@ -1,0 +1,96 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2016-11-13T09:03:35Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 8278,
+      "url" : "https://github.com/react/react/pull/8278",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 8260,
+      "url" : "https://github.com/react/react/issues/8260",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2017-03-21T16:50:44Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 8279,
+      "url" : "https://github.com/react/react/pull/8279",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 8260,
+      "url" : "https://github.com/react/react/issues/8260",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-01-03T18:04:06Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 11956,
+      "url" : "https://github.com/react/react/pull/11956",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 8260,
+      "url" : "https://github.com/react/react/issues/8260",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-08-15T01:42:04Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 13401,
+      "url" : "https://github.com/react/react/pull/13401",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 8260,
+      "url" : "https://github.com/react/react/issues/8260",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2018-08-15T16:44:47Z",
+    "closer" : {
+      "__typename" : "PullRequest",
+      "number" : 13401,
+      "url" : "https://github.com/react/react/pull/13401",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

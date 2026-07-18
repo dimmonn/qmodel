@@ -1,0 +1,56 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2023-02-24T20:03:53Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 26233,
+      "url" : "https://github.com/react/react/pull/26233",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 25924,
+      "url" : "https://github.com/react/react/issues/25924",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2023-02-24T20:13:08Z",
+    "closer" : {
+      "__typename" : "PullRequest",
+      "number" : 26233,
+      "url" : "https://github.com/react/react/pull/26233",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2023-03-09T14:37:12Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 5663,
+      "url" : "https://github.com/reactjs/react.dev/issues/5663",
+      "repository" : {
+        "nameWithOwner" : "reactjs/react.dev"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 25924,
+      "url" : "https://github.com/react/react/issues/25924",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

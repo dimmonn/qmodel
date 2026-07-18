@@ -1,0 +1,56 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2015-12-02T02:03:47Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 140,
+      "url" : "https://github.com/debops/debops-tools/issues/140",
+      "repository" : {
+        "nameWithOwner" : "debops/debops-tools"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 12353,
+      "url" : "https://github.com/ansible/ansible/issues/12353",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-01-09T13:43:39Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 34642,
+      "url" : "https://github.com/ansible/ansible/pull/34642",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 12353,
+      "url" : "https://github.com/ansible/ansible/issues/12353",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2018-02-21T13:34:45Z",
+    "closer" : {
+      "__typename" : "PullRequest",
+      "number" : 34642,
+      "url" : "https://github.com/ansible/ansible/pull/34642",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

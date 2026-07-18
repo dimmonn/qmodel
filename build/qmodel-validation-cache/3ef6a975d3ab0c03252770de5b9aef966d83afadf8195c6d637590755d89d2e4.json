@@ -1,0 +1,109 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2015-10-26T00:52:04Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 12904,
+      "url" : "https://github.com/ansible/ansible/pull/12904",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 11266,
+      "url" : "https://github.com/ansible/ansible/issues/11266",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2015-12-23T16:15:01Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 439,
+      "url" : "https://github.com/roots/trellis/issues/439",
+      "repository" : {
+        "nameWithOwner" : "roots/trellis"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 11266,
+      "url" : "https://github.com/ansible/ansible/issues/11266",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2016-01-14T12:45:16Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 6466,
+      "url" : "https://github.com/ansible/ansible/issues/6466",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 11266,
+      "url" : "https://github.com/ansible/ansible/issues/11266",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2016-03-14T22:01:25Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 14966,
+      "url" : "https://github.com/ansible/ansible/issues/14966",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 11266,
+      "url" : "https://github.com/ansible/ansible/issues/11266",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2017-01-23T23:31:39Z",
+    "closer" : null
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2017-04-07T10:00:59Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 23391,
+      "url" : "https://github.com/ansible/ansible/pull/23391",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 11266,
+      "url" : "https://github.com/ansible/ansible/issues/11266",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

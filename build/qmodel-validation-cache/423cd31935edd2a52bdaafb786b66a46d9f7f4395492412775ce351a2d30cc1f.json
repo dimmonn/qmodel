@@ -1,0 +1,69 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2014-06-10T06:50:57Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 1668,
+      "url" : "https://github.com/react/react/pull/1668",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1647,
+      "url" : "https://github.com/react/react/issues/1647",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2014-11-25T18:30:43Z",
+    "closer" : null
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2016-07-24T22:12:14Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 204,
+      "url" : "https://github.com/google-map-react/google-map-react/pull/204",
+      "repository" : {
+        "nameWithOwner" : "google-map-react/google-map-react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1647,
+      "url" : "https://github.com/react/react/issues/1647",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2021-04-22T00:54:32Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 1323,
+      "url" : "https://github.com/sparkletown/sparkle/pull/1323",
+      "repository" : {
+        "nameWithOwner" : "sparkletown/sparkle"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1647,
+      "url" : "https://github.com/react/react/issues/1647",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

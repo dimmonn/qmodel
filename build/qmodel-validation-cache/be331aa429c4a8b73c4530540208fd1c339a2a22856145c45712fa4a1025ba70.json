@@ -1,0 +1,49 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2013-10-16T22:53:49Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 433,
+      "url" : "https://github.com/react/react/pull/433",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 431,
+      "url" : "https://github.com/react/react/issues/431",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2014-09-23T21:53:05Z",
+    "closer" : null
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2023-11-30T21:25:51Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 259,
+      "url" : "https://github.com/ryan-ally/react-1/pull/259",
+      "repository" : {
+        "nameWithOwner" : "ryan-ally/react-1"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 431,
+      "url" : "https://github.com/react/react/issues/431",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

@@ -1,0 +1,49 @@
+{
+  "events" : [ {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2018-04-19T19:05:20Z",
+    "closer" : null
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-04-19T19:23:17Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 12654,
+      "url" : "https://github.com/react/react/pull/12654",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 12651,
+      "url" : "https://github.com/react/react/issues/12651",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2019-04-19T00:16:26Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 11,
+      "url" : "https://github.com/afenton90/koa-react-router/issues/11",
+      "repository" : {
+        "nameWithOwner" : "afenton90/koa-react-router"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 12651,
+      "url" : "https://github.com/react/react/issues/12651",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

@@ -1,0 +1,136 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2017-04-03T10:02:16Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 115,
+      "url" : "https://github.com/react-ga/react-ga/issues/115",
+      "repository" : {
+        "nameWithOwner" : "react-ga/react-ga"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 8529,
+      "url" : "https://github.com/react/react/issues/8529",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2017-06-07T13:51:49Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 2637,
+      "url" : "https://github.com/react-bootstrap/react-bootstrap/issues/2637",
+      "repository" : {
+        "nameWithOwner" : "react-bootstrap/react-bootstrap"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 8529,
+      "url" : "https://github.com/react/react/issues/8529",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2017-09-01T02:02:19Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 6,
+      "url" : "https://github.com/symbiote/silverstripe-multisites-googleanalytics/issues/6",
+      "repository" : {
+        "nameWithOwner" : "symbiote/silverstripe-multisites-googleanalytics"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 8529,
+      "url" : "https://github.com/react/react/issues/8529",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2017-11-16T14:53:52Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 11571,
+      "url" : "https://github.com/react/react/pull/11571",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 8529,
+      "url" : "https://github.com/react/react/issues/8529",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-06-02T12:32:40Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 157,
+      "url" : "https://github.com/symphonyoss/SFE-Minuet-DesktopClient/pull/157",
+      "repository" : {
+        "nameWithOwner" : "symphonyoss/SFE-Minuet-DesktopClient"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 8529,
+      "url" : "https://github.com/react/react/issues/8529",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2018-08-03T18:57:34Z",
+    "closer" : {
+      "__typename" : "PullRequest",
+      "number" : 11571,
+      "url" : "https://github.com/react/react/pull/11571",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-10-29T09:19:42Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 13435,
+      "url" : "https://github.com/mui/material-ui/issues/13435",
+      "repository" : {
+        "nameWithOwner" : "mui/material-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 8529,
+      "url" : "https://github.com/react/react/issues/8529",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

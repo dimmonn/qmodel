@@ -1,0 +1,2156 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-02-13T14:38:17Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 18093,
+      "url" : "https://github.com/eslint/eslint/issues/18093",
+      "repository" : {
+        "nameWithOwner" : "eslint/eslint"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-02-14T03:16:37Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 84,
+      "url" : "https://github.com/ecomfe/eslint-config/issues/84",
+      "repository" : {
+        "nameWithOwner" : "ecomfe/eslint-config"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-02-14T13:50:07Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 5493,
+      "url" : "https://github.com/UI5/webcomponents-react/pull/5493",
+      "repository" : {
+        "nameWithOwner" : "UI5/webcomponents-react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-04-06T03:47:47Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 12860,
+      "url" : "https://github.com/vitejs/vite/pull/12860",
+      "repository" : {
+        "nameWithOwner" : "vitejs/vite"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-04-06T15:28:55Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 28773,
+      "url" : "https://github.com/react/react/pull/28773",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-04-07T08:55:12Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 1175,
+      "url" : "https://github.com/sabertazimi/bod/issues/1175",
+      "repository" : {
+        "nameWithOwner" : "sabertazimi/bod"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-04-07T10:47:44Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 26,
+      "url" : "https://github.com/nnmax/eslint-config/issues/26",
+      "repository" : {
+        "nameWithOwner" : "nnmax/eslint-config"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-04-08T04:29:58Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 2961,
+      "url" : "https://github.com/airbnb/javascript/issues/2961",
+      "repository" : {
+        "nameWithOwner" : "airbnb/javascript"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-04-10T05:49:11Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 7,
+      "url" : "https://github.com/zgeoff/vers/issues/7",
+      "repository" : {
+        "nameWithOwner" : "zgeoff/vers"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-04-10T06:38:42Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 7253,
+      "url" : "https://github.com/TanStack/query/pull/7253",
+      "repository" : {
+        "nameWithOwner" : "TanStack/query"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-04-10T09:41:51Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 922,
+      "url" : "https://github.com/cerbos/cerbos-sdk-javascript/issues/922",
+      "repository" : {
+        "nameWithOwner" : "cerbos/cerbos-sdk-javascript"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-04-14T03:02:03Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 104,
+      "url" : "https://github.com/vvornanen/aoboshi/issues/104",
+      "repository" : {
+        "nameWithOwner" : "vvornanen/aoboshi"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-04-14T06:18:23Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 502,
+      "url" : "https://github.com/jubilee-works/eslint-config-timetree/issues/502",
+      "repository" : {
+        "nameWithOwner" : "jubilee-works/eslint-config-timetree"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-04-16T19:27:44Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 526,
+      "url" : "https://github.com/ttoss/ttoss/issues/526",
+      "repository" : {
+        "nameWithOwner" : "ttoss/ttoss"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-04-23T16:43:31Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 446,
+      "url" : "https://github.com/hawtio/hawtio-online/issues/446",
+      "repository" : {
+        "nameWithOwner" : "hawtio/hawtio-online"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-04-25T07:06:37Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 19,
+      "url" : "https://github.com/dudeofawesome/code-style/issues/19",
+      "repository" : {
+        "nameWithOwner" : "dudeofawesome/code-style"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-04-25T20:45:26Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 99,
+      "url" : "https://github.com/umts/public-message-board/pull/99",
+      "repository" : {
+        "nameWithOwner" : "umts/public-message-board"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-04-26T07:29:15Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 161,
+      "url" : "https://github.com/arkedge/gaia/pull/161",
+      "repository" : {
+        "nameWithOwner" : "arkedge/gaia"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-04-30T04:39:07Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 9002,
+      "url" : "https://github.com/typescript-eslint/typescript-eslint/pull/9002",
+      "repository" : {
+        "nameWithOwner" : "typescript-eslint/typescript-eslint"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-05-06T05:25:40Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 18,
+      "url" : "https://github.com/r4ai/yumemi-passport-frontend/issues/18",
+      "repository" : {
+        "nameWithOwner" : "r4ai/yumemi-passport-frontend"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-05-12T08:27:57Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 12,
+      "url" : "https://github.com/zemd/eslint-flat-config/issues/12",
+      "repository" : {
+        "nameWithOwner" : "zemd/eslint-flat-config"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-05-13T08:13:53Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 29047,
+      "url" : "https://github.com/react/react/issues/29047",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-05-13T08:51:47Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 1,
+      "url" : "https://github.com/HristoKolev/vite-workshop/pull/1",
+      "repository" : {
+        "nameWithOwner" : "HristoKolev/vite-workshop"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-05-20T03:26:47Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 269,
+      "url" : "https://github.com/moneyforward/frontend-tools/issues/269",
+      "repository" : {
+        "nameWithOwner" : "moneyforward/frontend-tools"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-05-22T12:08:09Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 9126,
+      "url" : "https://github.com/typescript-eslint/typescript-eslint/issues/9126",
+      "repository" : {
+        "nameWithOwner" : "typescript-eslint/typescript-eslint"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-05-28T11:46:21Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 2638,
+      "url" : "https://github.com/opossum-tool/OpossumUI/pull/2638",
+      "repository" : {
+        "nameWithOwner" : "opossum-tool/OpossumUI"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-05-28T20:06:30Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 567,
+      "url" : "https://github.com/mozilla/eslint-config-amo/issues/567",
+      "repository" : {
+        "nameWithOwner" : "mozilla/eslint-config-amo"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-06-03T18:12:30Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 441,
+      "url" : "https://github.com/cypress-io/cypress-design/pull/441",
+      "repository" : {
+        "nameWithOwner" : "cypress-io/cypress-design"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-06-05T05:43:02Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 10,
+      "url" : "https://github.com/JstnMcBrd/eslint-config/issues/10",
+      "repository" : {
+        "nameWithOwner" : "JstnMcBrd/eslint-config"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-06-05T16:38:45Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 29770,
+      "url" : "https://github.com/react/react/pull/29770",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-06-08T14:44:03Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 34017,
+      "url" : "https://github.com/mdn/content/pull/34017",
+      "repository" : {
+        "nameWithOwner" : "mdn/content"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-06-10T17:22:21Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 637,
+      "url" : "https://github.com/nozomiishii/configs/issues/637",
+      "repository" : {
+        "nameWithOwner" : "nozomiishii/configs"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-06-11T09:09:22Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 41,
+      "url" : "https://github.com/burtek/eslint-config/pull/41",
+      "repository" : {
+        "nameWithOwner" : "burtek/eslint-config"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-06-11T09:23:35Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 65,
+      "url" : "https://github.com/burtek/eslint-config/pull/65",
+      "repository" : {
+        "nameWithOwner" : "burtek/eslint-config"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-06-14T12:34:44Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 322,
+      "url" : "https://github.com/Elonsoft/esfront/pull/322",
+      "repository" : {
+        "nameWithOwner" : "Elonsoft/esfront"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-06-19T13:41:30Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 84,
+      "url" : "https://github.com/shlinkio/js-coding-standard/issues/84",
+      "repository" : {
+        "nameWithOwner" : "shlinkio/js-coding-standard"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-06-24T13:45:58Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 167,
+      "url" : "https://github.com/adidahiya/raga/pull/167",
+      "repository" : {
+        "nameWithOwner" : "adidahiya/raga"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-06-27T01:34:41Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 9440,
+      "url" : "https://github.com/typescript-eslint/typescript-eslint/issues/9440",
+      "repository" : {
+        "nameWithOwner" : "typescript-eslint/typescript-eslint"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-07-02T02:43:42Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 583,
+      "url" : "https://github.com/Abhiek187/abhiek187.github.io/pull/583",
+      "repository" : {
+        "nameWithOwner" : "Abhiek187/abhiek187.github.io"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-07-03T07:19:05Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 388,
+      "url" : "https://github.com/ota-meshi/eslint-plugin-astro/issues/388",
+      "repository" : {
+        "nameWithOwner" : "ota-meshi/eslint-plugin-astro"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-07-05T14:00:44Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 984,
+      "url" : "https://github.com/t3-oss/create-t3-turbo/issues/984",
+      "repository" : {
+        "nameWithOwner" : "t3-oss/create-t3-turbo"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-07-11T04:28:00Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 8,
+      "url" : "https://github.com/epicweb-dev/config/pull/8",
+      "repository" : {
+        "nameWithOwner" : "epicweb-dev/config"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-07-21T10:07:59Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 558,
+      "url" : "https://github.com/antfu/eslint-config/issues/558",
+      "repository" : {
+        "nameWithOwner" : "antfu/eslint-config"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-07-23T13:40:19Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 13,
+      "url" : "https://github.com/nimec01/eslint-config/issues/13",
+      "repository" : {
+        "nameWithOwner" : "nimec01/eslint-config"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-07-25T19:54:40Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 35078,
+      "url" : "https://github.com/mdn/content/pull/35078",
+      "repository" : {
+        "nameWithOwner" : "mdn/content"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-07-26T09:13:42Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 471,
+      "url" : "https://github.com/rune/rune/pull/471",
+      "repository" : {
+        "nameWithOwner" : "rune/rune"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-07-31T16:22:19Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 571,
+      "url" : "https://github.com/antfu/eslint-config/issues/571",
+      "repository" : {
+        "nameWithOwner" : "antfu/eslint-config"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-08-01T07:20:54Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 12150,
+      "url" : "https://github.com/react-hook-form/react-hook-form/pull/12150",
+      "repository" : {
+        "nameWithOwner" : "react-hook-form/react-hook-form"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-08-03T15:17:43Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 18746,
+      "url" : "https://github.com/eslint/eslint/issues/18746",
+      "repository" : {
+        "nameWithOwner" : "eslint/eslint"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-08-08T08:45:19Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 256,
+      "url" : "https://github.com/aragon/gov-ui-kit/pull/256",
+      "repository" : {
+        "nameWithOwner" : "aragon/gov-ui-kit"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-08-08T08:55:42Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 2,
+      "url" : "https://github.com/aragon/app/pull/2",
+      "repository" : {
+        "nameWithOwner" : "aragon/app"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-08-08T21:43:15Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 1490,
+      "url" : "https://github.com/fossar/selfoss/issues/1490",
+      "repository" : {
+        "nameWithOwner" : "fossar/selfoss"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-08-09T06:15:38Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 30,
+      "url" : "https://github.com/sima-land/frontend-linters/issues/30",
+      "repository" : {
+        "nameWithOwner" : "sima-land/frontend-linters"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-08-10T23:38:22Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 64,
+      "url" : "https://github.com/jwngr/notreda.me/pull/64",
+      "repository" : {
+        "nameWithOwner" : "jwngr/notreda.me"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-08-11T01:44:11Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 710,
+      "url" : "https://github.com/Rel1cx/eslint-react/issues/710",
+      "repository" : {
+        "nameWithOwner" : "Rel1cx/eslint-react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-08-14T02:36:44Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 224,
+      "url" : "https://github.com/nadohq/nado-typescript-sdk/pull/224",
+      "repository" : {
+        "nameWithOwner" : "nadohq/nado-typescript-sdk"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-08-21T11:53:38Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 30774,
+      "url" : "https://github.com/react/react/pull/30774",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-08-21T19:55:53Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 1941,
+      "url" : "https://github.com/techmatters/terraso-mobile-client/pull/1941",
+      "repository" : {
+        "nameWithOwner" : "techmatters/terraso-mobile-client"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-09-05T07:54:28Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 107,
+      "url" : "https://github.com/ssangani/melody/pull/107",
+      "repository" : {
+        "nameWithOwner" : "ssangani/melody"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-09-06T13:50:16Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 7032,
+      "url" : "https://github.com/nodejs/nodejs.org/pull/7032",
+      "repository" : {
+        "nameWithOwner" : "nodejs/nodejs.org"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-09-12T01:57:35Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 410,
+      "url" : "https://github.com/laravel/breeze/pull/410",
+      "repository" : {
+        "nameWithOwner" : "laravel/breeze"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-09-16T12:24:23Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 412,
+      "url" : "https://github.com/laravel/breeze/pull/412",
+      "repository" : {
+        "nameWithOwner" : "laravel/breeze"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-09-17T14:44:42Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 132,
+      "url" : "https://github.com/ssangani/melody/pull/132",
+      "repository" : {
+        "nameWithOwner" : "ssangani/melody"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-09-19T08:10:55Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 1027,
+      "url" : "https://github.com/acm-uic/acm-uic.github.io/pull/1027",
+      "repository" : {
+        "nameWithOwner" : "acm-uic/acm-uic.github.io"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-09-19T19:54:00Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 30932,
+      "url" : "https://github.com/react/react/issues/30932",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-09-25T12:50:47Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 65648,
+      "url" : "https://github.com/WordPress/gutenberg/pull/65648",
+      "repository" : {
+        "nameWithOwner" : "WordPress/gutenberg"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-09-25T22:22:30Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 86,
+      "url" : "https://github.com/jwngr/notreda.me/pull/86",
+      "repository" : {
+        "nameWithOwner" : "jwngr/notreda.me"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-09-25T22:26:59Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 172,
+      "url" : "https://github.com/jwngr/sdow/pull/172",
+      "repository" : {
+        "nameWithOwner" : "jwngr/sdow"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-09-25T22:35:32Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 15,
+      "url" : "https://github.com/jwngr/jwn.gr/pull/15",
+      "repository" : {
+        "nameWithOwner" : "jwngr/jwn.gr"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-09-28T11:02:40Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 43,
+      "url" : "https://github.com/Kassy0220/fjord-minutes/pull/43",
+      "repository" : {
+        "nameWithOwner" : "Kassy0220/fjord-minutes"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-09-30T05:05:39Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 18391,
+      "url" : "https://github.com/eslint/eslint/issues/18391",
+      "repository" : {
+        "nameWithOwner" : "eslint/eslint"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-10-02T21:51:30Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 82,
+      "url" : "https://github.com/iTwin/eslint-plugin/pull/82",
+      "repository" : {
+        "nameWithOwner" : "iTwin/eslint-plugin"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-10-03T12:31:50Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 2239,
+      "url" : "https://github.com/STN-DTS/canadian-dental-care-plan/pull/2239",
+      "repository" : {
+        "nameWithOwner" : "STN-DTS/canadian-dental-care-plan"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-10-03T22:26:02Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 732,
+      "url" : "https://github.com/libnyanpasu/clash-nyanpasu/pull/732",
+      "repository" : {
+        "nameWithOwner" : "libnyanpasu/clash-nyanpasu"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-10-04T00:36:18Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 28191,
+      "url" : "https://github.com/nrwl/nx/issues/28191",
+      "repository" : {
+        "nameWithOwner" : "nrwl/nx"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-10-04T14:44:12Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 109,
+      "url" : "https://github.com/molindo/eslint-config-molindo/pull/109",
+      "repository" : {
+        "nameWithOwner" : "molindo/eslint-config-molindo"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-10-04T17:33:54Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 7760,
+      "url" : "https://github.com/JetBrains/ring-ui/pull/7760",
+      "repository" : {
+        "nameWithOwner" : "JetBrains/ring-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-10-07T05:54:29Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 340,
+      "url" : "https://github.com/kamilmielnik/scrabble-solver/issues/340",
+      "repository" : {
+        "nameWithOwner" : "kamilmielnik/scrabble-solver"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-10-07T21:22:15Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 697,
+      "url" : "https://github.com/tarasglek/chatcraft.org/pull/697",
+      "repository" : {
+        "nameWithOwner" : "tarasglek/chatcraft.org"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-10-08T15:04:48Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 781,
+      "url" : "https://github.com/digitalservicebund/a2j-rechtsantragstelle/issues/781",
+      "repository" : {
+        "nameWithOwner" : "digitalservicebund/a2j-rechtsantragstelle"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-10-11T09:20:55Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 100,
+      "url" : "https://github.com/bpmn-io/dmn-js-properties-panel/pull/100",
+      "repository" : {
+        "nameWithOwner" : "bpmn-io/dmn-js-properties-panel"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-10-11T09:45:59Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 385,
+      "url" : "https://github.com/bpmn-io/properties-panel/pull/385",
+      "repository" : {
+        "nameWithOwner" : "bpmn-io/properties-panel"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-10-15T15:46:49Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 3285,
+      "url" : "https://github.com/quantified-uncertainty/squiggle/pull/3285",
+      "repository" : {
+        "nameWithOwner" : "quantified-uncertainty/squiggle"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-10-19T21:14:28Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 3,
+      "url" : "https://github.com/tools-aoeur/eslint-config/pull/3",
+      "repository" : {
+        "nameWithOwner" : "tools-aoeur/eslint-config"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-11-04T01:43:27Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 135,
+      "url" : "https://github.com/Project-Chirp/chirp-frontend/pull/135",
+      "repository" : {
+        "nameWithOwner" : "Project-Chirp/chirp-frontend"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-11-06T17:18:24Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 684,
+      "url" : "https://github.com/OpenRailAssociation/osrd-ui/pull/684",
+      "repository" : {
+        "nameWithOwner" : "OpenRailAssociation/osrd-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-12-06T10:34:23Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 429,
+      "url" : "https://github.com/woowacourse-teams/2024-ddangkong/issues/429",
+      "repository" : {
+        "nameWithOwner" : "woowacourse-teams/2024-ddangkong"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-12-08T14:32:36Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 106,
+      "url" : "https://github.com/eslint/rewrite/pull/106",
+      "repository" : {
+        "nameWithOwner" : "eslint/rewrite"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-12-10T19:02:16Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 10731,
+      "url" : "https://github.com/badges/shields/issues/10731",
+      "repository" : {
+        "nameWithOwner" : "badges/shields"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-12-20T11:30:36Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 441,
+      "url" : "https://github.com/woowacourse-teams/2024-ddangkong/pull/441",
+      "repository" : {
+        "nameWithOwner" : "woowacourse-teams/2024-ddangkong"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2025-01-09T03:14:14Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 3075,
+      "url" : "https://github.com/airbnb/javascript/issues/3075",
+      "repository" : {
+        "nameWithOwner" : "airbnb/javascript"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2025-01-13T08:26:37Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 4,
+      "url" : "https://github.com/IsaacIsrael/project/issues/4",
+      "repository" : {
+        "nameWithOwner" : "IsaacIsrael/project"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2025-01-16T23:39:12Z",
+    "closer" : {
+      "__typename" : "PullRequest",
+      "number" : 30774,
+      "url" : "https://github.com/react/react/pull/30774",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2025-02-21T06:53:10Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 3887,
+      "url" : "https://github.com/jsx-eslint/eslint-plugin-react/issues/3887",
+      "repository" : {
+        "nameWithOwner" : "jsx-eslint/eslint-plugin-react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2025-02-22T18:00:26Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 5,
+      "url" : "https://github.com/briansegs/patient-zero/pull/5",
+      "repository" : {
+        "nameWithOwner" : "briansegs/patient-zero"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2025-03-10T19:36:26Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 126,
+      "url" : "https://github.com/zenml-io/vscode-zenml/pull/126",
+      "repository" : {
+        "nameWithOwner" : "zenml-io/vscode-zenml"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2025-03-11T00:38:07Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 75,
+      "url" : "https://github.com/tambo-ai/tambo/pull/75",
+      "repository" : {
+        "nameWithOwner" : "tambo-ai/tambo"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2025-03-30T23:07:03Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 9,
+      "url" : "https://github.com/koyweforest/koywe-challenge/pull/9",
+      "repository" : {
+        "nameWithOwner" : "koyweforest/koywe-challenge"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2025-05-12T17:42:05Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 73,
+      "url" : "https://github.com/Gravender/boardgames/pull/73",
+      "repository" : {
+        "nameWithOwner" : "Gravender/boardgames"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2025-05-29T10:33:44Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 1321,
+      "url" : "https://github.com/pinyinlylabs/pinyinly/pull/1321",
+      "repository" : {
+        "nameWithOwner" : "pinyinlylabs/pinyinly"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2025-11-30T12:48:36Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 20,
+      "url" : "https://github.com/xeikit/starter-templates/pull/20",
+      "repository" : {
+        "nameWithOwner" : "xeikit/starter-templates"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-09T17:17:31Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 15,
+      "url" : "https://github.com/qStivi/qanimeranker/pull/15",
+      "repository" : {
+        "nameWithOwner" : "qStivi/qanimeranker"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-17T16:02:28Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 165,
+      "url" : "https://github.com/Wintus/Wikipedia-Blame/pull/165",
+      "repository" : {
+        "nameWithOwner" : "Wintus/Wikipedia-Blame"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-06T15:41:25Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 43355,
+      "url" : "https://github.com/mdn/content/issues/43355",
+      "repository" : {
+        "nameWithOwner" : "mdn/content"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-25T16:09:31Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 2360,
+      "url" : "https://github.com/linagora/cozy-home/pull/2360",
+      "repository" : {
+        "nameWithOwner" : "linagora/cozy-home"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-28T11:29:56Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 169,
+      "url" : "https://github.com/MasumRab/EmailIntelligence/pull/169",
+      "repository" : {
+        "nameWithOwner" : "MasumRab/EmailIntelligence"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-04-03T20:37:59Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 2594,
+      "url" : "https://github.com/SpecterOps/BloodHound/pull/2594",
+      "repository" : {
+        "nameWithOwner" : "SpecterOps/BloodHound"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-05-04T02:57:52Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 7,
+      "url" : "https://github.com/bonsai/fontgen/pull/7",
+      "repository" : {
+        "nameWithOwner" : "bonsai/fontgen"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 28313,
+      "url" : "https://github.com/react/react/issues/28313",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

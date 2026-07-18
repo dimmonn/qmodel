@@ -1,0 +1,193 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2017-11-06T14:14:26Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 29676,
+      "url" : "https://github.com/ansible/ansible/issues/29676",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 25414,
+      "url" : "https://github.com/ansible/ansible/issues/25414",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2019-03-27T17:14:34Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 41498,
+      "url" : "https://github.com/ansible/ansible/pull/41498",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 25414,
+      "url" : "https://github.com/ansible/ansible/issues/25414",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2019-04-21T10:49:24Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 51959,
+      "url" : "https://github.com/ansible/ansible/issues/51959",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 25414,
+      "url" : "https://github.com/ansible/ansible/issues/25414",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2019-06-03T17:51:51Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 30,
+      "url" : "https://github.com/LopezNathan/vpn-deployer/pull/30",
+      "repository" : {
+        "nameWithOwner" : "LopezNathan/vpn-deployer"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 25414,
+      "url" : "https://github.com/ansible/ansible/issues/25414",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2020-07-14T14:43:30Z",
+    "closer" : null
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2020-12-30T00:26:40Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 73079,
+      "url" : "https://github.com/ansible/ansible/pull/73079",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 25414,
+      "url" : "https://github.com/ansible/ansible/issues/25414",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2021-01-06T18:06:31Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 4,
+      "url" : "https://github.com/idiv-biodiversity/ansible-role-lmod/pull/4",
+      "repository" : {
+        "nameWithOwner" : "idiv-biodiversity/ansible-role-lmod"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 25414,
+      "url" : "https://github.com/ansible/ansible/issues/25414",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2021-01-08T22:01:42Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 73165,
+      "url" : "https://github.com/ansible/ansible/pull/73165",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 25414,
+      "url" : "https://github.com/ansible/ansible/issues/25414",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2021-10-11T04:46:14Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 13,
+      "url" : "https://github.com/ScottG489/machine-setup/issues/13",
+      "repository" : {
+        "nameWithOwner" : "ScottG489/machine-setup"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 25414,
+      "url" : "https://github.com/ansible/ansible/issues/25414",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2021-10-11T16:35:04Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 40,
+      "url" : "https://github.com/ScottG489/conjob/issues/40",
+      "repository" : {
+        "nameWithOwner" : "ScottG489/conjob"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 25414,
+      "url" : "https://github.com/ansible/ansible/issues/25414",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2021-11-08T14:45:43Z",
+    "closer" : null
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

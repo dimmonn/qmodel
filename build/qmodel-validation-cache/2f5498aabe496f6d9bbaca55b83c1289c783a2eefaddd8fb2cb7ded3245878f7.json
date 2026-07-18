@@ -1,0 +1,116 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-11-08T23:51:43Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 237,
+      "url" : "https://github.com/facebook/prop-types/issues/237",
+      "repository" : {
+        "nameWithOwner" : "facebook/prop-types"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 14159,
+      "url" : "https://github.com/react/react/issues/14159",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-11-12T19:55:52Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 14203,
+      "url" : "https://github.com/react/react/pull/14203",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 14159,
+      "url" : "https://github.com/react/react/issues/14159",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-11-13T11:33:57Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 12,
+      "url" : "https://github.com/mobxjs/mobx-react-lite/issues/12",
+      "repository" : {
+        "nameWithOwner" : "mobxjs/mobx-react-lite"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 14159,
+      "url" : "https://github.com/react/react/issues/14159",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-11-13T15:01:46Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 14219,
+      "url" : "https://github.com/react/react/pull/14219",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 14159,
+      "url" : "https://github.com/react/react/issues/14159",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-11-22T20:16:08Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 14298,
+      "url" : "https://github.com/react/react/pull/14298",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 14159,
+      "url" : "https://github.com/react/react/issues/14159",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2018-11-29T20:06:28Z",
+    "closer" : {
+      "__typename" : "PullRequest",
+      "number" : 14298,
+      "url" : "https://github.com/react/react/pull/14298",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

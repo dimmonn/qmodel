@@ -1,0 +1,216 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2014-10-18T05:31:57Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 2347,
+      "url" : "https://github.com/react/react/issues/2347",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 2374,
+      "url" : "https://github.com/react/react/issues/2374",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2014-10-20T06:56:08Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 2384,
+      "url" : "https://github.com/react/react/pull/2384",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 2374,
+      "url" : "https://github.com/react/react/issues/2374",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2014-10-20T23:03:15Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 10,
+      "url" : "https://github.com/reactjs/express-react-views/pull/10",
+      "repository" : {
+        "nameWithOwner" : "reactjs/express-react-views"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 2374,
+      "url" : "https://github.com/react/react/issues/2374",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2014-10-21T00:17:56Z",
+    "closer" : {
+      "__typename" : "PullRequest",
+      "number" : 2384,
+      "url" : "https://github.com/react/react/pull/2384",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2014-10-21T02:31:27Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 2044,
+      "url" : "https://github.com/react/react/issues/2044",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 2374,
+      "url" : "https://github.com/react/react/issues/2374",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2014-11-03T16:43:19Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 18,
+      "url" : "https://github.com/ngReact/ngReact/pull/18",
+      "repository" : {
+        "nameWithOwner" : "ngReact/ngReact"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 2374,
+      "url" : "https://github.com/react/react/issues/2374",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2015-01-13T21:05:51Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 3,
+      "url" : "https://github.com/ghempton/ember-react/pull/3",
+      "repository" : {
+        "nameWithOwner" : "ghempton/ember-react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 2374,
+      "url" : "https://github.com/react/react/issues/2374",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2015-03-11T20:43:23Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 34,
+      "url" : "https://github.com/fmoo/react-typeahead/pull/34",
+      "repository" : {
+        "nameWithOwner" : "fmoo/react-typeahead"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 2374,
+      "url" : "https://github.com/react/react/issues/2374",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2022-05-13T16:50:00Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 55,
+      "url" : "https://github.com/nchathu2014/react/pull/55",
+      "repository" : {
+        "nameWithOwner" : "nchathu2014/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 2374,
+      "url" : "https://github.com/react/react/issues/2374",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2022-05-13T18:01:57Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 127,
+      "url" : "https://github.com/ryan-ally/react-1/pull/127",
+      "repository" : {
+        "nameWithOwner" : "ryan-ally/react-1"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 2374,
+      "url" : "https://github.com/react/react/issues/2374",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2022-05-13T22:06:32Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 179,
+      "url" : "https://github.com/Matthelonianxl/react/pull/179",
+      "repository" : {
+        "nameWithOwner" : "Matthelonianxl/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 2374,
+      "url" : "https://github.com/react/react/issues/2374",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

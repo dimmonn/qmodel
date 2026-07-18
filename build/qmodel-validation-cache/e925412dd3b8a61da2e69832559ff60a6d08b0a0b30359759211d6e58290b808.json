@@ -1,0 +1,56 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2020-07-23T18:39:47Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 7703,
+      "url" : "https://github.com/ansible/awx/issues/7703",
+      "repository" : {
+        "nameWithOwner" : "ansible/awx"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 70831,
+      "url" : "https://github.com/ansible/ansible/issues/70831",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2020-07-30T12:55:24Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 70988,
+      "url" : "https://github.com/ansible/ansible/pull/70988",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 70831,
+      "url" : "https://github.com/ansible/ansible/issues/70831",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2020-08-11T08:19:50Z",
+    "closer" : {
+      "__typename" : "PullRequest",
+      "number" : 70988,
+      "url" : "https://github.com/ansible/ansible/pull/70988",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

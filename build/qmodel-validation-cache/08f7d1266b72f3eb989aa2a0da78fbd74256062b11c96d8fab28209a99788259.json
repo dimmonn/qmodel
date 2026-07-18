@@ -1,0 +1,96 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2013-09-27T06:55:46Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 378,
+      "url" : "https://github.com/react/react/pull/378",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 377,
+      "url" : "https://github.com/react/react/issues/377",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2013-10-01T20:38:09Z",
+    "closer" : {
+      "__typename" : "PullRequest",
+      "number" : 378,
+      "url" : "https://github.com/react/react/pull/378",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2015-11-03T00:54:10Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 398,
+      "url" : "https://github.com/algolia/instantsearch/issues/398",
+      "repository" : {
+        "nameWithOwner" : "algolia/instantsearch"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 377,
+      "url" : "https://github.com/react/react/issues/377",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2015-11-16T06:05:17Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 5479,
+      "url" : "https://github.com/react/react/issues/5479",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 377,
+      "url" : "https://github.com/react/react/issues/377",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-01-13T23:15:50Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 16483,
+      "url" : "https://github.com/freeCodeCamp/freeCodeCamp/issues/16483",
+      "repository" : {
+        "nameWithOwner" : "freeCodeCamp/freeCodeCamp"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 377,
+      "url" : "https://github.com/react/react/issues/377",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

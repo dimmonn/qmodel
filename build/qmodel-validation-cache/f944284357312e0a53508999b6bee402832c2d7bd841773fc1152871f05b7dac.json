@@ -1,0 +1,80 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2013-12-24T00:06:30Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 703,
+      "url" : "https://github.com/react/react/pull/703",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 631,
+      "url" : "https://github.com/react/react/issues/631",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2013-12-24T00:46:53Z",
+    "closer" : {
+      "__typename" : "PullRequest",
+      "number" : 703,
+      "url" : "https://github.com/react/react/pull/703",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2014-01-03T19:20:22Z",
+    "closer" : null
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2016-04-20T16:14:07Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 5,
+      "url" : "https://github.com/smikhalevski/react-scroll-box/issues/5",
+      "repository" : {
+        "nameWithOwner" : "smikhalevski/react-scroll-box"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 631,
+      "url" : "https://github.com/react/react/issues/631",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2016-04-26T23:02:31Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 6626,
+      "url" : "https://github.com/react/react/issues/6626",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 631,
+      "url" : "https://github.com/react/react/issues/631",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

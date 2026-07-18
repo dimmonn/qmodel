@@ -1,0 +1,109 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2016-08-24T12:40:04Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 7554,
+      "url" : "https://github.com/react/react/pull/7554",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 7552,
+      "url" : "https://github.com/react/react/issues/7552",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2019-04-13T21:23:33Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 21,
+      "url" : "https://github.com/storeon/storeon/pull/21",
+      "repository" : {
+        "nameWithOwner" : "storeon/storeon"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 7552,
+      "url" : "https://github.com/react/react/issues/7552",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2021-03-24T17:31:22Z",
+    "closer" : null
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2022-07-06T07:54:39Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 33196,
+      "url" : "https://github.com/mui/material-ui/pull/33196",
+      "repository" : {
+        "nameWithOwner" : "mui/material-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 7552,
+      "url" : "https://github.com/react/react/issues/7552",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-06-06T09:32:51Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 885,
+      "url" : "https://github.com/iTwin/viewer-components-react/pull/885",
+      "repository" : {
+        "nameWithOwner" : "iTwin/viewer-components-react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 7552,
+      "url" : "https://github.com/react/react/issues/7552",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-13T02:51:47Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 9787,
+      "url" : "https://github.com/adobe/react-spectrum/pull/9787",
+      "repository" : {
+        "nameWithOwner" : "adobe/react-spectrum"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 7552,
+      "url" : "https://github.com/react/react/issues/7552",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

@@ -1,0 +1,109 @@
+{
+  "events" : [ {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2014-09-03T16:23:42Z",
+    "closer" : null
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2014-09-14T06:44:42Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 8999,
+      "url" : "https://github.com/ansible/ansible/pull/8999",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 8875,
+      "url" : "https://github.com/ansible/ansible/issues/8875",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2014-09-14T06:50:40Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 5412,
+      "url" : "https://github.com/ansible/ansible/issues/5412",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 8875,
+      "url" : "https://github.com/ansible/ansible/issues/8875",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2014-09-17T20:48:34Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 9043,
+      "url" : "https://github.com/ansible/ansible/pull/9043",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 8875,
+      "url" : "https://github.com/ansible/ansible/issues/8875",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2017-04-19T14:40:41Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 379,
+      "url" : "https://github.com/openedx-unsupported/edx-analytics-pipeline/pull/379",
+      "repository" : {
+        "nameWithOwner" : "openedx-unsupported/edx-analytics-pipeline"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 8875,
+      "url" : "https://github.com/ansible/ansible/issues/8875",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-05-24T16:39:51Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 507,
+      "url" : "https://github.com/openedx-unsupported/edx-analytics-pipeline/pull/507",
+      "repository" : {
+        "nameWithOwner" : "openedx-unsupported/edx-analytics-pipeline"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 8875,
+      "url" : "https://github.com/ansible/ansible/issues/8875",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

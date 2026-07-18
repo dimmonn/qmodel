@@ -1,0 +1,69 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2019-10-21T20:08:34Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 63763,
+      "url" : "https://github.com/ansible/ansible/pull/63763",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 63756,
+      "url" : "https://github.com/ansible/ansible/issues/63756",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2019-10-21T21:17:10Z",
+    "closer" : null
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2019-10-22T14:46:53Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 2010,
+      "url" : "https://github.com/iiab/iiab/issues/2010",
+      "repository" : {
+        "nameWithOwner" : "iiab/iiab"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 63756,
+      "url" : "https://github.com/ansible/ansible/issues/63756",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2019-10-31T17:26:38Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 64158,
+      "url" : "https://github.com/ansible/ansible/issues/64158",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 63756,
+      "url" : "https://github.com/ansible/ansible/issues/63756",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

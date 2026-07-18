@@ -1,0 +1,89 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2019-05-15T21:01:14Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 56488,
+      "url" : "https://github.com/ansible/ansible/issues/56488",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 56144,
+      "url" : "https://github.com/ansible/ansible/issues/56144",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2019-05-16T16:34:47Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 56532,
+      "url" : "https://github.com/ansible/ansible/pull/56532",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 56144,
+      "url" : "https://github.com/ansible/ansible/issues/56144",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2019-06-28T20:21:18Z",
+    "closer" : null
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2019-07-18T14:36:13Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 4080,
+      "url" : "https://github.com/openshift/openshift-tools/pull/4080",
+      "repository" : {
+        "nameWithOwner" : "openshift/openshift-tools"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 56144,
+      "url" : "https://github.com/ansible/ansible/issues/56144",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2019-07-18T14:56:03Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 4081,
+      "url" : "https://github.com/openshift/openshift-tools/pull/4081",
+      "repository" : {
+        "nameWithOwner" : "openshift/openshift-tools"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 56144,
+      "url" : "https://github.com/ansible/ansible/issues/56144",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

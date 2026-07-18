@@ -1,0 +1,49 @@
+{
+  "events" : [ {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2013-07-04T12:53:44Z",
+    "closer" : null
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2014-03-10T10:33:08Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 6364,
+      "url" : "https://github.com/ansible/ansible/pull/6364",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 3437,
+      "url" : "https://github.com/ansible/ansible/issues/3437",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2015-07-27T18:21:02Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 772,
+      "url" : "https://github.com/ansible/ansible-modules-extras/pull/772",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible-modules-extras"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 3437,
+      "url" : "https://github.com/ansible/ansible/issues/3437",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

@@ -1,0 +1,156 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2015-11-23T23:39:48Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 5536,
+      "url" : "https://github.com/react/react/pull/5536",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 2612,
+      "url" : "https://github.com/react/react/issues/2612",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2015-12-01T07:33:26Z",
+    "closer" : {
+      "__typename" : "PullRequest",
+      "number" : 5536,
+      "url" : "https://github.com/react/react/pull/5536",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2023-01-24T17:44:58Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 341,
+      "url" : "https://github.com/saurabharch/react/pull/341",
+      "repository" : {
+        "nameWithOwner" : "saurabharch/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 2612,
+      "url" : "https://github.com/react/react/issues/2612",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2023-01-24T19:50:22Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 91,
+      "url" : "https://github.com/nchathu2014/react/pull/91",
+      "repository" : {
+        "nameWithOwner" : "nchathu2014/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 2612,
+      "url" : "https://github.com/react/react/issues/2612",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2023-01-25T00:19:37Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 211,
+      "url" : "https://github.com/Matthelonianxl/react/pull/211",
+      "repository" : {
+        "nameWithOwner" : "Matthelonianxl/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 2612,
+      "url" : "https://github.com/react/react/issues/2612",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2023-01-26T06:45:11Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 36,
+      "url" : "https://github.com/leftrightleft/react/pull/36",
+      "repository" : {
+        "nameWithOwner" : "leftrightleft/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 2612,
+      "url" : "https://github.com/react/react/issues/2612",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2023-11-26T20:16:42Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 226,
+      "url" : "https://github.com/Matthelonianxl/react/pull/226",
+      "repository" : {
+        "nameWithOwner" : "Matthelonianxl/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 2612,
+      "url" : "https://github.com/react/react/issues/2612",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2023-11-28T23:52:38Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 55,
+      "url" : "https://github.com/leftrightleft/react/pull/55",
+      "repository" : {
+        "nameWithOwner" : "leftrightleft/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 2612,
+      "url" : "https://github.com/react/react/issues/2612",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

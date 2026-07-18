@@ -1,0 +1,96 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2016-05-30T18:18:09Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 6924,
+      "url" : "https://github.com/react/react/pull/6924",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 6599,
+      "url" : "https://github.com/react/react/issues/6599",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2016-06-21T18:43:15Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 4373,
+      "url" : "https://github.com/mui/material-ui/issues/4373",
+      "repository" : {
+        "nameWithOwner" : "mui/material-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 6599,
+      "url" : "https://github.com/react/react/issues/6599",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2016-06-22T13:53:17Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 4,
+      "url" : "https://github.com/cloudflare/react-gateway/issues/4",
+      "repository" : {
+        "nameWithOwner" : "cloudflare/react-gateway"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 6599,
+      "url" : "https://github.com/react/react/issues/6599",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2016-06-27T00:14:50Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 7125,
+      "url" : "https://github.com/react/react/pull/7125",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 6599,
+      "url" : "https://github.com/react/react/issues/6599",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2016-06-27T22:29:43Z",
+    "closer" : {
+      "__typename" : "PullRequest",
+      "number" : 7125,
+      "url" : "https://github.com/react/react/pull/7125",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

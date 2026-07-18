@@ -1,0 +1,49 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2020-02-27T06:16:23Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 67808,
+      "url" : "https://github.com/ansible/ansible/pull/67808",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 67796,
+      "url" : "https://github.com/ansible/ansible/issues/67796",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2020-04-16T13:33:55Z",
+    "closer" : null
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2020-05-05T19:29:45Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 86980,
+      "url" : "https://github.com/NixOS/nixpkgs/pull/86980",
+      "repository" : {
+        "nameWithOwner" : "NixOS/nixpkgs"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 67796,
+      "url" : "https://github.com/ansible/ansible/issues/67796",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

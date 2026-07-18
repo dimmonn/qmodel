@@ -1,0 +1,49 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2014-04-15T16:47:26Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 877,
+      "url" : "https://github.com/react/react/pull/877",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1185,
+      "url" : "https://github.com/react/react/issues/1185",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2014-04-24T02:30:12Z",
+    "closer" : null
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2016-02-11T02:58:32Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 15,
+      "url" : "https://github.com/formsy/formsy-material-ui/issues/15",
+      "repository" : {
+        "nameWithOwner" : "formsy/formsy-material-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1185,
+      "url" : "https://github.com/react/react/issues/1185",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

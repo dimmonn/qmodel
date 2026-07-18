@@ -1,0 +1,13 @@
+{
+  "events" : [ {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2016-03-02T14:16:23Z",
+    "closer" : {
+      "__typename" : "Commit",
+      "oid" : "7404d4ce7fb9bc4362a4c560406e4685c04cfcd6",
+      "url" : "https://github.com/ansible/ansible/commit/7404d4ce7fb9bc4362a4c560406e4685c04cfcd6"
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

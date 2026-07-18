@@ -1,0 +1,96 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2017-09-28T14:16:13Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 10915,
+      "url" : "https://github.com/react/react/pull/10915",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 10831,
+      "url" : "https://github.com/react/react/issues/10831",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2017-09-28T19:40:27Z",
+    "closer" : {
+      "__typename" : "PullRequest",
+      "number" : 10915,
+      "url" : "https://github.com/react/react/pull/10915",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2017-10-03T15:38:16Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 11065,
+      "url" : "https://github.com/react/react/issues/11065",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 10831,
+      "url" : "https://github.com/react/react/issues/10831",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2017-10-05T12:36:34Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 467,
+      "url" : "https://github.com/react-cosmos/react-cosmos/pull/467",
+      "repository" : {
+        "nameWithOwner" : "react-cosmos/react-cosmos"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 10831,
+      "url" : "https://github.com/react/react/issues/10831",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2017-10-26T19:35:32Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 8029,
+      "url" : "https://github.com/ant-design/ant-design/issues/8029",
+      "repository" : {
+        "nameWithOwner" : "ant-design/ant-design"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 10831,
+      "url" : "https://github.com/react/react/issues/10831",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

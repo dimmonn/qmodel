@@ -1,0 +1,1820 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2020-12-09T20:51:20Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 2668,
+      "url" : "https://github.com/mobxjs/mobx/issues/2668",
+      "repository" : {
+        "nameWithOwner" : "mobxjs/mobx"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2021-02-09T22:59:10Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 301,
+      "url" : "https://github.com/pmmmwh/react-refresh-webpack-plugin/issues/301",
+      "repository" : {
+        "nameWithOwner" : "pmmmwh/react-refresh-webpack-plugin"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2021-03-24T16:16:17Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 21074,
+      "url" : "https://github.com/react/react/pull/21074",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2021-03-25T16:46:17Z",
+    "closer" : null
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2021-03-26T01:05:06Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 21104,
+      "url" : "https://github.com/react/react/pull/21104",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2021-03-27T01:17:17Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 3015,
+      "url" : "https://github.com/FredKSchott/snowpack/pull/3015",
+      "repository" : {
+        "nameWithOwner" : "FredKSchott/snowpack"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2021-03-30T12:17:17Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 21139,
+      "url" : "https://github.com/react/react/issues/21139",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2021-03-30T15:08:51Z",
+    "closer" : {
+      "__typename" : "PullRequest",
+      "number" : 21104,
+      "url" : "https://github.com/react/react/pull/21104",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2021-07-01T11:43:36Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 4066,
+      "url" : "https://github.com/vitejs/vite/pull/4066",
+      "repository" : {
+        "nameWithOwner" : "vitejs/vite"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2021-08-27T15:43:29Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 22188,
+      "url" : "https://github.com/react/react/issues/22188",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2021-11-11T16:48:44Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 6,
+      "url" : "https://github.com/vitejs/vite-plugin-react/issues/6",
+      "repository" : {
+        "nameWithOwner" : "vitejs/vite-plugin-react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-02-15T03:36:52Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 5655,
+      "url" : "https://github.com/web-infra-dev/rspack/issues/5655",
+      "repository" : {
+        "nameWithOwner" : "web-infra-dev/rspack"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2025-12-09T10:55:39Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 325,
+      "url" : "https://github.com/guibranco/financial-dashboard/pull/325",
+      "repository" : {
+        "nameWithOwner" : "guibranco/financial-dashboard"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2025-12-09T10:56:00Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 489,
+      "url" : "https://github.com/ApiBR/catalog/pull/489",
+      "repository" : {
+        "nameWithOwner" : "ApiBR/catalog"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2025-12-09T10:56:12Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 578,
+      "url" : "https://github.com/ApiBR/sports-agenda-ui/pull/578",
+      "repository" : {
+        "nameWithOwner" : "ApiBR/sports-agenda-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2025-12-15T07:12:34Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 590,
+      "url" : "https://github.com/guibranco/guibranco.github.io/pull/590",
+      "repository" : {
+        "nameWithOwner" : "guibranco/guibranco.github.io"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-01-19T04:43:08Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 502,
+      "url" : "https://github.com/ApiBR/vagas-aggregator-ui/pull/502",
+      "repository" : {
+        "nameWithOwner" : "ApiBR/vagas-aggregator-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-01-19T15:32:45Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 513,
+      "url" : "https://github.com/ApiBR/vagas-aggregator-ui/pull/513",
+      "repository" : {
+        "nameWithOwner" : "ApiBR/vagas-aggregator-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-01-19T23:19:13Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 752,
+      "url" : "https://github.com/GuilhermeStracini/hello-world-nextjs/pull/752",
+      "repository" : {
+        "nameWithOwner" : "GuilhermeStracini/hello-world-nextjs"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-01-26T23:43:06Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 758,
+      "url" : "https://github.com/GuilhermeStracini/hello-world-nextjs/pull/758",
+      "repository" : {
+        "nameWithOwner" : "GuilhermeStracini/hello-world-nextjs"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-01-27T22:28:39Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 2,
+      "url" : "https://github.com/elliot-huffman/check-in/pull/2",
+      "repository" : {
+        "nameWithOwner" : "elliot-huffman/check-in"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-01-27T23:00:03Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 1,
+      "url" : "https://github.com/elliot-huffman/Carbon-Copy/pull/1",
+      "repository" : {
+        "nameWithOwner" : "elliot-huffman/Carbon-Copy"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-02T12:18:43Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 356,
+      "url" : "https://github.com/GuilhermeStracini/guilhermestracini.github.io/pull/356",
+      "repository" : {
+        "nameWithOwner" : "GuilhermeStracini/guilhermestracini.github.io"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-02T14:35:43Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 421,
+      "url" : "https://github.com/guibranco/bookmarks-manager-ui/pull/421",
+      "repository" : {
+        "nameWithOwner" : "guibranco/bookmarks-manager-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-02T18:01:20Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 323,
+      "url" : "https://github.com/guibranco/projects-monitor-ui/pull/323",
+      "repository" : {
+        "nameWithOwner" : "guibranco/projects-monitor-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-02T19:07:14Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 530,
+      "url" : "https://github.com/guibranco/pull-request-ui/pull/530",
+      "repository" : {
+        "nameWithOwner" : "guibranco/pull-request-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-03T03:45:15Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 763,
+      "url" : "https://github.com/GuilhermeStracini/hello-world-nextjs/pull/763",
+      "repository" : {
+        "nameWithOwner" : "GuilhermeStracini/hello-world-nextjs"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-03T11:40:47Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 545,
+      "url" : "https://github.com/ApiBR/vagas-aggregator-ui/pull/545",
+      "repository" : {
+        "nameWithOwner" : "ApiBR/vagas-aggregator-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-03T11:40:53Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 383,
+      "url" : "https://github.com/ApiBR/banks-directory-ui/pull/383",
+      "repository" : {
+        "nameWithOwner" : "ApiBR/banks-directory-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-03T11:40:53Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 361,
+      "url" : "https://github.com/guibranco/financial-dashboard/pull/361",
+      "repository" : {
+        "nameWithOwner" : "guibranco/financial-dashboard"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-03T11:40:55Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 550,
+      "url" : "https://github.com/guibranco/clean-cv-maker/pull/550",
+      "repository" : {
+        "nameWithOwner" : "guibranco/clean-cv-maker"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-03T11:40:58Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 629,
+      "url" : "https://github.com/ApiBR/sports-agenda-ui/pull/629",
+      "repository" : {
+        "nameWithOwner" : "ApiBR/sports-agenda-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-03T11:40:59Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 536,
+      "url" : "https://github.com/ApiBR/catalog/pull/536",
+      "repository" : {
+        "nameWithOwner" : "ApiBR/catalog"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-09T07:56:11Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 648,
+      "url" : "https://github.com/guibranco/guibranco.github.io/pull/648",
+      "repository" : {
+        "nameWithOwner" : "guibranco/guibranco.github.io"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-11T14:30:57Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 368,
+      "url" : "https://github.com/guibranco/financial-dashboard/pull/368",
+      "repository" : {
+        "nameWithOwner" : "guibranco/financial-dashboard"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-16T01:55:57Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 552,
+      "url" : "https://github.com/ApiBR/catalog/pull/552",
+      "repository" : {
+        "nameWithOwner" : "ApiBR/catalog"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-16T04:23:18Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 564,
+      "url" : "https://github.com/ApiBR/vagas-aggregator-ui/pull/564",
+      "repository" : {
+        "nameWithOwner" : "ApiBR/vagas-aggregator-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-16T05:54:38Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 373,
+      "url" : "https://github.com/guibranco/financial-dashboard/pull/373",
+      "repository" : {
+        "nameWithOwner" : "guibranco/financial-dashboard"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-16T14:07:50Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 432,
+      "url" : "https://github.com/guibranco/bookmarks-manager-ui/pull/432",
+      "repository" : {
+        "nameWithOwner" : "guibranco/bookmarks-manager-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-16T16:04:16Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 396,
+      "url" : "https://github.com/ApiBR/banks-directory-ui/pull/396",
+      "repository" : {
+        "nameWithOwner" : "ApiBR/banks-directory-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-17T19:12:08Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 388,
+      "url" : "https://github.com/ApiBR/banks-directory-ui/pull/388",
+      "repository" : {
+        "nameWithOwner" : "ApiBR/banks-directory-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-02-18T09:57:14Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 545,
+      "url" : "https://github.com/ApiBR/catalog/pull/545",
+      "repository" : {
+        "nameWithOwner" : "ApiBR/catalog"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-01T20:53:33Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 25,
+      "url" : "https://github.com/Dustin4444/defillama-app/pull/25",
+      "repository" : {
+        "nameWithOwner" : "Dustin4444/defillama-app"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-01T20:55:23Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 7,
+      "url" : "https://github.com/Dustin4444/openai-assistants-quickstart/pull/7",
+      "repository" : {
+        "nameWithOwner" : "Dustin4444/openai-assistants-quickstart"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-01T21:30:27Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 16,
+      "url" : "https://github.com/Dustin4444/nextjs-commerce/pull/16",
+      "repository" : {
+        "nameWithOwner" : "Dustin4444/nextjs-commerce"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-01T21:32:08Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 34,
+      "url" : "https://github.com/Dustin4444/next-platform-starter/pull/34",
+      "repository" : {
+        "nameWithOwner" : "Dustin4444/next-platform-starter"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-01T21:33:27Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 15,
+      "url" : "https://github.com/Dustin4444/nextjs-saas-starter-template/pull/15",
+      "repository" : {
+        "nameWithOwner" : "Dustin4444/nextjs-saas-starter-template"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-01T21:34:23Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 14,
+      "url" : "https://github.com/Dustin4444/chainlist/pull/14",
+      "repository" : {
+        "nameWithOwner" : "Dustin4444/chainlist"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-01T22:08:44Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 1,
+      "url" : "https://github.com/Dustin4444/metamask-metamask-sdk-examples-2rnfv8wf/pull/1",
+      "repository" : {
+        "nameWithOwner" : "Dustin4444/metamask-metamask-sdk-examples-2rnfv8wf"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-01T22:13:06Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 13,
+      "url" : "https://github.com/Dustin4444/commerce/pull/13",
+      "repository" : {
+        "nameWithOwner" : "Dustin4444/commerce"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-01T22:21:54Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 5,
+      "url" : "https://github.com/Dustin4444/metamask-metamask-sdk-examples-wrs8jsf5/pull/5",
+      "repository" : {
+        "nameWithOwner" : "Dustin4444/metamask-metamask-sdk-examples-wrs8jsf5"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-01T22:23:01Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 1,
+      "url" : "https://github.com/Dustin4444/agents.md/pull/1",
+      "repository" : {
+        "nameWithOwner" : "Dustin4444/agents.md"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-07T03:49:04Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 14,
+      "url" : "https://github.com/Dustin4444/website/pull/14",
+      "repository" : {
+        "nameWithOwner" : "Dustin4444/website"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-11T13:45:29Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 655,
+      "url" : "https://github.com/guibranco/guibranco.github.io/pull/655",
+      "repository" : {
+        "nameWithOwner" : "guibranco/guibranco.github.io"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-13T15:41:07Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 584,
+      "url" : "https://github.com/guibranco/pull-request-ui/pull/584",
+      "repository" : {
+        "nameWithOwner" : "guibranco/pull-request-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-13T15:41:29Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 382,
+      "url" : "https://github.com/guibranco/projects-monitor-ui/pull/382",
+      "repository" : {
+        "nameWithOwner" : "guibranco/projects-monitor-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-16T06:36:00Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 617,
+      "url" : "https://github.com/guibranco/clean-cv-maker/pull/617",
+      "repository" : {
+        "nameWithOwner" : "guibranco/clean-cv-maker"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-16T11:21:37Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 390,
+      "url" : "https://github.com/GuilhermeStracini/guilhermestracini.github.io/pull/390",
+      "repository" : {
+        "nameWithOwner" : "GuilhermeStracini/guilhermestracini.github.io"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-16T15:59:32Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 387,
+      "url" : "https://github.com/guibranco/projects-monitor-ui/pull/387",
+      "repository" : {
+        "nameWithOwner" : "guibranco/projects-monitor-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-16T17:04:15Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 591,
+      "url" : "https://github.com/guibranco/pull-request-ui/pull/591",
+      "repository" : {
+        "nameWithOwner" : "guibranco/pull-request-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-17T16:06:30Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 780,
+      "url" : "https://github.com/GuilhermeStracini/hello-world-nextjs/pull/780",
+      "repository" : {
+        "nameWithOwner" : "GuilhermeStracini/hello-world-nextjs"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-17T19:20:17Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 9,
+      "url" : "https://github.com/elliot-huffman/check-in/pull/9",
+      "repository" : {
+        "nameWithOwner" : "elliot-huffman/check-in"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-17T19:32:22Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 3,
+      "url" : "https://github.com/elliot-huffman/Carbon-Copy/pull/3",
+      "repository" : {
+        "nameWithOwner" : "elliot-huffman/Carbon-Copy"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-17T20:54:25Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 781,
+      "url" : "https://github.com/GuilhermeStracini/hello-world-nextjs/pull/781",
+      "repository" : {
+        "nameWithOwner" : "GuilhermeStracini/hello-world-nextjs"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-19T17:59:03Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 412,
+      "url" : "https://github.com/guibranco/financial-dashboard/pull/412",
+      "repository" : {
+        "nameWithOwner" : "guibranco/financial-dashboard"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-19T18:05:50Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 680,
+      "url" : "https://github.com/ApiBR/sports-agenda-ui/pull/680",
+      "repository" : {
+        "nameWithOwner" : "ApiBR/sports-agenda-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-19T18:16:18Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 464,
+      "url" : "https://github.com/guibranco/bookmarks-manager-ui/pull/464",
+      "repository" : {
+        "nameWithOwner" : "guibranco/bookmarks-manager-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-19T19:31:02Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 689,
+      "url" : "https://github.com/ApiBR/sports-agenda-ui/pull/689",
+      "repository" : {
+        "nameWithOwner" : "ApiBR/sports-agenda-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-20T10:26:01Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 436,
+      "url" : "https://github.com/ApiBR/banks-directory-ui/pull/436",
+      "repository" : {
+        "nameWithOwner" : "ApiBR/banks-directory-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-20T10:32:48Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 598,
+      "url" : "https://github.com/ApiBR/vagas-aggregator-ui/pull/598",
+      "repository" : {
+        "nameWithOwner" : "ApiBR/vagas-aggregator-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-20T16:55:55Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 623,
+      "url" : "https://github.com/guibranco/clean-cv-maker/pull/623",
+      "repository" : {
+        "nameWithOwner" : "guibranco/clean-cv-maker"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-23T22:40:25Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 783,
+      "url" : "https://github.com/GuilhermeStracini/hello-world-nextjs/pull/783",
+      "repository" : {
+        "nameWithOwner" : "GuilhermeStracini/hello-world-nextjs"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-26T12:33:03Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 611,
+      "url" : "https://github.com/guibranco/pull-request-ui/pull/611",
+      "repository" : {
+        "nameWithOwner" : "guibranco/pull-request-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-26T13:18:05Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 602,
+      "url" : "https://github.com/ApiBR/catalog/pull/602",
+      "repository" : {
+        "nameWithOwner" : "ApiBR/catalog"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-26T14:58:11Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 457,
+      "url" : "https://github.com/ApiBR/banks-directory-ui/pull/457",
+      "repository" : {
+        "nameWithOwner" : "ApiBR/banks-directory-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-30T09:37:27Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 704,
+      "url" : "https://github.com/guibranco/guibranco.github.io/pull/704",
+      "repository" : {
+        "nameWithOwner" : "guibranco/guibranco.github.io"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-03-30T09:39:07Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 431,
+      "url" : "https://github.com/guibranco/financial-dashboard/pull/431",
+      "repository" : {
+        "nameWithOwner" : "guibranco/financial-dashboard"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-04-01T17:32:43Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 701,
+      "url" : "https://github.com/ApiBR/sports-agenda-ui/pull/701",
+      "repository" : {
+        "nameWithOwner" : "ApiBR/sports-agenda-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-04-07T10:59:34Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 410,
+      "url" : "https://github.com/GuilhermeStracini/guilhermestracini.github.io/pull/410",
+      "repository" : {
+        "nameWithOwner" : "GuilhermeStracini/guilhermestracini.github.io"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-04-10T22:41:24Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 6,
+      "url" : "https://github.com/elliot-huffman/Carbon-Copy/pull/6",
+      "repository" : {
+        "nameWithOwner" : "elliot-huffman/Carbon-Copy"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-04-11T04:26:41Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 1,
+      "url" : "https://github.com/DobroslavRadosavljevic/next-start/pull/1",
+      "repository" : {
+        "nameWithOwner" : "DobroslavRadosavljevic/next-start"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-05-01T15:21:26Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 105,
+      "url" : "https://github.com/guibranco/exchange-rates-ui/pull/105",
+      "repository" : {
+        "nameWithOwner" : "guibranco/exchange-rates-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-05-04T23:15:45Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 77,
+      "url" : "https://github.com/guibranco/deployment-notifier/pull/77",
+      "repository" : {
+        "nameWithOwner" : "guibranco/deployment-notifier"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-05-06T15:04:33Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 88,
+      "url" : "https://github.com/guibranco/deployment-notifier/pull/88",
+      "repository" : {
+        "nameWithOwner" : "guibranco/deployment-notifier"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-05-07T09:40:03Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 23,
+      "url" : "https://github.com/elliot-huffman/check-in/pull/23",
+      "repository" : {
+        "nameWithOwner" : "elliot-huffman/check-in"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-05-08T00:13:42Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 115,
+      "url" : "https://github.com/guibranco/gstraccini-bot-portal/pull/115",
+      "repository" : {
+        "nameWithOwner" : "guibranco/gstraccini-bot-portal"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-05-14T21:36:06Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 235,
+      "url" : "https://github.com/guibranco/payment-schedule-simulator/pull/235",
+      "repository" : {
+        "nameWithOwner" : "guibranco/payment-schedule-simulator"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-05-15T00:14:27Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 128,
+      "url" : "https://github.com/guibranco/gstraccini-bot-portal/pull/128",
+      "repository" : {
+        "nameWithOwner" : "guibranco/gstraccini-bot-portal"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-05-15T04:37:52Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 707,
+      "url" : "https://github.com/ApiBR/vagas-aggregator-ui/pull/707",
+      "repository" : {
+        "nameWithOwner" : "ApiBR/vagas-aggregator-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-05-15T21:26:05Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 769,
+      "url" : "https://github.com/guibranco/clean-cv-maker/pull/769",
+      "repository" : {
+        "nameWithOwner" : "guibranco/clean-cv-maker"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-05-21T07:28:07Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 765,
+      "url" : "https://github.com/guibranco/guibranco.github.io/pull/765",
+      "repository" : {
+        "nameWithOwner" : "guibranco/guibranco.github.io"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2026-05-21T11:39:06Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 461,
+      "url" : "https://github.com/GuilhermeStracini/guilhermestracini.github.io/pull/461",
+      "repository" : {
+        "nameWithOwner" : "GuilhermeStracini/guilhermestracini.github.io"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 20417,
+      "url" : "https://github.com/react/react/issues/20417",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

@@ -1,0 +1,56 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2019-08-19T21:40:25Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 365,
+      "url" : "https://github.com/bvaughn/react-devtools-experimental/issues/365",
+      "repository" : {
+        "nameWithOwner" : "bvaughn/react-devtools-experimental"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 16467,
+      "url" : "https://github.com/react/react/issues/16467",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2020-05-01T22:46:51Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 18802,
+      "url" : "https://github.com/react/react/pull/18802",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 16467,
+      "url" : "https://github.com/react/react/issues/16467",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2020-05-15T17:37:35Z",
+    "closer" : {
+      "__typename" : "PullRequest",
+      "number" : 18802,
+      "url" : "https://github.com/react/react/pull/18802",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

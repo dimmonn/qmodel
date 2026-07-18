@@ -1,0 +1,76 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2017-09-11T14:39:15Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 5286,
+      "url" : "https://github.com/ansible/ansible-modules-core/issues/5286",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible-modules-core"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 29578,
+      "url" : "https://github.com/ansible/ansible/issues/29578",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-03-01T04:45:09Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 36889,
+      "url" : "https://github.com/ansible/ansible/pull/36889",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 29578,
+      "url" : "https://github.com/ansible/ansible/issues/29578",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-08-05T11:29:01Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 43293,
+      "url" : "https://github.com/ansible/ansible/issues/43293",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 29578,
+      "url" : "https://github.com/ansible/ansible/issues/29578",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2018-08-07T06:41:53Z",
+    "closer" : {
+      "__typename" : "PullRequest",
+      "number" : 36889,
+      "url" : "https://github.com/ansible/ansible/pull/36889",
+      "repository" : {
+        "nameWithOwner" : "ansible/ansible"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

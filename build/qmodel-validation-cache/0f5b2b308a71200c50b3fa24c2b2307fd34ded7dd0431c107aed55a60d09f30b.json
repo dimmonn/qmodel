@@ -1,0 +1,56 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-11-28T21:31:43Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 21967,
+      "url" : "https://github.com/react/react-native/issues/21967",
+      "repository" : {
+        "nameWithOwner" : "react/react-native"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 14352,
+      "url" : "https://github.com/react/react/issues/14352",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-11-29T23:57:58Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 14358,
+      "url" : "https://github.com/react/react/pull/14358",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 14352,
+      "url" : "https://github.com/react/react/issues/14352",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2018-12-01T21:03:20Z",
+    "closer" : {
+      "__typename" : "PullRequest",
+      "number" : 14358,
+      "url" : "https://github.com/react/react/pull/14358",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

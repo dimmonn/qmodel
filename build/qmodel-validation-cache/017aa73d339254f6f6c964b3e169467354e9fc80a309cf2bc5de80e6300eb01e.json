@@ -1,0 +1,449 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2014-12-22T10:41:01Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 2762,
+      "url" : "https://github.com/react/react/issues/2762",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2015-01-28T22:36:49Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 2973,
+      "url" : "https://github.com/react/react/issues/2973",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2015-12-27T06:07:39Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 245,
+      "url" : "https://github.com/japgolly/scalajs-react/issues/245",
+      "repository" : {
+        "nameWithOwner" : "japgolly/scalajs-react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2016-01-24T18:13:34Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 5908,
+      "url" : "https://github.com/react/react/pull/5908",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2016-04-14T03:53:09Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 17,
+      "url" : "https://github.com/luqin/react-icheck/pull/17",
+      "repository" : {
+        "nameWithOwner" : "luqin/react-icheck"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2016-07-25T21:33:27Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 4828,
+      "url" : "https://github.com/mui/material-ui/issues/4828",
+      "repository" : {
+        "nameWithOwner" : "mui/material-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2017-02-15T23:10:37Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 2,
+      "url" : "https://github.com/jakezatecky/react-checkbox-tree/issues/2",
+      "repository" : {
+        "nameWithOwner" : "jakezatecky/react-checkbox-tree"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2017-07-06T05:39:26Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 2815,
+      "url" : "https://github.com/whatwg/html/issues/2815",
+      "repository" : {
+        "nameWithOwner" : "whatwg/html"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2017-07-29T11:17:13Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 32,
+      "url" : "https://github.com/crazycodeboy/react-native-check-box/issues/32",
+      "repository" : {
+        "nameWithOwner" : "crazycodeboy/react-native-check-box"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2017-10-01T23:34:23Z",
+    "closer" : null
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-04-12T18:15:26Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 47,
+      "url" : "https://github.com/ziad-saab/react-checkbox-group/pull/47",
+      "repository" : {
+        "nameWithOwner" : "ziad-saab/react-checkbox-group"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-04-25T15:00:45Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 129,
+      "url" : "https://github.com/choojs/nanohtml/pull/129",
+      "repository" : {
+        "nameWithOwner" : "choojs/nanohtml"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-08-27T08:12:07Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 12671,
+      "url" : "https://github.com/mui/material-ui/pull/12671",
+      "repository" : {
+        "nameWithOwner" : "mui/material-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2018-09-04T13:38:23Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 12773,
+      "url" : "https://github.com/mui/material-ui/pull/12773",
+      "repository" : {
+        "nameWithOwner" : "mui/material-ui"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2019-06-14T18:44:27Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 2252,
+      "url" : "https://github.com/patternfly/patternfly-react/pull/2252",
+      "repository" : {
+        "nameWithOwner" : "patternfly/patternfly-react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2020-07-13T16:04:25Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 432,
+      "url" : "https://github.com/guardian/source/pull/432",
+      "repository" : {
+        "nameWithOwner" : "guardian/source"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2021-01-21T15:59:40Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 78,
+      "url" : "https://github.com/onfido/castor/pull/78",
+      "repository" : {
+        "nameWithOwner" : "onfido/castor"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2022-06-03T17:24:46Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 33,
+      "url" : "https://github.com/collegevine/purescript-elmish-html/pull/33",
+      "repository" : {
+        "nameWithOwner" : "collegevine/purescript-elmish-html"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2022-10-27T12:37:06Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 766,
+      "url" : "https://github.com/epam/UUI/issues/766",
+      "repository" : {
+        "nameWithOwner" : "epam/UUI"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2022-11-16T20:04:11Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 6497,
+      "url" : "https://github.com/react-bootstrap/react-bootstrap/issues/6497",
+      "repository" : {
+        "nameWithOwner" : "react-bootstrap/react-bootstrap"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2023-02-28T14:13:03Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 1511,
+      "url" : "https://github.com/chanzuckerberg/edu-design-system/pull/1511",
+      "repository" : {
+        "nameWithOwner" : "chanzuckerberg/edu-design-system"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2023-03-02T19:17:26Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 1520,
+      "url" : "https://github.com/chanzuckerberg/edu-design-system/pull/1520",
+      "repository" : {
+        "nameWithOwner" : "chanzuckerberg/edu-design-system"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2024-07-30T19:08:30Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 479,
+      "url" : "https://github.com/dequelabs/cauldron/issues/479",
+      "repository" : {
+        "nameWithOwner" : "dequelabs/cauldron"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 1798,
+      "url" : "https://github.com/react/react/issues/1798",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}

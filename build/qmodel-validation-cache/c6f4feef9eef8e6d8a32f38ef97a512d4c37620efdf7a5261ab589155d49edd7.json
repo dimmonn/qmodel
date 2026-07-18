@@ -1,0 +1,96 @@
+{
+  "events" : [ {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2019-04-05T09:05:50Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 15334,
+      "url" : "https://github.com/react/react/pull/15334",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 15333,
+      "url" : "https://github.com/react/react/issues/15333",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2019-04-05T20:52:25Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "PullRequest",
+      "number" : 15339,
+      "url" : "https://github.com/react/react/pull/15339",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 15333,
+      "url" : "https://github.com/react/react/issues/15333",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "ClosedEvent",
+    "createdAt" : "2019-04-25T11:02:28Z",
+    "closer" : {
+      "__typename" : "PullRequest",
+      "number" : 15334,
+      "url" : "https://github.com/react/react/pull/15334",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2020-01-21T09:41:42Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 36324,
+      "url" : "https://github.com/microsoft/TypeScript/issues/36324",
+      "repository" : {
+        "nameWithOwner" : "microsoft/TypeScript"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 15333,
+      "url" : "https://github.com/react/react/issues/15333",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  }, {
+    "__typename" : "CrossReferencedEvent",
+    "createdAt" : "2020-02-21T13:02:03Z",
+    "willCloseTarget" : false,
+    "source" : {
+      "__typename" : "Issue",
+      "number" : 538,
+      "url" : "https://github.com/cookpete/react-player/issues/538",
+      "repository" : {
+        "nameWithOwner" : "cookpete/react-player"
+      }
+    },
+    "target" : {
+      "__typename" : "Issue",
+      "number" : 15333,
+      "url" : "https://github.com/react/react/issues/15333",
+      "repository" : {
+        "nameWithOwner" : "react/react"
+      }
+    }
+  } ],
+  "repositoryFound" : true,
+  "issueFound" : true
+}
